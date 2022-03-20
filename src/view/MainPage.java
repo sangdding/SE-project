@@ -23,7 +23,7 @@ public class MainPage extends JFrame{
     private PageController pageController;
 
     private JButton[] buttons=new JButton[]{gameStartButton,settingButton,scoreBoardButton, exitButton };
-    private int buttonSelecterIndex=0;
+    private int buttonSelectorIndex =0;
 
 
 
@@ -108,22 +108,22 @@ public class MainPage extends JFrame{
                 switch (e.getKeyCode()) {//키 코드로 스위치
 
                     case KeyEvent.VK_DOWN: //방향키(아래) 눌렀을때
-                        if (buttonSelecterIndex+1<buttons.length)
+                        if (buttonSelectorIndex +1<buttons.length)
                         {
-                            buttons[buttonSelecterIndex].setBackground(new Color(238,238,238));
-                            buttons[++buttonSelecterIndex].setBackground(Color.RED);
+                            buttons[buttonSelectorIndex].setBackground(new Color(238,238,238));
+                            buttons[++buttonSelectorIndex].setBackground(Color.RED);
                         }
                         break;
                     case KeyEvent.VK_UP: //방향키(위)눌렀을때
-                        if(buttonSelecterIndex>0)
+                        if(buttonSelectorIndex >0)
                         {
-                            buttons[buttonSelecterIndex].setBackground(new Color(238,238,238));
-                            buttons[--buttonSelecterIndex].setBackground(Color.RED);
+                            buttons[buttonSelectorIndex].setBackground(new Color(238,238,238));
+                            buttons[--buttonSelectorIndex].setBackground(Color.RED);
                         }
                         break;
                     case KeyEvent.VK_ENTER:
                         setVisible(false);
-                        pageController = new PageController(buttons[buttonSelecterIndex].getText());
+                        pageController = new PageController(buttons[buttonSelectorIndex].getText());
                         break;
                     default:
                         break;
