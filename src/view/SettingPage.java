@@ -9,17 +9,38 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class SettingPage extends JFrame{
-    private JSlider slider1;
     private JPanel settingPanel;
-    private JPanel settingSubPanel;
-    private JLabel left;
-    private JLabel right;
-    private JButton mainButton;
-    private JPanel bottomPanel;
+    private JPanel buttonPanel;
+    private JPanel resolutionPanel;
     private PageController pageController;
+
+    private JButton mainButton;
+    private JButton resolutionButton1;
+    private JButton resolutionButton2;
+    private JButton resolutionButton3;
+    private JButton settingResetButton;
+    private JButton scoreboardResetButton;
+    private JCheckBox colorBlindnessCheckBox;
+    private JButton keySettingButton;
+
+
+
 
     public SettingPage() {
 
+
+        initialize();
+        //키보드 이벤트 처리 설정
+        setKeyEventController();
+
+        setButtonClickController();
+
+
+
+
+    }
+    private void initialize()
+    {
         this.add(settingPanel);
         this.setSize(500, 500);
         this.setVisible(true);
@@ -27,23 +48,18 @@ public class SettingPage extends JFrame{
 
         this.setLocationRelativeTo(null);//화면 가운데에 생성
 
+        //세팅 파일에서 읽어와서 색맹모드 1이면 체크박스 체크. if 문 안에 세팅 파일 속 색맹모드 여부 체크
+        if(1==0) colorBlindnessCheckBox.setSelected(true);
+
+        else colorBlindnessCheckBox.setSelected(false);
+
 
         //포커스를 이 화면에 맟춰서 키 이벤트 받게 만듦
         requestFocus();
         setFocusable(true);
-
-        //키보드 이벤트 처리 설정
-        setKeyEventController();
-
-
-        mainButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setVisible(false);
-                pageController = new PageController(e.getActionCommand());
-            }
-        });
     }
+
+
 
     private void setKeyEventController()
     {
@@ -65,6 +81,55 @@ public class SettingPage extends JFrame{
                     default:
                         break;
                 }
+            }
+        });
+
+    }
+
+    private void setButtonClickController(){
+        mainButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setVisible(false);
+                pageController = new PageController(e.getActionCommand());
+            }
+        });
+
+        resolutionButton1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //파일 입출력을 통해 세팅 txt에 해상도 사이즈 변경
+            }
+        });
+        resolutionButton2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //파일 입출력을 통해 세팅 txt에 해상도 사이즈 변경
+            }
+        });
+        resolutionButton3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //파일 입출력을 통해 세팅 txt에 해상도 사이즈 변경
+            }
+        });
+        settingResetButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //파일 입출력을 통해 세팅 txt 초기화
+            }
+        });
+        scoreboardResetButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //파일 입출력을 통해 스코어보드 txt 초기화
+            }
+        });
+
+        keySettingButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //키세팅 페이지로 전환
             }
         });
 

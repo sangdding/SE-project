@@ -3,7 +3,6 @@ package view;
 import controller.PageController;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -36,7 +35,7 @@ public class GamePage extends JFrame{
     private void initialize(){
 
         this.add(gamePanel);
-        this.setSize(500, 800);
+        this.setSize(500, 800); // 나중에 파일 입출력으로 세팅 파일에서 해상도 읽어오기
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // x표 눌럿을 때 프로그램 종료되게 만듦
 

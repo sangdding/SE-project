@@ -24,4 +24,8 @@ public class PageController {
              scorePage=new ScorePage();
         }
     }
+
+    private void setButtonClickController(){
+        
+    }
 }

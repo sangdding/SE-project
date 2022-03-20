@@ -13,12 +13,13 @@ import java.awt.event.KeyEvent;
 
 public class MainPage extends JFrame{
 
+    private JPanel mainPanel;
+
     private JButton gameStartButton;
     private JButton settingButton;
     private JButton scoreBoardButton;
     private JButton exitButton;
 
-    private JPanel mainPanel;
 
     private PageController pageController;
 
@@ -35,40 +36,10 @@ public class MainPage extends JFrame{
         initialize();
         //키보드 입력 이벤트
         setKeyEventController();
-
-        gameStartButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setVisible(false);
-                pageController = new PageController(e.getActionCommand());
-            }
-        });
+        //버튼 클릭 이벤트 설정
+        setButtonClickController();
 
 
-
-        settingButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setVisible(false);
-                pageController = new PageController(e.getActionCommand());
-            }
-
-        });
-
-        scoreBoardButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setVisible(false);
-                pageController = new PageController(e.getActionCommand());
-            }
-        });
-
-        exitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        });
     }
 
 
@@ -131,5 +102,40 @@ public class MainPage extends JFrame{
             }
         });
 
+    }
+    private void setButtonClickController(){
+        gameStartButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setVisible(false);
+                pageController = new PageController(e.getActionCommand());
+            }
+        });
+
+
+
+        settingButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setVisible(false);
+                pageController = new PageController(e.getActionCommand());
+            }
+
+        });
+
+        scoreBoardButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setVisible(false);
+                pageController = new PageController(e.getActionCommand());
+            }
+        });
+
+        exitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
     }
 }
