@@ -13,11 +13,19 @@ import java.awt.event.KeyEvent;
 public class ScorePage extends JFrame {
 
     private JPanel scorePanel;
-    private JLabel[] Scores=new JLabel[10];
+    private JLabel[] Scores = new JLabel[10];
     private JButton mainButton;
     private PageController pageController;
 
-    public ScorePage()
+    public ScorePage() {
+
+        initialize();
+        setButtonClickController();
+
+
+    }
+
+    private void initialize()
     {
         this.add(scorePanel);
         this.setSize(500, 500);
@@ -26,17 +34,17 @@ public class ScorePage extends JFrame {
 
         this.setLocationRelativeTo(null);//화면 가운데에 생성
 
-        for(int i=0;i<Scores.length;i++)
-        {
+        for (int i = 0; i < Scores.length; i++) {
             //파일에서 읽어오는 내용 추가
 
         }
 
-
         //포커스를 이 화면에 맟춰서 키 이벤트 받게 만듦
         requestFocus();
         setFocusable(true);
+    }
 
+    private void setButtonClickController() {
         mainButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -44,7 +52,6 @@ public class ScorePage extends JFrame {
                 pageController = new PageController(e.getActionCommand());
             }
         });
-
     }
 
 }

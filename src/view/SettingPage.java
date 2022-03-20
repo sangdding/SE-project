@@ -9,17 +9,34 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class SettingPage extends JFrame{
-    private JSlider slider1;
     private JPanel settingPanel;
-    private JPanel settingSubPanel;
-    private JLabel left;
-    private JLabel right;
     private JButton mainButton;
     private JPanel bottomPanel;
+    private JPanel resolutionPanel;
+    private JButton resolutionButton1;
+    private JButton resolutionButton2;
+    private JButton resolutionButton3;
+    private JButton settingResetButton;
+    private JButton scoreboardResetButton;
+    private JCheckBox colorBlindnessCheckBox;
+    private JButton keySettingButton;
     private PageController pageController;
 
     public SettingPage() {
 
+
+        initialize();
+        //키보드 이벤트 처리 설정
+        setKeyEventController();
+
+        setButtonClickController();
+
+
+
+
+    }
+    private void initialize()
+    {
         this.add(settingPanel);
         this.setSize(500, 500);
         this.setVisible(true);
@@ -31,20 +48,7 @@ public class SettingPage extends JFrame{
         //포커스를 이 화면에 맟춰서 키 이벤트 받게 만듦
         requestFocus();
         setFocusable(true);
-
-        //키보드 이벤트 처리 설정
-        setKeyEventController();
-
-
-        mainButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setVisible(false);
-                pageController = new PageController(e.getActionCommand());
-            }
-        });
     }
-
     private void setKeyEventController()
     {
         addKeyListener(new KeyAdapter() { //키 이벤트
@@ -65,6 +69,42 @@ public class SettingPage extends JFrame{
                     default:
                         break;
                 }
+            }
+        });
+
+    }
+
+    private void setButtonClickController(){
+        mainButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setVisible(false);
+                pageController = new PageController(e.getActionCommand());
+            }
+        });
+
+        resolutionButton1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //파일 입출력을 통해 세팅 txt에 해상도 사이즈 변경
+            }
+        });
+        resolutionButton2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //파일 입출력을 통해 세팅 txt에 해상도 사이즈 변경
+            }
+        });
+        resolutionButton3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //파일 입출력을 통해 세팅 txt에 해상도 사이즈 변경
+            }
+        });
+        settingResetButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //파일 입출력을 통해 세팅 txt 초기화
             }
         });
 
