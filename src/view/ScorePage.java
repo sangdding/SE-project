@@ -15,6 +15,7 @@ public class ScorePage extends JFrame {
     private JPanel scorePanel;
     private JLabel[] Scores = new JLabel[10];
     private JButton mainButton;
+
     private PageController pageController;
 
     public ScorePage() {

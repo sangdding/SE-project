@@ -13,12 +13,13 @@ import java.awt.event.KeyEvent;
 
 public class MainPage extends JFrame{
 
+    private JPanel mainPanel;
+
     private JButton gameStartButton;
     private JButton settingButton;
     private JButton scoreBoardButton;
     private JButton exitButton;
 
-    private JPanel mainPanel;
 
     private PageController pageController;
 

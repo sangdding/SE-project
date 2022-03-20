@@ -10,9 +10,11 @@ import java.awt.event.KeyEvent;
 
 public class SettingPage extends JFrame{
     private JPanel settingPanel;
-    private JButton mainButton;
-    private JPanel bottomPanel;
+    private JPanel buttonPanel;
     private JPanel resolutionPanel;
+    private PageController pageController;
+
+    private JButton mainButton;
     private JButton resolutionButton1;
     private JButton resolutionButton2;
     private JButton resolutionButton3;
@@ -20,7 +22,9 @@ public class SettingPage extends JFrame{
     private JButton scoreboardResetButton;
     private JCheckBox colorBlindnessCheckBox;
     private JButton keySettingButton;
-    private PageController pageController;
+
+
+
 
     public SettingPage() {
 
@@ -44,11 +48,19 @@ public class SettingPage extends JFrame{
 
         this.setLocationRelativeTo(null);//화면 가운데에 생성
 
+        //세팅 파일에서 읽어와서 색맹모드 1이면 체크박스 체크. if 문 안에 세팅 파일 속 색맹모드 여부 체크
+        if(1==0) colorBlindnessCheckBox.setSelected(true);
+
+        else colorBlindnessCheckBox.setSelected(false);
+
 
         //포커스를 이 화면에 맟춰서 키 이벤트 받게 만듦
         requestFocus();
         setFocusable(true);
     }
+
+
+
     private void setKeyEventController()
     {
         addKeyListener(new KeyAdapter() { //키 이벤트
@@ -105,6 +117,19 @@ public class SettingPage extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 //파일 입출력을 통해 세팅 txt 초기화
+            }
+        });
+        scoreboardResetButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //파일 입출력을 통해 스코어보드 txt 초기화
+            }
+        });
+
+        keySettingButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //키세팅 페이지로 전환
             }
         });
 
