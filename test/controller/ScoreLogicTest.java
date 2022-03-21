@@ -38,7 +38,7 @@ class ScoreLogicTest {
     @Test
     public void 정렬_테스트() {
         저장_테스트();
-        HashMap<Long, Integer> resultList = scoreLogic.sortByAscend(this.score.getList());
+        HashMap<String, Integer> resultList = scoreLogic.sortByAscend(this.score.getList());
         int testValue = 200;
         for(int score : resultList.values()) {
             System.out.println(score);
