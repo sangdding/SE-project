@@ -12,13 +12,13 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class JsonKeySetting implements SettingInfo{
+public class JsonSetting implements SettingInfo{
 
     private JSONObject keySet;
     private JSONObject defaultKeyset;
     private ObjectMapper objectMapper;
 
-    public JsonKeySetting() throws IOException, ParseException {
+    public JsonSetting() throws IOException, ParseException {
         JSONParser parser = new JSONParser();
         try {
             Reader readerCustom = new FileReader("src/keySet.json");

@@ -1,6 +1,5 @@
 package model;
 
-import com.sun.jdi.request.DuplicateRequestException;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -44,7 +43,7 @@ class JsonKeySettingTest {
 
     @Test
     void 같은_키_중복입력() throws IOException, ParseException {
-        JsonKeySetting jsonKeySetting = new JsonKeySetting();
+        JsonSetting jsonKeySetting = new JsonSetting();
         HashMap<String, Integer> changeKey = new HashMap<>();
         changeKey.put("up", KeyEvent.VK_9);
         changeKey.put("down", KeyEvent.VK_0);
@@ -56,7 +55,7 @@ class JsonKeySettingTest {
 
     @Test
     void getDefaultKeySet() throws IOException, ParseException {
-        JsonKeySetting jsonKeySetting = new JsonKeySetting();
+        JsonSetting jsonKeySetting = new JsonSetting();
         jsonKeySetting.setDefaultKeySet();
         assertTrue(jsonKeySetting.getKeyList().equals(jsonKeySetting.getDefaultKeySet()));
     }

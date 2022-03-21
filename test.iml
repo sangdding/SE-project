@@ -12,5 +12,6 @@
     <orderEntry type="library" scope="TEST" name="googlecode.json.simple" level="project" />
     <orderEntry type="library" name="codehaus.jackson.mapper.asl" level="project" />
     <orderEntry type="library" name="google.code.gson" level="project" />
+    <orderEntry type="library" name="googlecode.json.simple" level="project" />
   </component>
 </module>
