@@ -6,13 +6,12 @@ import controller.PageController;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 
 public class ScorePage extends JFrame {
 
     private JPanel scorePanel;
+    private JPanel ButtonPanel;
     private JLabel[] Scores = new JLabel[10];
     private JButton mainButton;
 
@@ -55,4 +54,10 @@ public class ScorePage extends JFrame {
         });
     }
 
+
+    public JPanel returnScorePanel()
+    {
+        this.setVisible(false);
+        return this.scorePanel;
+    }
 }
