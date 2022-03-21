@@ -18,7 +18,7 @@ public class JsonSetting implements SettingInfo{
     private JSONObject defaultKeyset;
     private ObjectMapper objectMapper;
 
-    public JsonSetting() throws IOException, ParseException {
+    public JsonSetting() {
         JSONParser parser = new JSONParser();
         try {
             Reader readerCustom = new FileReader("src/keySet.json");
@@ -26,7 +26,11 @@ public class JsonSetting implements SettingInfo{
             keySet = (JSONObject) parser.parse(readerCustom);
             defaultKeyset = (JSONObject) parser.parse(readerDefault);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            System.out.println("파일이 존재하지 않습니다.");
+        } catch (IOException e) {
+            System.out.println("입출력 에러");
+        } catch (ParseException e) {
+            System.out.println("파싱 에러");
         }
     }
 
@@ -54,7 +58,7 @@ public class JsonSetting implements SettingInfo{
             fw.flush();
             fw.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("입출력 에러");
         }
     }
 
@@ -65,7 +69,7 @@ public class JsonSetting implements SettingInfo{
             returnDefaultKeySet = objectMapper.readValue(defaultKeyset.toJSONString(), new TypeReference<Map<String, Integer>>() {
             });
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("입출력 에러");
         }
         return returnDefaultKeySet;
     }

@@ -1,11 +1,11 @@
 package config;
 
+import model.JsonScoreImpl;
 import model.Score;
-import model.ScoreImpl;
 
 public class AppConfig {
 
     public Score score() {
-        return new ScoreImpl();
+        return new JsonScoreImpl();
     }
 }

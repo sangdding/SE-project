@@ -11,4 +11,6 @@ public interface SettingInfo {
     HashMap<String, Integer> getDefaultKeySet(); // 기본 키 설정 가져오기
 
     void setDefaultKeySet(); // 기본 키로 설정
+
+
 }
