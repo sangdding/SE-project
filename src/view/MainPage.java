@@ -58,7 +58,7 @@ public class MainPage extends JFrame{
 
         this.setLocationRelativeTo(null); //화면 가운데에 윈도우 생성
 
-
+        System.out.println(settingButton.getBackground());
         //초기 버튼을 버튼 배열의 0번째 버튼으로 설정
         buttons[0].setBackground(Color.RED);
 
@@ -81,14 +81,14 @@ public class MainPage extends JFrame{
                     case KeyEvent.VK_DOWN: //방향키(아래) 눌렀을때
                         if (buttonSelecterIndex+1<buttons.length)
                         {
-                            buttons[buttonSelecterIndex].setBackground(new Color(238,238,238));
+                            buttons[buttonSelecterIndex].setBackground(null);
                             buttons[++buttonSelecterIndex].setBackground(Color.RED);
                         }
                         break;
                     case KeyEvent.VK_UP: //방향키(위)눌렀을때
                         if(buttonSelecterIndex>0)
                         {
-                            buttons[buttonSelecterIndex].setBackground(new Color(238,238,238));
+                            buttons[buttonSelecterIndex].setBackground(null);
                             buttons[--buttonSelecterIndex].setBackground(Color.RED);
                         }
                         break;
