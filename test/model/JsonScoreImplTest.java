@@ -20,7 +20,7 @@ class JsonScoreImplTest {
     }
 
     @Test
-    void 파일_없으면_만들기() {
+    void 점수_초기화() {
         score.resetList();
     }
 

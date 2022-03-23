@@ -27,24 +27,16 @@ public class JsonScore implements Score {
             scoreInfo = (JSONObject) parser.parse(readerScore);
             readerScore.close();
         } catch (FileNotFoundException e) {
-            System.out.println("hi");
-            File file = new File("src/scoreInfo.json");
-            try {
-                file.createNewFile();
-                save("admin", -1);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+            e.printStackTrace();
         } catch (IOException e) {
             System.out.println("입출력 에러");
         } catch (ParseException e) {
-            save("admin", -1);
+            e.printStackTrace();
         }
     }
 
     @Override
     public void save(String name, int score) {
-        System.out.println("save called");
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try {
             FileWriter fw = new FileWriter("src/scoreInfo.json");
@@ -62,7 +54,8 @@ public class JsonScore implements Score {
         HashMap<String, Integer> returnScoreInfo = null;
         objectMapper = new ObjectMapper();
         try {
-            returnScoreInfo = objectMapper.readValue(scoreInfo.toJSONString(), new TypeReference<Map<String, Integer>>(){});
+            returnScoreInfo = objectMapper.readValue(scoreInfo.toJSONString(), new TypeReference<Map<String, Integer>>() {
+            });
         } catch (JsonMappingException e) {
             System.out.println("JsonMapping 에러");
         } catch (JsonParseException e) {
@@ -75,11 +68,16 @@ public class JsonScore implements Score {
 
     @Override
     public void resetList() {
-        File deleteFile = new File("src/scoreInfo.json");
-        if (deleteFile.exists()) {
-            boolean fileDeleted = deleteFile.delete();
-        } else {
-            System.out.println("점수 정보가 없습니다.");
+        HashMap<String, Integer> resetScore = new HashMap<>();
+        resetScore.put("admin", -1);
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        try {
+            FileWriter fw = new FileWriter("src/scoreInfo.json");
+            gson.toJson(resetScore, fw);
+            fw.flush();
+            fw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
