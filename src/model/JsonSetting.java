@@ -16,6 +16,7 @@ public class JsonSetting implements SettingInfo{
 
     private JSONObject keySet;
     private JSONObject defaultKeyset;
+    private JSONObject displaySet;
     private ObjectMapper objectMapper;
 
     public JsonSetting() {
@@ -23,8 +24,10 @@ public class JsonSetting implements SettingInfo{
         try {
             Reader readerCustom = new FileReader("src/keySet.json");
             Reader readerDefault = new FileReader("src/defaultKeySet.json");
+            Reader readerDisplay = new FileReader("src/displayInfo.json");
             keySet = (JSONObject) parser.parse(readerCustom);
             defaultKeyset = (JSONObject) parser.parse(readerDefault);
+            displaySet = (JSONObject) parser.parse(readerDisplay);
         } catch (FileNotFoundException e) {
             System.out.println("파일이 존재하지 않습니다.");
         } catch (IOException e) {
@@ -82,5 +85,17 @@ public class JsonSetting implements SettingInfo{
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public HashMap<String, Integer> getDisplaySize(String type) {
+        objectMapper = new ObjectMapper();
+        HashMap<String, HashMap<String, Integer>> returnDisplayValue = new HashMap<>();
+        try {
+            returnDisplayValue = objectMapper.readValue(displaySet.toJSONString(), new TypeReference<Map<String, Map<String, Integer>>>(){});
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return returnDisplayValue.get(type);
     }
 }

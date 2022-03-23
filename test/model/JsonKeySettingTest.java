@@ -1,5 +1,7 @@
 package model;
 
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -13,14 +15,16 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.HashMap;
+import java.util.Map;
 
 import static java.awt.event.KeyEvent.VK_L;
 import static org.junit.jupiter.api.Assertions.*;
 
-class JsonKeySettingTest {
+class JsonSettingTest {
 
     private JSONObject keySet;
     private JSONObject defaultKeyset;
+    private JSONObject displaySet;
 
     @BeforeEach
     public void JsonKeySetting() throws IOException, ParseException {
@@ -28,8 +32,10 @@ class JsonKeySettingTest {
         try {
             Reader readerCustom = new FileReader("src/keySet.json");
             Reader readerDefault = new FileReader("src/defaultKeySet.json");
+            Reader readerDisplay = new FileReader("src/displayInfo.json");
             keySet = (JSONObject) parser.parse(readerCustom);
             defaultKeyset = (JSONObject) parser.parse(readerDefault);
+            displaySet = (JSONObject) parser.parse(readerDisplay);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -58,5 +64,17 @@ class JsonKeySettingTest {
         JsonSetting jsonKeySetting = new JsonSetting();
         jsonKeySetting.setDefaultKeySet();
         assertTrue(jsonKeySetting.getKeyList().equals(jsonKeySetting.getDefaultKeySet()));
+    }
+
+    @Test
+    void 입력_형식_테스트() {
+        HashMap<String, HashMap<String, Integer>> returnDisplayValue = new HashMap<>();
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            returnDisplayValue = objectMapper.readValue(displaySet.toJSONString(), new TypeReference<Map<String, Map<String, Integer>>>(){});
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println(returnDisplayValue.get("small").get("width"));
     }
 }
