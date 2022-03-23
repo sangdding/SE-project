@@ -1,0 +1,11 @@
+{
+  "up" : 26,
+  "down" : 28,
+  "left" : 25,
+  "right" : 27,
+  "resume" : 52,
+  "pause" : 50,
+  "exit" : 45,
+  "quickDown" : 51,
+  "drop" : 57
+}
