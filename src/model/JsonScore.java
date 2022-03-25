@@ -14,23 +14,24 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class JsonScoreImpl implements Score {
+public class JsonScore implements Score {
 
     private JSONObject scoreInfo;
     private ObjectMapper objectMapper;
 
 
-    public JsonScoreImpl() {
+    public JsonScore() {
         JSONParser parser = new JSONParser();
         try {
             Reader readerScore = new FileReader("src/scoreInfo.json");
             scoreInfo = (JSONObject) parser.parse(readerScore);
+            readerScore.close();
         } catch (FileNotFoundException e) {
-            File file = new File("src/scoreInfo.json");
+            e.printStackTrace();
         } catch (IOException e) {
             System.out.println("입출력 에러");
         } catch (ParseException e) {
-            System.out.println("파싱 에러");
+            e.printStackTrace();
         }
     }
 
@@ -39,7 +40,7 @@ public class JsonScoreImpl implements Score {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try {
             FileWriter fw = new FileWriter("src/scoreInfo.json");
-            scoreInfo.put("name", score); // json 파일에 점수 저장
+            scoreInfo.put(name, score); // json 파일에 점수 저장
             gson.toJson(scoreInfo, fw); // 로컬에 저장
             fw.flush();
             fw.close();
@@ -51,8 +52,10 @@ public class JsonScoreImpl implements Score {
     @Override
     public HashMap<String, Integer> getList() {
         HashMap<String, Integer> returnScoreInfo = null;
+        objectMapper = new ObjectMapper();
         try {
-            returnScoreInfo = objectMapper.readValue(scoreInfo.toJSONString(), new TypeReference<Map<String, Integer>>(){});
+            returnScoreInfo = objectMapper.readValue(scoreInfo.toJSONString(), new TypeReference<Map<String, Integer>>() {
+            });
         } catch (JsonMappingException e) {
             System.out.println("JsonMapping 에러");
         } catch (JsonParseException e) {
@@ -65,11 +68,16 @@ public class JsonScoreImpl implements Score {
 
     @Override
     public void resetList() {
-        File deleteFile = new File("src/scoreInfo.json");
-        if (deleteFile.exists()) {
-            deleteFile.delete();
-        } else {
-            System.out.println("점수 정보가 없습니다.");
+        HashMap<String, Integer> resetScore = new HashMap<>();
+        resetScore.put("admin", -1);
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        try {
+            FileWriter fw = new FileWriter("src/scoreInfo.json");
+            gson.toJson(resetScore, fw);
+            fw.flush();
+            fw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

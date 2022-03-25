@@ -1,0 +1,14 @@
+{
+  "big" : {
+    "width" : 500,
+    "height" : 800
+  },
+  "medium" : {
+    "width" : 800,
+    "height" : 800
+  },
+  "small" : {
+    "width" : 1000,
+    "height" : 1500
+  }
+}
