@@ -17,7 +17,7 @@ public class PageController {
             settingPage = new SettingPage();
         } else if (pageName.equals("Main")) {
             mainPage = new MainPage();
-        } else if (pageName.equals("Game Start")) {
+        } else if (pageName.equals("Game Start") || pageName.equals("Game Restart")) {
             gamePage = new GamePage();
         }
         else if (pageName.equals("ScoreBoard")) {
@@ -25,7 +25,5 @@ public class PageController {
         }
     }
 
-    private void setButtonClickController(){
-        
-    }
+
 }
