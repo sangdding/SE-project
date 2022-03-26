@@ -4,201 +4,191 @@ import java.awt.Color;
 import java.awt.Graphics;
 import javax.swing.JPanel;
 
-
-//JPanel 클래스. 게임 로직 부분 떼다가 gamepage에 붙이면 된다.
-public class GameArea extends JPanel{
+public class GameArea extends JPanel {
 
     private int gridRows;
     private int gridColumns;
     private int gridCellSize;
-    private Color[][] background;
+    private int[][] background;
     private TetrisBlock block;//블럭을 만드는 과정 L자 모형
 
 
-
-    public GameArea(JPanel placeholder,int columns){//생성자
-        // placeholder는 gameArea 객체가 붙을 객체. 여기선 gamepage의 gameAreaPlaceholder panel
-        placeholder.setVisible(false); //여기 수정
+    //여기가 거의 메인메소드
+    public GameArea(JPanel placeholder, int columns) {//생성자
+        placeholder.setVisible(false);
         this.setBounds(placeholder.getBounds()); //왼쪽 대각선 좌표, 오른쪽 대각선 좌표
         //this.setBackground(Color.RED); //배경 색 설정
         this.setBackground(placeholder.getBackground()); //객체의 배경색을 알아서 받아옴
         this.setBorder(placeholder.getBorder());
-
-        //여기까지는 평범한 java swing code
-
-
-        //이 변수들은 로직들을 위함. 나는 필요 없다.
-        gridColumns= columns;
-        gridCellSize=this.getBounds().width/ columns;
-        gridRows =this.getBounds().height / gridCellSize;
-        
-        //블럭들을 표현하기 위한 배열. 이건
-        background = new Color[gridRows][gridColumns];
+        gridColumns = 10;
+        gridRows = 20;
+        background = new int[gridRows][gridColumns];
     }
 
-
-
-    private boolean checkBottom(){
-        if(block.getBottomEdge()== gridRows){
+    private boolean checkBottom() {
+        if (block.getBottomEdge() == gridRows) {
             return false;
         }
         int[][] shape = block.getShape();
         int w = block.getWidth();
-        int h= block.getHeight();
-        for(int col=0; col<w; col++){
-            for(int row=h-1; row>=0; row--)
-            {
-                if(shape[row][col]!=0){
-                    int x = col+block.getX();
-                    int y = row+block.getY()+1;
-                    if(y<0) break;
-                    if(background[y][x]!=null) return false;
+        int h = block.getHeight();
+        for (int col = 0; col < w; col++) {
+            for (int row = h - 1; row >= 0; row--) {
+                if (shape[row][col] != 0) {
+                    int x = col + block.getX();
+                    int y = row + block.getY() + 1;
+                    if (y < 0) break;
+                    if (background[y][x] != 0) return false;
                     break;
                 }
             }
         }
         return true;
     }
-    private boolean checkLeft(){
-        if(block.getLeftEdge()==0) return false;
+
+    private boolean checkLeft() {
+        if (block.getLeftEdge() == 0) return false;
         int[][] shape = block.getShape();
         int w = block.getWidth();
-        int h= block.getHeight();
-        for(int row=0; row<h; row++){
-            for(int col=0; col<w; col++)
-            {
-                if(shape[row][col]!=0){
-                    int x = col+block.getX() -1;
-                    int y = row+block.getY();
-                    if(y<0) break;
-                    if(background[y][x]!=null) return false;
+        int h = block.getHeight();
+        for (int row = 0; row < h; row++) {
+            for (int col = 0; col < w; col++) {
+                if (shape[row][col] != 0) {
+                    int x = col + block.getX() - 1;
+                    int y = row + block.getY();
+                    if (y < 0) break;
+                    if (background[y][x] != 0) return false;
                     break;
                 }
             }
         }
         return true;
     }
-    private boolean checkRight(){
-        if(block.getRightEdge()==gridColumns) return false;
+
+    private boolean checkRight() {
+        if (block.getRightEdge() == gridColumns) return false;
         int[][] shape = block.getShape();
         int w = block.getWidth();
-        int h= block.getHeight();
-        for(int row=0; row<h; row++){
-            for(int col=w-1; col>= 0; col--)
-            {
-                if(shape[row][col]!=0){
-                    int x = col+block.getX() -1;
-                    int y = row+block.getY();
-                    if(y<0) break;
-                    if(background[y][x]!=null) return false;
+        int h = block.getHeight();
+        for (int row = 0; row < h; row++) {
+            for (int col = w - 1; col >= 0; col--) {
+                if (shape[row][col] != 0) {
+                    int x = col + block.getX() - 1;
+                    int y = row + block.getY();
+                    if (y < 0) break;
+                    if (background[y][x] != 0) return false;
                     break;
                 }
             }
         }
         return true;
     }
-    public void spawnBlock(int[][] arr)
-    { //블럭생성
-        block = new TetrisBlock( arr, Color.blue);
+
+    public void spawnBlock(int[][] shape, int color) { //블럭생성
+        block = new TetrisBlock(shape, color);
         block.spawn(gridColumns);
     }
-    public  boolean moveBlockDown(){
 
-        if(checkBottom()==false){
-            moveBlockToBackground(); //바닥에 닿으면 지금 템프의 블럭을 백그라운드로 옮김.
+    public boolean isBlockOuOofBounds() {
+        if (block.getY() < 0) { //맨 위 프레임을 건들여, 게임에서 진 상황
+            block = null;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean moveBlockDown() {
+        if (checkBottom() == false) {//바닥에 닿으면 지금 템프의 블럭을 백그라운드로 옮김.
             return false;
         }
         block.moveDown();
         repaint();
         return true;
     }
-    public void moveBlockRight(){
-        if(!checkRight()) return;
+
+    public void moveBlockRight() {
+        if (block == null) return;
+        if (!checkRight()) return;
         block.moveRight();
         repaint();
     }
-    public void moveBlockLeft(){
-        if(!checkLeft()) return;
+
+    public void moveBlockLeft() {
+        if (block == null) return;
+        if (!checkLeft()) return;
         block.moveLeft();
         repaint();
     }
-    public void dropBlock(){
-        while(checkBottom()){
-            block.moveDown();}
+
+    public void dropBlock() {
+        if (block == null) return;
+        while (checkBottom()) {
+            block.moveDown();
+        }
     }
-    public void rotateBlock(){
+
+    public void rotateBlock() {
+        if (block == null) return;
         block.rotate();
         repaint();
     }
-    private void moveBlockToBackground(){
+
+    public void moveBlockToBackground() {
         int[][] shape = block.getShape();
-        int h= block.getHeight();
-        int w=block.getWidth();
-        int xPos= block.getX();
-        int yPos= block.getY();
-        Color color = block.getColor();
-        for (int r=0; r<h; r++){
-            for (int c=0; c<w; c++){
-                if(shape[r][c]==1){
-                    background[r+yPos][c+xPos] = color;
-                }
-            }
-        }
-    }
-    //블럭을 만들기
-    private void drawBlock(Graphics g){
-        int h= block.getHeight();
+        int h = block.getHeight();
         int w = block.getWidth();
-        Color c = block.getColor();
-        int[][] shape = block.getShape();
-        for(int row=0; row<h;row++){
-            for ( int col=0; col<w;col++){
-                if(shape[row][col] == 1)
-                {
-                    int x= (block.getX()+col)*gridCellSize;
-                    int y=(block.getY()+row)*gridCellSize;
-                    drawGridSquare(g,c,x,y);
+        int xPos = block.getX();
+        int yPos = block.getY();
+        int color = block.getColor();
+        for (int r = 0; r < h; r++) {
+            for (int c = 0; c < w; c++) {
+                if (shape[r][c] != 0) {
+                    background[r + yPos][c + xPos] = color;
                 }
             }
         }
     }
 
-    private void drawBackGround(Graphics g){//처리가 끝난 블럭을 처리하는 방법
-        Color color;
-        for(int r=0; r<gridRows; r++){
-            for(int c =0; c<gridColumns; c++){
-                color=background[r][c]; //null = no color
-                if(color !=null){
-                    int x=c*gridCellSize;
-                    int y=r*gridCellSize;
-                    drawGridSquare(g,color,x,y);
+
+    //행제거
+    public int clearLines() {
+        boolean lineFilled;
+        int linesCleared = 0;
+        for (int r = gridRows - 1; r >= 0; r--) {
+            lineFilled = true;
+            for (int c = 0; c < gridColumns; c++) {
+                if (background[r][c] == 0) {
+                    lineFilled = false;
                 }
+
             }
-        }
-    }
-    private void drawGridSquare(Graphics g,Color color ,int x, int y){
-        g.setColor(color);
-        g.fillRect(x, y, gridCellSize, gridCellSize);
-        g.setColor(Color.black);
-        g.drawRect(x,y,gridCellSize,gridCellSize);
-    }
-
-
-    @Override
-    protected void paintComponent(Graphics g){
-        super.paintComponent(g); //게임영역 원하는 색으로 채우기 위해서 필요함
-        for(int x=0; x<gridRows; x++){
-            g.drawRect(0, x*gridCellSize, gridCellSize, gridCellSize);
-        }
-        //d이게 그 배경에 그리드 칠하는거.
-        for(int x=0; x<gridColumns; x++){
-            for(int j=0; j<gridRows; j++){
-                g.drawRect(x*gridCellSize, j*gridCellSize, gridCellSize, gridCellSize);
+            if (lineFilled) {
+                linesCleared++;
+                clearLine(r);
+                shiftDown(r);
+                clearLine(0);
+                r++; //한줄만 지워지는거 제외
+                repaint();
             }
 
         }
-        drawBackGround(g); //백그라운드
-        drawBlock(g);
+        return linesCleared;
     }
 
+    //행제거
+    private void clearLine(int r) {
+
+        for (int i = 0; i < gridColumns; i++) {
+            background[r][i] = 0;
+        }
+    }
+
+    //나머지 행들 끌어오기
+    private void shiftDown(int r) {
+        for (int row = r; row > 0; row--) {
+            for (int col = 0; col < gridColumns; col++) {
+                background[row][col] = background[row - 1][col];
+            }
+        }
+    }
 }
