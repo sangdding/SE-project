@@ -33,7 +33,7 @@ public class GameThread extends Thread{
 
         while(true){
             ga.spawnBlock(shapes[0],); //블럭 추가
-            while(ga.moveBlockDown()){
+            while(ga.checkBottom()){
                 try {
                     Thread.sleep(wait);
                 } catch (InterruptedException ex) {

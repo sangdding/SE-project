@@ -1,10 +1,6 @@
-
 package model;
-import java.awt.Color;
-import java.awt.Graphics;
-import javax.swing.JPanel;
 
-public class GameArea extends JPanel {
+public class GameArea {
 
     private int gridRows;
     private int gridColumns;
@@ -14,18 +10,13 @@ public class GameArea extends JPanel {
 
 
     //여기가 거의 메인메소드
-    public GameArea(JPanel placeholder, int columns) {//생성자
-        placeholder.setVisible(false);
-        this.setBounds(placeholder.getBounds()); //왼쪽 대각선 좌표, 오른쪽 대각선 좌표
-        //this.setBackground(Color.RED); //배경 색 설정
-        this.setBackground(placeholder.getBackground()); //객체의 배경색을 알아서 받아옴
-        this.setBorder(placeholder.getBorder());
+    public GameArea() {//생성자
         gridColumns = 10;
         gridRows = 20;
         background = new int[gridRows][gridColumns];
     }
 
-    private boolean checkBottom() {
+    public boolean checkBottom() {
         if (block.getBottomEdge() == gridRows) {
             return false;
         }
@@ -83,7 +74,6 @@ public class GameArea extends JPanel {
         }
         return true;
     }
-
     public void spawnBlock(int[][] shape, int color) { //블럭생성
         block = new TetrisBlock(shape, color);
         block.spawn(gridColumns);
@@ -96,43 +86,36 @@ public class GameArea extends JPanel {
         }
         return false;
     }
-
-    public boolean moveBlockDown() {
-        if (checkBottom() == false) {//바닥에 닿으면 지금 템프의 블럭을 백그라운드로 옮김.
-            return false;
-        }
+    public int[][] moveBlockDown() {
         block.moveDown();
-        repaint();
-        return true;
+        return background;
     }
-
-    public void moveBlockRight() {
-        if (block == null) return;
-        if (!checkRight()) return;
+    public int[][] moveBlockRight() {
+        if (block == null) return background;
+        if (!checkRight()) return background;
         block.moveRight();
-        repaint();
+        return background;
     }
 
-    public void moveBlockLeft() {
-        if (block == null) return;
-        if (!checkLeft()) return;
+    public int[][] moveBlockLeft() {
+        if (block == null) return background;
+        if (!checkLeft()) return background;
         block.moveLeft();
-        repaint();
+        return background;
     }
-
-    public void dropBlock() {
-        if (block == null) return;
+    public int[][] dropBlock() {
+        if (block == null) return background;
         while (checkBottom()) {
             block.moveDown();
         }
+        return background;
     }
 
-    public void rotateBlock() {
-        if (block == null) return;
+    public int[][] rotateBlock() {
+        if (block == null) return background;
         block.rotate();
-        repaint();
+        return background;
     }
-
     public void moveBlockToBackground() {
         int[][] shape = block.getShape();
         int h = block.getHeight();
@@ -168,13 +151,11 @@ public class GameArea extends JPanel {
                 shiftDown(r);
                 clearLine(0);
                 r++; //한줄만 지워지는거 제외
-                repaint();
             }
 
         }
         return linesCleared;
     }
-
     //행제거
     private void clearLine(int r) {
 
@@ -182,7 +163,6 @@ public class GameArea extends JPanel {
             background[r][i] = 0;
         }
     }
-
     //나머지 행들 끌어오기
     private void shiftDown(int r) {
         for (int row = r; row > 0; row--) {
@@ -190,5 +170,8 @@ public class GameArea extends JPanel {
                 background[row][col] = background[row - 1][col];
             }
         }
+    }
+    public int[][] getBackground(){
+        return background;
     }
 }

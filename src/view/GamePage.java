@@ -25,7 +25,7 @@ public class GamePage extends JFrame{
     public GamePage() {
         //초기화
         initialize();
-        ga=new GameArea(gameAreaPlaceholder,10);
+        ga=new GameArea();
         this.add(ga);
         //키보드 이벤트 처리 설정
         setKeyEventController();
