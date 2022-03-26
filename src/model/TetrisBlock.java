@@ -3,11 +3,11 @@ import java.awt.Color;
 
 public class TetrisBlock {
     private int[][] shape;
-    private Color color;
+    private int color;
     private int x,y;
     private int[][][] shapes;
     private int currentRotation;
-    public TetrisBlock(int[][] shape, Color color)
+    public TetrisBlock(int[][] shape, int color)
     {
         this.shape = shape;
         this.color = color; //블럭 생성자
@@ -35,7 +35,7 @@ public class TetrisBlock {
         x= (gridWidth-getWidth())/2;
     }
     public int[][] getShape(){return this.shape;} //지금 형태를 2차원 배열로 리턴
-    public Color getColor(){return this.color;} // 컬러 받기
+    public int getColor(){return this.color;} // 컬러 받기
     public int getHeight(){return shape.length;}
     public int getWidth(){return shape[0].length;}
     public int getX(){ return x;}
