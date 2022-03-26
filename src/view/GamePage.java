@@ -25,8 +25,12 @@ public class GamePage extends JFrame{
     public GamePage() {
         //초기화
         initialize();
+
+        //여기가 민재 부분
         ga=new GameArea(gameAreaPlaceholder,10);
         this.add(ga);
+        
+
         //키보드 이벤트 처리 설정
         setKeyEventController();
         //버튼 마우스 입력 처리 설정
@@ -47,7 +51,7 @@ public class GamePage extends JFrame{
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // x표 눌럿을 때 프로그램 종료되게 만듦
 
 
-
+        this.setTitle("Tetris Game");
         //포커스를 이 화면에 맟춰서 키 이벤트 받게 만듦
         requestFocus();
         setFocusable(true);

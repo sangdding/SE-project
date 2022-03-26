@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import javax.swing.JPanel;
 
+
+//JPanel 클래스. 게임 로직 부분 떼다가 gamepage에 붙이면 된다.
 public class GameArea extends JPanel{
 
     private int gridRows;
@@ -13,18 +15,29 @@ public class GameArea extends JPanel{
     private TetrisBlock block;//블럭을 만드는 과정 L자 모형
 
 
-    //여기가 거의 메인메소드
+
     public GameArea(JPanel placeholder,int columns){//생성자
-        placeholder.setVisible(false);
+        // placeholder는 gameArea 객체가 붙을 객체. 여기선 gamepage의 gameAreaPlaceholder panel
+        placeholder.setVisible(false); //여기 수정
         this.setBounds(placeholder.getBounds()); //왼쪽 대각선 좌표, 오른쪽 대각선 좌표
         //this.setBackground(Color.RED); //배경 색 설정
         this.setBackground(placeholder.getBackground()); //객체의 배경색을 알아서 받아옴
         this.setBorder(placeholder.getBorder());
+
+        //여기까지는 평범한 java swing code
+
+
+        //이 변수들은 로직들을 위함. 나는 필요 없다.
         gridColumns= columns;
         gridCellSize=this.getBounds().width/ columns;
         gridRows =this.getBounds().height / gridCellSize;
+        
+        //블럭들을 표현하기 위한 배열. 이건
         background = new Color[gridRows][gridColumns];
     }
+
+
+
     private boolean checkBottom(){
         if(block.getBottomEdge()== gridRows){
             return false;
