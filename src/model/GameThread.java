@@ -40,6 +40,7 @@ public class GameThread extends Thread{
             if(i == 3 ){i=0;} else{i++;}
             ga.moveBlockToBackground();
             score+=ga.clearLines();
+            gp.setScore(score);
             wait-=50;
     }
     }

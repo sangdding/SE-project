@@ -21,6 +21,7 @@ public class GamePage extends JFrame{
     private JButton mainButton;
     private JButton stopButton;
     private PageController pageController;
+    private int score;
     public GamePage() {
         //초기화
         initialize();
@@ -52,6 +53,9 @@ public class GamePage extends JFrame{
         //화면 가운데에 생성
         this.setLocationRelativeTo(null);
 
+    }
+    public void setScore(int score){
+        this.score=score;
     }
     private void setKeyEventController()
     {

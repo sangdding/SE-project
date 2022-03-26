@@ -92,7 +92,7 @@ public class GameArea extends JPanel{
         block.spawn(gridColumns);
     }
     public boolean isBlockOuOofBounds(){
-        if(block.getY() <0 ){
+        if(block.getY() <0 ){ //맨 위 프레임을 건들여, 게임에서 진 상황
             block=null;
             return true;
         }
