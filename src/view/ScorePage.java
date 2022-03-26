@@ -4,17 +4,23 @@ package view;
 import controller.PageController;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import model.JsonScore;
+
 import java.io.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.ArrayList;
 
 
 public class ScorePage extends JFrame {
 
     private JPanel MainPanel;
     private JPanel ButtonPanel;
-    private JLabel[] Scores = new JLabel[10];
+    //private JLabel[] Scores = new JLabel[10];
     private JButton mainButton;
     private JPanel ScorePanel;
 
@@ -37,10 +43,9 @@ public class ScorePage extends JFrame {
 
         this.setLocationRelativeTo(null);//화면 가운데에 생성
 
-        for (int i = 0; i < Scores.length; i++) {
-            //파일에서 읽어오는 내용 추가
 
-        }
+
+        setScoreBoard();
 
         //포커스를 이 화면에 맟춰서 키 이벤트 받게 만듦
         requestFocus();
@@ -62,5 +67,30 @@ public class ScorePage extends JFrame {
     {
         this.setVisible(false);
         return this.ScorePanel;
+    }
+
+    private void setScoreBoard()
+    {
+        HashMap<String,Integer> scoreInfo= new JsonScore().getList();
+        ArrayList<Integer> scores = new ArrayList<Integer>();
+
+        Iterator<String> iter = scoreInfo.keySet().iterator();
+        while(iter.hasNext()) {
+            String key = iter.next();
+            scores.add(scoreInfo.get(key));
+        }
+        System.out.println(scoreInfo);
+
+        Iterator<Integer> iter2=scores.iterator();
+        for(int i=0;i<10;i++)
+        {
+            Component c = ScorePanel.getComponent(2*i+1);
+            if(c instanceof JLabel)
+            {
+                JLabel jl=(JLabel) c;
+                jl.setText(Integer.toString(iter2.next()));
+            }
+        }
+
     }
 }
