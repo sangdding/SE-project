@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public interface SettingInfo {
@@ -12,5 +13,10 @@ public interface SettingInfo {
 
     void setDefaultKeySet(); // 기본 키로 설정
 
-
+    /**
+     * type : small, normal, big
+     * return : key = width, height
+     * 디폴트 설정 호출하면 normal로 세팅해주세요
+     */
+    HashMap<String, Integer> getDisplaySize(String type);
 }
