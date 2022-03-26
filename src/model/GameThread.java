@@ -21,7 +21,7 @@ public class GameThread extends Thread{
             {{1},{1},{1},{1}},{{1,0,0},{1,1,1}},{{0,0,1},{1,1,1}},{{1,1},{1,1}},
             {{0,1,1},{1,1,0}},{{0,1,0},{1,1,1}},{{1,1,0},{0,3,3}}
     };
-    private Color[] colors={Color.RED,Color.RED,Color.RED,Color.RED,Color.RED,Color.RED,Color.RED};
+    private int[] colors={1,2,3,4,5,6,7};
 
     public GameThread(GameArea ga,GamePage gp){ //gameArea를 넘김
     this.ga=ga;
@@ -32,7 +32,7 @@ public class GameThread extends Thread{
     public void run(){//런이 꺼지면 쓰레드가 날아가기때문에 무한루푸 실행해줘야함.
 
         while(true){
-            ga.spawnBlock(shapes[0],); //블럭 추가
+            ga.spawnBlock(shapes[i],colors[i]); //블럭 추가
             while(ga.checkBottom()){
                 try {
                     Thread.sleep(wait);
@@ -44,14 +44,14 @@ public class GameThread extends Thread{
                 System.out.println("GameOver");
                 break;
             }
-            if(i == 3 ){i=0;} else{i++;}
+            if(i == colors.length -1 ){i=0;} else{i++;}
             ga.moveBlockToBackground();
             if(ga.clearLines() > 1){score=score+ga.clearLines()*2;}
             else {score+=ga.clearLines();}
             gp.setScore(score);
             if(ga.clearLines() != 0){wait -=50;}}}
         }
-    }
+
 
 
 
