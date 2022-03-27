@@ -1,9 +1,6 @@
 package controller;
 
-import view.GamePage;
-import view.MainPage;
-import view.ScorePage;
-import view.SettingPage;
+import view.*;
 
 public class PageController {
 
@@ -11,6 +8,8 @@ public class PageController {
     private SettingPage settingPage;
     private GamePage gamePage;
     private ScorePage scorePage;
+    private GameEndPage gameEndPage;
+    private KeySettingPage keySettingPage;
 
     public PageController(String pageName) {
         if (pageName.equals("Setting")) {
@@ -22,6 +21,9 @@ public class PageController {
         }
         else if (pageName.equals("ScoreBoard")) {
              scorePage=new ScorePage();
+        }
+        else if (pageName.equals("Key Setting")){
+            keySettingPage=new KeySettingPage();
         }
     }
 

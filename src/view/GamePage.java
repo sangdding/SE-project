@@ -15,7 +15,7 @@ import model.GameThread;
 public class GamePage extends JFrame{
     private JPanel gamePanel;
     private javax.swing.JPanel gameAreaPlaceholder;
-    private GameArea ga;
+
     private JTextArea nextBlockTextArea;
     private JTextArea scoreBoardTextArea;
     private JButton mainButton;
@@ -25,17 +25,13 @@ public class GamePage extends JFrame{
     public GamePage() {
         //초기화
         initialize();
-        ga=new GameArea();
-        this.add(ga);
+
         //키보드 이벤트 처리 설정
         setKeyEventController();
         //버튼 마우스 입력 처리 설정
         setButtonClickController();
-        startGame();
     }
-    public void startGame(){
-        new GameThread(ga,this).start();
-    }
+
     private void initialize(){
         this.add(gamePanel);
         this.setSize(500, 800); // 나중에 파일 입출력으로 세팅 파일에서 해상도 읽어오기
@@ -68,16 +64,16 @@ public class GamePage extends JFrame{
                 switch (e.getKeyCode()) {//키 코드로 스위치
 
                     case KeyEvent.VK_DOWN: //방향키(아래) 눌렀을때
-                        ga.dropBlock();
+
                         break;
                     case KeyEvent.VK_UP: //방향키(위)눌렀을때
-                        ga.rotateBlock();
+
                         break;
                     case KeyEvent.VK_RIGHT:
-                        ga.moveBlockRight();
+
                         break;
                     case KeyEvent.VK_LEFT:
-                        ga.moveBlockLeft();
+
                     default:
                         break;
                 }
