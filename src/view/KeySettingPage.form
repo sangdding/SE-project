@@ -21,7 +21,7 @@
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Up"/>
+              <text value="up"/>
             </properties>
           </component>
           <component id="fd2c9" class="javax.swing.JLabel" binding="downButton">
@@ -29,7 +29,7 @@
               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Down"/>
+              <text value="down"/>
             </properties>
           </component>
           <component id="28f0a" class="javax.swing.JLabel" binding="rightButton">
@@ -37,7 +37,7 @@
               <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Right"/>
+              <text value="right"/>
             </properties>
           </component>
           <component id="6739e" class="javax.swing.JLabel" binding="leftButton">
@@ -45,10 +45,10 @@
               <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Left"/>
+              <text value="left"/>
             </properties>
           </component>
-          <component id="475b9" class="javax.swing.JLabel" binding="valueForUP">
+          <component id="475b9" class="javax.swing.JLabel" binding="valueForUp">
             <constraints>
               <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -56,7 +56,7 @@
               <text value="Label"/>
             </properties>
           </component>
-          <component id="fcaaf" class="javax.swing.JLabel" binding="valueFoDown">
+          <component id="fcaaf" class="javax.swing.JLabel" binding="valueForDown">
             <constraints>
               <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -64,7 +64,7 @@
               <text value="Label"/>
             </properties>
           </component>
-          <component id="bc84f" class="javax.swing.JLabel" binding="valueFOrRIght">
+          <component id="bc84f" class="javax.swing.JLabel" binding="valueForRight">
             <constraints>
               <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>

@@ -10,6 +10,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 import model.JsonSetting;
 
@@ -23,16 +24,16 @@ public class KeySettingPage extends JFrame {
     private JLabel rightButton;
     private JLabel leftButton;
     private JButton settingButton;
-    private JLabel valueForUP;
-    private JLabel valueFoDown;
-    private JLabel valueFOrRIght;
+    private JLabel valueForUp;
+    private JLabel valueForDown;
+    private JLabel valueForRight;
     private JLabel valueForLeft;
     private JButton resetButton;
 
     private PageController pageController;
 
     private JLabel[] keyLabels = new JLabel[]{upButton, downButton, rightButton, leftButton};
-    private JLabel[] keyValues = new JLabel[]{valueForUP, valueFoDown, valueFOrRIght, valueForLeft};
+    private JLabel[] keyValues = new JLabel[]{valueForUp, valueForDown, valueForRight, valueForLeft};
     private int buttonSelectorIndex = 0;
     private boolean isSetting = false;
 
@@ -79,6 +80,19 @@ public class KeySettingPage extends JFrame {
         settingButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
+                //json 파일에 세팅 저장
+                JsonSetting jsonsettign = new JsonSetting();
+                HashMap<String,Integer> keyMap=new HashMap<>();
+
+                for(int i=0;i<keyLabels.length;i++)
+                {
+                    keyMap.put(keyLabels[i].getText(),
+                            Integer.parseInt(keyValues[i].getText()));
+                }
+                jsonsettign.setKeyList(keyMap);
+
+
                 setVisible(false);
                 pageController = new PageController(e.getActionCommand());
             }
@@ -145,13 +159,11 @@ public class KeySettingPage extends JFrame {
         JsonSetting jsonsetting=new JsonSetting();
         HashMap<String,Integer> keyMap=jsonsetting.getKeyList();
 
-        HashMapParser hashmapparser= new HashMapParser();
-        ArrayList<Integer> values=hashmapparser.getValues(keyMap);
+        valueForUp.setText(Integer.toString(keyMap.get("up")));
+        valueForDown.setText(Integer.toString(keyMap.get("down")));
+        valueForRight.setText(Integer.toString(keyMap.get("right")));
+        valueForLeft.setText(Integer.toString(keyMap.get("left")));
 
-        for(int i=0;i<keyValues.length;i++)
-        {
-            keyValues[i].setText(Integer.toString(values.get(i)));
-        }
 
     }
 }
