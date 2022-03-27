@@ -8,6 +8,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import model.JsonSetting;
 
 
 public class KeySettingPage extends JFrame {
@@ -23,11 +27,12 @@ public class KeySettingPage extends JFrame {
     private JLabel valueFoDown;
     private JLabel valueFOrRIght;
     private JLabel valueForLeft;
+    private JButton resetButton;
 
     private PageController pageController;
 
-    private JLabel[] labels = new JLabel[]{upButton, downButton, rightButton, leftButton};
-    private JLabel[] values = new JLabel[]{valueForUP, valueFoDown, valueFOrRIght, valueForLeft};
+    private JLabel[] keyLabels = new JLabel[]{upButton, downButton, rightButton, leftButton};
+    private JLabel[] keyValues = new JLabel[]{valueForUP, valueFoDown, valueFOrRIght, valueForLeft};
     private int buttonSelectorIndex = 0;
     private boolean isSetting = false;
 
@@ -44,11 +49,12 @@ public class KeySettingPage extends JFrame {
 
         this.setSize(500, 500);
 
-        for (JLabel jl : labels) {
+        for (JLabel jl : keyLabels) {
             jl.setOpaque(true);
         }
         
-        //JSON 파일 읽어서 라벨 값 초기화 해야 함
+        //키 세팅 밸류 라벨 값 초기화 해야 함
+        displaySettingValues();
 
         this.add(mainPanel);
 
@@ -60,7 +66,7 @@ public class KeySettingPage extends JFrame {
 
 
         //초기 버튼을 버튼 배열의 0번째 버튼으로 설정
-        labels[0].setBackground(Color.RED);
+        keyLabels[0].setBackground(Color.RED);
 
         //포커스를 이 화면에 맟춰서 키 이벤트 받게 만듦
         requestFocus();
@@ -78,6 +84,15 @@ public class KeySettingPage extends JFrame {
             }
         });
 
+        resetButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JsonSetting jsonsetting=new JsonSetting();
+                jsonsetting.setDefaultKeySet();
+                //화면 초기화
+                displaySettingValues();
+            }
+        });
 
     }
 
@@ -92,21 +107,21 @@ public class KeySettingPage extends JFrame {
 
 
                         case KeyEvent.VK_DOWN: //방향키(아래) 눌렀을때
-                            if (buttonSelectorIndex + 1 < labels.length) {
-                                labels[buttonSelectorIndex].setBackground(null);
-                                labels[++buttonSelectorIndex].setBackground(Color.RED);
+                            if (buttonSelectorIndex + 1 < keyLabels.length) {
+                                keyLabels[buttonSelectorIndex].setBackground(null);
+                                keyLabels[++buttonSelectorIndex].setBackground(Color.RED);
                             }
                             break;
                         case KeyEvent.VK_UP: //방향키(위)눌렀을때
                             if (buttonSelectorIndex > 0) {
-                                labels[buttonSelectorIndex].setBackground(null);
-                                labels[--buttonSelectorIndex].setBackground(Color.RED);
+                                keyLabels[buttonSelectorIndex].setBackground(null);
+                                keyLabels[--buttonSelectorIndex].setBackground(Color.RED);
                             }
                             break;
                         case KeyEvent.VK_ENTER:
 
                             isSetting = true;
-                            labels[buttonSelectorIndex].setBackground(Color.GREEN);
+                            keyLabels[buttonSelectorIndex].setBackground(Color.GREEN);
 
                             break;
                         default:
@@ -117,12 +132,26 @@ public class KeySettingPage extends JFrame {
                     if(e.getKeyCode()==KeyEvent.VK_ENTER)
                     {
                         isSetting = false;
-                        labels[buttonSelectorIndex].setBackground(Color.RED);
+                        keyLabels[buttonSelectorIndex].setBackground(Color.RED);
                     }
-                    else values[buttonSelectorIndex].setText(Integer.toString(e.getKeyCode()));
+                    else keyValues[buttonSelectorIndex].setText(Integer.toString(e.getKeyCode()));
                 }
             }
         });
+
+    }
+    private void displaySettingValues()
+    {
+        JsonSetting jsonsetting=new JsonSetting();
+        HashMap<String,Integer> keyMap=jsonsetting.getKeyList();
+
+        HashMapParser hashmapparser= new HashMapParser();
+        ArrayList<Integer> values=hashmapparser.getValues(keyMap);
+
+        for(int i=0;i<keyValues.length;i++)
+        {
+            keyValues[i].setText(Integer.toString(values.get(i)));
+        }
 
     }
 }

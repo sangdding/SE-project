@@ -96,7 +96,7 @@
               <text value="9위"/>
             </properties>
           </component>
-          <component id="b4daf" class="javax.swing.JLabel">
+          <component id="b4daf" class="javax.swing.JLabel" binding="score1">
             <constraints>
               <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -104,7 +104,7 @@
               <text value="Label"/>
             </properties>
           </component>
-          <component id="52a5f" class="javax.swing.JLabel">
+          <component id="52a5f" class="javax.swing.JLabel" binding="score2">
             <constraints>
               <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -112,7 +112,7 @@
               <text value="Label"/>
             </properties>
           </component>
-          <component id="dacf1" class="javax.swing.JLabel">
+          <component id="dacf1" class="javax.swing.JLabel" binding="score3">
             <constraints>
               <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -120,7 +120,7 @@
               <text value="Label"/>
             </properties>
           </component>
-          <component id="9204" class="javax.swing.JLabel">
+          <component id="9204" class="javax.swing.JLabel" binding="score4">
             <constraints>
               <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -128,7 +128,7 @@
               <text value="Label"/>
             </properties>
           </component>
-          <component id="9035f" class="javax.swing.JLabel">
+          <component id="9035f" class="javax.swing.JLabel" binding="score5">
             <constraints>
               <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -136,7 +136,7 @@
               <text value="Label"/>
             </properties>
           </component>
-          <component id="de0c1" class="javax.swing.JLabel">
+          <component id="de0c1" class="javax.swing.JLabel" binding="score6">
             <constraints>
               <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -144,7 +144,7 @@
               <text value="Label"/>
             </properties>
           </component>
-          <component id="f9ead" class="javax.swing.JLabel">
+          <component id="f9ead" class="javax.swing.JLabel" binding="score7">
             <constraints>
               <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -152,7 +152,7 @@
               <text value="Label"/>
             </properties>
           </component>
-          <component id="fa1fc" class="javax.swing.JLabel">
+          <component id="fa1fc" class="javax.swing.JLabel" binding="score8">
             <constraints>
               <grid row="7" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -160,7 +160,7 @@
               <text value="Label"/>
             </properties>
           </component>
-          <component id="9315d" class="javax.swing.JLabel">
+          <component id="9315d" class="javax.swing.JLabel" binding="score9">
             <constraints>
               <grid row="8" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -168,7 +168,7 @@
               <text value="Label"/>
             </properties>
           </component>
-          <component id="d25fd" class="javax.swing.JLabel">
+          <component id="d25fd" class="javax.swing.JLabel" binding="score10">
             <constraints>
               <grid row="9" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
