@@ -1,10 +1,10 @@
 package view;
 
 
+import controller.HashMapParser;
 import controller.PageController;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -76,17 +76,21 @@ public class ScorePage extends JFrame {
 
     private void setScoreBoard() {
         HashMap<String, Integer> scoreInfo = new JsonScore().getList();
-        ArrayList<Integer> scores = new ArrayList<Integer>();
-
-
         HashMapParser hashmapparser = new HashMapParser();
 
-        scores = hashmapparser.getValues(scoreInfo);
+        //hashmap은 정렬이 안 되어서 list로 변경
+        java.util.List<Map.Entry<String,Integer>> orederedScoreInfo=hashmapparser.orederByDescent(scoreInfo);
 
-        System.out.println(scores);
+
+
+
+
+
+
+        System.out.println(orederedScoreInfo + "  printed at ScorePage.Java");
         for (int i = 0; i < 10; i++) {
 
-            scoreLables[i].setText(Integer.toString(scores.get(i)));
+            scoreLables[i].setText(Integer.toString(orederedScoreInfo.get(i).getValue()) + " by "+orederedScoreInfo.get(i).getKey());
 
         }
 

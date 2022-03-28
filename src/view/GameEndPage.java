@@ -1,6 +1,7 @@
 package view;
 
 import controller.PageController;
+import model.JsonScore;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -11,13 +12,16 @@ public class GameEndPage extends JFrame {
     private JPanel MainPanel;
     private JPanel InsetPanel;
     private JPanel ButtonPanel;
-    private JButton enterButton;
-    private JTextField NameTextField;
+    private JButton nameEnterButton;
+    private JTextField nameTextField;
     private JButton mainButton;
     private JButton exitButton;
     private JButton gameRestartButton;
-    private JLabel GameScore;
+    private JLabel gameScore;
+    private JPanel scoreBoardPanel;
     private PageController pageController;
+
+    private boolean scoreIsEntered =false;
 
     public GameEndPage() {
 
@@ -27,7 +31,8 @@ public class GameEndPage extends JFrame {
 
     private void initialize() {
 
-        this.add(new ScorePage().returnScorePanel());
+        scoreBoardPanel=new ScorePage().returnScorePanel();
+        this.add(scoreBoardPanel);
         this.add(MainPanel);
 
         this.setSize(500, 500);
@@ -65,6 +70,28 @@ public class GameEndPage extends JFrame {
             }
         });
 
+        nameEnterButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                if(scoreIsEntered==true)
+                {
+                    System.out.println("Already entered score");
+                    return;
+                }
+
+                scoreIsEntered=true;
+                if(!nameTextField.getText().isEmpty())
+                {
+                    JsonScore score=new JsonScore();
+                    score.save(nameTextField.getText(),1111);
+
+                    
+
+                }
+                else System.out.println("Name is empty");
+            }
+        });
 
     }
 }
