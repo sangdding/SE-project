@@ -127,10 +127,9 @@ public class GameEndPage extends JFrame {
 
                     updateScore();
 
-                    //변경된 부분 하이라이트 추가
+
                     for(int i=0;i<10;i++)
                     {
-                        //인덱스로 못 찾는 거 같은데
                         Component c = scoreBoardPanel.getComponent(3*i+2);
                         if(c instanceof JLabel)
                         {
