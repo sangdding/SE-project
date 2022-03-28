@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Random;
+
 public class GameArea {
 
     private int gridRows;
@@ -77,6 +79,8 @@ public class GameArea {
     public void spawnBlock(int[][] shape, int color) { //블럭생성
         block = new TetrisBlock(shape, color);
         block.spawn(gridColumns);
+
+
     }
 
     public boolean isBlockOuOofBounds() {
