@@ -130,6 +130,8 @@ public class SettingPage extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 //키세팅 페이지로 전환
+                setVisible(false);
+                pageController = new PageController(e.getActionCommand());
             }
         });
 

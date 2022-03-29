@@ -1,13 +1,14 @@
 package model;
 import java.awt.Color;
+import java.util.Random;
 
 public class TetrisBlock {
     private int[][] shape;
-    private Color color;
+    private int color;
     private int x,y;
     private int[][][] shapes;
     private int currentRotation;
-    public TetrisBlock(int[][] shape, Color color)
+    public TetrisBlock(int[][] shape, int color)
     {
         this.shape = shape;
         this.color = color; //블럭 생성자
@@ -29,13 +30,15 @@ public class TetrisBlock {
         }
     }
     public void spawn(int gridWidth){
-        currentRotation = 0;
+        Random r= new Random();
+        currentRotation=r.nextInt(shapes.length);
+        currentRotation = shapes.length;
         shape=shapes[currentRotation];
         y= -getHeight();
-        x= (gridWidth-getWidth())/2;
+        x= r.nextInt(gridWidth-getWidth());
     }
     public int[][] getShape(){return this.shape;} //지금 형태를 2차원 배열로 리턴
-    public Color getColor(){return this.color;} // 컬러 받기
+    public int getColor(){return this.color;} // 컬러 받기
     public int getHeight(){return shape.length;}
     public int getWidth(){return shape[0].length;}
     public int getX(){ return x;}
