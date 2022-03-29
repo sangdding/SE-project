@@ -88,14 +88,29 @@ public class JsonSetting implements SettingInfo{
     }
 
     @Override
-    public HashMap<String, Integer> getDisplaySize(String type) {
+    public HashMap<String, Integer> getDisplaySize() {
         objectMapper = new ObjectMapper();
-        HashMap<String, HashMap<String, Integer>> returnDisplayValue = new HashMap<>();
+        HashMap<String, Integer> returnDisplayValue = new HashMap<>();
         try {
-            returnDisplayValue = objectMapper.readValue(displaySet.toJSONString(), new TypeReference<Map<String, Map<String, Integer>>>(){});
+            returnDisplayValue = objectMapper.readValue(displaySet.toJSONString(), new TypeReference<Map<String, Integer>>(){});
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return returnDisplayValue.get(type);
+        return returnDisplayValue;
+    }
+
+    @Override
+    public void setDisplaySize(int width, int height) {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        try {
+            FileWriter fw = new FileWriter("src/setting/displayInfo.json");
+            displaySet.replace("width", width);
+            displaySet.replace("height", height);
+            gson.toJson(displaySet, fw); // 로컬에 저장
+            fw.flush();
+            fw.close();
+        } catch (IOException e) {
+            System.out.println("입출력 에러");
+        }
     }
 }
