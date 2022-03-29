@@ -39,10 +39,10 @@ public class JsonScore implements Score {
     public int save(String name, int score) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try {
-            FileWriter fw = new FileWriter("src/setting/scoreInfo.json");
             if (scoreInfo.containsKey(name)) {
                 return 1;
             } else {
+                FileWriter fw = new FileWriter("src/setting/scoreInfo.json");
                 scoreInfo.put(name, score); // json 파일에 점수 저장
                 gson.toJson(scoreInfo, fw); // 로컬에 저장
                 fw.flush();
