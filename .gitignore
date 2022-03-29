@@ -6,6 +6,10 @@
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
+idea/
+.idea/
+test.iml
+
 # User-specific stuff
 .idea/**/workspace.xml
 .idea/**/tasks.xml
@@ -55,7 +59,8 @@ cmake-build-*/
 *.iws
 
 # IntelliJ
-out/
+out/production/
+out/test/
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/
