@@ -139,7 +139,8 @@ public class GameEndPage extends JFrame {
                     updateScoreBoard();
 
                     //하이라이트
-                    for(int i=0;i<10;i++)
+                    System.out.println(scoreBoardPanel.getComponents().length);
+                    for(int i=0;i<10 && 3*i<scoreBoardPanel.getComponents().length;i++)
                     {
                         Component c1 = scoreBoardPanel.getComponent(3*i);
                         Component c2 = scoreBoardPanel.getComponent(3*i+1);

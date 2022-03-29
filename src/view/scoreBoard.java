@@ -23,7 +23,12 @@ public class scoreBoard extends JPanel{
 
         System.out.println(orederedScoreInfo + "  printed at ScorePage.Java");
 
-        for (int i = 0; i < 10; i++) {
+
+
+        //배열 크기 맞추기
+        for (int i = 0; i < 10 && i<orederedScoreInfo.size(); i++) {
+
+            if(orederedScoreInfo.get(i).getKey().equals("admin")) continue;
 
             //align 맞추기
             labels[3*i]=new JLabel(Integer.toString(i+1)+"위 : ");

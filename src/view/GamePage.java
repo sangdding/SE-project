@@ -21,6 +21,7 @@ public class GamePage extends JFrame{
     private JTextPane gameBoardPane;
     private JTextPane nextBlockPane;
     private JPanel scorePanel;
+    private JButton exitButton;
     private PageController pageController;
     private int score;
     private boolean isStop;
@@ -130,6 +131,12 @@ public class GamePage extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 pageController = new PageController(e.getActionCommand());
                 JOptionPane.showMessageDialog(null, "stopped!!");
+            }
+        });
+        exitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
             }
         });
 
