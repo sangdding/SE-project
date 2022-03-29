@@ -23,7 +23,7 @@ public class JsonScore implements Score {
     public JsonScore() {
         JSONParser parser = new JSONParser();
         try {
-            Reader readerScore = new FileReader("src/scoreInfo.json");
+            Reader readerScore = new FileReader("src/setting/scoreInfo.json");
             scoreInfo = (JSONObject) parser.parse(readerScore);
             readerScore.close();
         } catch (FileNotFoundException e) {
@@ -39,7 +39,7 @@ public class JsonScore implements Score {
     public void save(String name, int score) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try {
-            FileWriter fw = new FileWriter("src/scoreInfo.json");
+            FileWriter fw = new FileWriter("src/setting/scoreInfo.json");
             scoreInfo.put(name, score); // json 파일에 점수 저장
             gson.toJson(scoreInfo, fw); // 로컬에 저장
             fw.flush();
@@ -72,7 +72,7 @@ public class JsonScore implements Score {
         resetScore.put("admin", -1);
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try {
-            FileWriter fw = new FileWriter("src/scoreInfo.json");
+            FileWriter fw = new FileWriter("src/setting/scoreInfo.json");
             gson.toJson(resetScore, fw);
             fw.flush();
             fw.close();

@@ -1,13 +1,13 @@
 {
-  "big" : {
+  "small" : {
     "width" : 500,
     "height" : 800
   },
-  "medium" : {
+  "normal" : {
     "width" : 800,
     "height" : 800
   },
-  "small" : {
+  "big" : {
     "width" : 1000,
     "height" : 1500
   }

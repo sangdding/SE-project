@@ -22,9 +22,9 @@ public class JsonSetting implements SettingInfo{
     public JsonSetting() {
         JSONParser parser = new JSONParser();
         try {
-            Reader readerCustom = new FileReader("src/keySet.json");
-            Reader readerDefault = new FileReader("src/defaultKeySet.json");
-            Reader readerDisplay = new FileReader("src/displayInfo.json");
+            Reader readerCustom = new FileReader("src/setting/keySet.json");
+            Reader readerDefault = new FileReader("src/setting/defaultKeySet.json");
+            Reader readerDisplay = new FileReader("src/setting/displayInfo.json");
             keySet = (JSONObject) parser.parse(readerCustom);
             defaultKeyset = (JSONObject) parser.parse(readerDefault);
             displaySet = (JSONObject) parser.parse(readerDisplay);
@@ -53,7 +53,7 @@ public class JsonSetting implements SettingInfo{
     public void setKeyList(HashMap<String, Integer> changeKey) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try {
-            FileWriter fw = new FileWriter("src/keySet.json");
+            FileWriter fw = new FileWriter("src/setting/keySet.json");
             for(String key : changeKey.keySet()) {
                 keySet.replace(key, changeKey.get(key)); // json 파일에 키 정보 저장 후
             }
@@ -81,7 +81,7 @@ public class JsonSetting implements SettingInfo{
     public void setDefaultKeySet() {
         try {
             objectMapper = new ObjectMapper();
-            objectMapper.writeValue(new File("src/keySet.json"), defaultKeyset);
+            objectMapper.writeValue(new File("src/setting/keySet.json"), defaultKeyset);
         } catch (IOException e) {
             e.printStackTrace();
         }
