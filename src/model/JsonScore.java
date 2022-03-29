@@ -36,16 +36,21 @@ public class JsonScore implements Score {
     }
 
     @Override
-    public void save(String name, int score) {
+    public int save(String name, int score) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try {
             FileWriter fw = new FileWriter("src/setting/scoreInfo.json");
-            scoreInfo.put(name, score); // json 파일에 점수 저장
-            gson.toJson(scoreInfo, fw); // 로컬에 저장
-            fw.flush();
-            fw.close();
+            if (scoreInfo.containsKey(name)) {
+                return 1;
+            } else {
+                scoreInfo.put(name, score); // json 파일에 점수 저장
+                gson.toJson(scoreInfo, fw); // 로컬에 저장
+                fw.flush();
+                fw.close();
+                return 0;
+            }
         } catch (IOException e) {
-            System.out.println("입출력 에러");
+            return -1;
         }
     }
 

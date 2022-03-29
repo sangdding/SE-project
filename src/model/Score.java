@@ -1,16 +1,16 @@
 package model;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public interface Score {
 
     /**
-     * HashMap의 형태로 저장되기 때문에 name이 중복되면 Duplicate key error 발생.
-     * save로 저장하기 전에, 먼저 getList로 score정보 가져온 다음 키가 중복되지 않는지 확인하고
-     * 중복되지 않으면 save 호출해서 저장하면 됨.
+     * @return
+     * 1 : 중복된 이름으로 저장 실패
+     * 2 : 저장 성공
+     * -1 : 입출력 에러
      */
-    void save(String name, int score);
+    int save(String name, int score);
 
     HashMap<String, Integer> getList(); // 점수 정보 불러오기
 
