@@ -47,7 +47,7 @@ public class GameEndPage extends JFrame {
 
         //컴포넌트 생성
         nameEnterButton=new JButton("Enter");
-        nameTextField = new JTextField();
+        nameTextField = new JTextField("",10);
         gameScoreLabel = new JLabel("1111");
         nameLabel=new JLabel("Name");
 
@@ -119,26 +119,47 @@ public class GameEndPage extends JFrame {
                     return;
                 }
 
-                scoreIsEntered=true;
+
                 if(!nameTextField.getText().isEmpty())
                 {
                     JsonScore score=new JsonScore();
-                    score.save(nameTextField.getText(),1111);
 
-                    updateScore();
+                    int retSave=score.save(nameTextField.getText(),3000);
+                    if(retSave==1){
+                        System.out.println("Duplicated Name");
+                        return;
+                    }
+                    else if(retSave==-1)
+                    {
+                        System.out.println("Input Output  Error");
+                        return;
+                    }
 
+                    scoreIsEntered=true;
+                    updateScoreBoard();
 
+                    //하이라이트
                     for(int i=0;i<10;i++)
                     {
-                        Component c = scoreBoardPanel.getComponent(3*i+2);
-                        if(c instanceof JLabel)
+                        Component c1 = scoreBoardPanel.getComponent(3*i);
+                        Component c2 = scoreBoardPanel.getComponent(3*i+1);
+                        Component c3 = scoreBoardPanel.getComponent(3*i+2);
+                        if(c3 instanceof JLabel)
                         {
-                            JLabel jl=(JLabel) c;
-                            if(jl.getText().equals(nameTextField.getText()))
+                            JLabel jl3=(JLabel) c3;
+                            if(jl3.getText().equals(nameTextField.getText()))
                             {
-                                System.out.println(jl.getText());
-                                jl.setOpaque(true);
-                                jl.setForeground(Color.RED);
+                                JLabel jl1=(JLabel) c1;
+                                JLabel jl2=(JLabel) c2;
+
+                                jl1.setOpaque(true);
+                                jl1.setForeground(Color.RED);
+
+                                jl2.setOpaque(true);
+                                jl2.setForeground(Color.RED);
+
+                                jl3.setOpaque(true);
+                                jl3.setForeground(Color.RED);
                             }
                         }
                     }
@@ -152,7 +173,7 @@ public class GameEndPage extends JFrame {
 
     }
 
-    private void updateScore()
+    private void updateScoreBoard()
     {
         this.remove(scoreBoardPanel);
         this.scoreBoardPanel=new scoreBoard();
