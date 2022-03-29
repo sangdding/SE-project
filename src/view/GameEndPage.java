@@ -133,7 +133,7 @@ public class GameEndPage extends JFrame {
                     {
                         System.out.println("Input Output  Error");
                         return;
-                    }
+                    };
 
                     scoreIsEntered=true;
                     updateScoreBoard();
