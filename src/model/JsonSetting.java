@@ -4,9 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
-import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.json.JSONObject;
 
 import java.io.*;
 import java.util.HashMap;
@@ -14,20 +14,16 @@ import java.util.Map;
 
 public class JsonSetting implements SettingInfo{
 
-    private JSONObject keySet;
+    private JSONObject settingData;
     private JSONObject defaultKeyset;
-    private JSONObject displaySet;
+    private JSONObject customKeySet;
     private ObjectMapper objectMapper;
 
     public JsonSetting() {
         JSONParser parser = new JSONParser();
         try {
-            Reader readerCustom = new FileReader("src/setting/keySet.json");
-            Reader readerDefault = new FileReader("src/setting/defaultKeySet.json");
-            Reader readerDisplay = new FileReader("src/setting/displayInfo.json");
-            keySet = (JSONObject) parser.parse(readerCustom);
-            defaultKeyset = (JSONObject) parser.parse(readerDefault);
-            displaySet = (JSONObject) parser.parse(readerDisplay);
+            Reader readerSetting = new FileReader("src/setting.json");
+            settingData = (JSONObject) parser.parse(readerSetting);
         } catch (FileNotFoundException e) {
             System.out.println("파일이 존재하지 않습니다.");
         } catch (IOException e) {
@@ -35,6 +31,11 @@ public class JsonSetting implements SettingInfo{
         } catch (ParseException e) {
             System.out.println("파싱 에러");
         }
+
+        defaultKeyset = settingData.getJSONObject("defaultKey");
+        customKeySet = settingData.getJSONObject("customKey");
+        displaySet = settingData.getJSONObject("display");
+
     }
 
     @Override
@@ -42,7 +43,7 @@ public class JsonSetting implements SettingInfo{
         objectMapper = new ObjectMapper();
         HashMap<String, Integer> returnKeySet = null;
         try {
-            returnKeySet = objectMapper.readValue(keySet.toJSONString(), new TypeReference<Map<String, Integer>>(){});
+            returnKeySet = objectMapper.readValue(customKeySet.toString(), new TypeReference<Map<String, Integer>>(){});
         } catch (IOException e) {
             e.printStackTrace();
         }
