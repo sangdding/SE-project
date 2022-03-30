@@ -1,6 +1,8 @@
 package view;
 
 import controller.PageController;
+import model.JsonScore;
+import model.Score;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -122,7 +124,8 @@ public class SettingPage extends JFrame{
         scoreboardResetButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //파일 입출력을 통해 스코어보드 txt 초기화
+                Score score= new JsonScore();
+                score.resetList();
             }
         });
 
