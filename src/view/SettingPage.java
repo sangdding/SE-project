@@ -1,8 +1,8 @@
 package view;
 
 import controller.PageController;
-import model.JsonScore;
-import model.Score;
+import model.score.JsonScore;
+import model.score.Score;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

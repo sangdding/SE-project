@@ -1,4 +1,4 @@
-package model;
+package model.setting;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -6,17 +6,18 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.json.JSONObject;
+import org.json.simple.*;
 
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class JsonSetting implements SettingInfo{
+public class JsonSetting implements Setting {
 
     private JSONObject settingData;
     private JSONObject defaultKeyset;
-    private JSONObject customKeySet;
+    private JSONObject customKeyset;
+    private JSONObject displaySet;
     private ObjectMapper objectMapper;
 
     public JsonSetting() {
@@ -32,9 +33,9 @@ public class JsonSetting implements SettingInfo{
             System.out.println("파싱 에러");
         }
 
-        defaultKeyset = settingData.getJSONObject("defaultKey");
-        customKeySet = settingData.getJSONObject("customKey");
-        displaySet = settingData.getJSONObject("display");
+        defaultKeyset = (JSONObject) settingData.get("defaultKey");
+        customKeyset = (JSONObject) settingData.get("customKey");
+        displaySet = (JSONObject) settingData.get("display");
 
     }
 
@@ -43,7 +44,7 @@ public class JsonSetting implements SettingInfo{
         objectMapper = new ObjectMapper();
         HashMap<String, Integer> returnKeySet = null;
         try {
-            returnKeySet = objectMapper.readValue(customKeySet.toString(), new TypeReference<Map<String, Integer>>(){});
+            returnKeySet = objectMapper.readValue(customKeyset.toJSONString(), new TypeReference<Map<String, Integer>>(){});
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -54,11 +55,11 @@ public class JsonSetting implements SettingInfo{
     public void setKeyList(HashMap<String, Integer> changeKey) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try {
-            FileWriter fw = new FileWriter("src/setting/keySet.json");
+            FileWriter fw = new FileWriter("src/setting.json");
             for(String key : changeKey.keySet()) {
-                keySet.replace(key, changeKey.get(key)); // json 파일에 키 정보 저장 후
+                customKeyset.replace(key, changeKey.get(key)); // json 파일에 키 정보 저장 후
             }
-            gson.toJson(keySet, fw); // 로컬에 저장
+            gson.toJson(customKeyset, fw); // 로컬에 저장
             fw.flush();
             fw.close();
         } catch (IOException e) {
@@ -69,6 +70,7 @@ public class JsonSetting implements SettingInfo{
     @Override
     public HashMap<String, Integer> getDefaultKeySet() {
         HashMap<String, Integer> returnDefaultKeySet = null;
+        objectMapper = new ObjectMapper();
         try {
             returnDefaultKeySet = objectMapper.readValue(defaultKeyset.toJSONString(), new TypeReference<Map<String, Integer>>() {
             });
@@ -82,7 +84,7 @@ public class JsonSetting implements SettingInfo{
     public void setDefaultKeySet() {
         try {
             objectMapper = new ObjectMapper();
-            objectMapper.writeValue(new File("src/setting/keySet.json"), defaultKeyset);
+            objectMapper.writeValue(new File("src/setting.json"), defaultKeyset);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -104,7 +106,7 @@ public class JsonSetting implements SettingInfo{
     public void setDisplaySize(int width, int height) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try {
-            FileWriter fw = new FileWriter("src/setting/displayInfo.json");
+            FileWriter fw = new FileWriter("src/setting.json");
             displaySet.replace("width", width);
             displaySet.replace("height", height);
             gson.toJson(displaySet, fw); // 로컬에 저장

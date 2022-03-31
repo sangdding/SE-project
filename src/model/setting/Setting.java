@@ -1,9 +1,8 @@
-package model;
+package model.setting;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
-public interface SettingInfo {
+public interface Setting {
 
     HashMap<String, Integer> getKeyList(); // 키 정보 가져오기
 
