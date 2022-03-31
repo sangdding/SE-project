@@ -1,6 +1,7 @@
 package model;
 
 import config.AppConfig;
+import model.score.Score;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

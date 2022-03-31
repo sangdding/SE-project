@@ -1,7 +1,8 @@
-package model;
+package model.score;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import model.score.Score;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -23,7 +24,7 @@ public class JsonScore implements Score {
     public JsonScore() {
         JSONParser parser = new JSONParser();
         try {
-            Reader readerScore = new FileReader("src/setting/scoreInfo.json");
+            Reader readerScore = new FileReader("src/setting/score.json");
             scoreInfo = (JSONObject) parser.parse(readerScore);
             readerScore.close();
         } catch (FileNotFoundException e) {
@@ -42,7 +43,7 @@ public class JsonScore implements Score {
             if (scoreInfo.containsKey(name)) {
                 return 1;
             } else {
-                FileWriter fw = new FileWriter("src/setting/scoreInfo.json");
+                FileWriter fw = new FileWriter("src/setting/score.json");
                 scoreInfo.put(name, score); // json 파일에 점수 저장
                 gson.toJson(scoreInfo, fw); // 로컬에 저장
                 fw.flush();
@@ -77,7 +78,7 @@ public class JsonScore implements Score {
         resetScore.put("admin", -1);
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try {
-            FileWriter fw = new FileWriter("src/setting/scoreInfo.json");
+            FileWriter fw = new FileWriter("src/setting/score.json");
             gson.toJson(resetScore, fw);
             fw.flush();
             fw.close();

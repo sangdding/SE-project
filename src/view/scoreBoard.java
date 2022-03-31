@@ -1,6 +1,6 @@
 package view;
 import controller.HashMapParser;
-import model.JsonScore;
+import model.score.JsonScore;
 
 import javax.swing.*;
 import java.awt.*;

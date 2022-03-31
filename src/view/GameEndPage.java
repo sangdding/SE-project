@@ -1,7 +1,7 @@
 package view;
 
 import controller.PageController;
-import model.JsonScore;
+import model.score.JsonScore;
 
 import javax.swing.*;
 import java.awt.*;
