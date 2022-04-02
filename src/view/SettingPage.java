@@ -3,6 +3,8 @@ package view;
 import controller.PageController;
 import model.score.JsonScore;
 import model.score.Score;
+import model.setting.JsonSetting;
+import model.setting.Setting;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -100,19 +102,21 @@ public class SettingPage extends JFrame{
         resolutionButton1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //파일 입출력을 통해 세팅 txt에 해상도 사이즈 변경
+
+                setDisplaysize(500,800);
+
             }
         });
         resolutionButton2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //파일 입출력을 통해 세팅 txt에 해상도 사이즈 변경
+                setDisplaysize(800,800);
             }
         });
         resolutionButton3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //파일 입출력을 통해 세팅 txt에 해상도 사이즈 변경
+                setDisplaysize(1000,1500);
             }
         });
         settingResetButton.addActionListener(new ActionListener() {
@@ -138,5 +142,11 @@ public class SettingPage extends JFrame{
             }
         });
 
+    }
+
+    private void setDisplaysize(int w, int h)
+    {
+        Setting setting = new JsonSetting();
+        setting.setDisplaySize(w,h);
     }
 }
