@@ -1,14 +1,14 @@
 {
   "customKey": {
-    "resume": 52,
-    "drop": 57,
-    "exit": 45,
-    "left": 25,
-    "up": 26,
-    "right": 27,
-    "down": 28,
-    "pause": 50,
-    "quickDown": 51
+    "resume": 82,
+    "drop": 68,
+    "exit": 27,
+    "left": 37,
+    "up": 38,
+    "right": 39,
+    "down": 40,
+    "pause": 80,
+    "quickDown": 81
   },
   "difficulty": 1,
 
@@ -21,15 +21,15 @@
     "item": 2
   },
   "defaultKey": {
-    "resume": 52,
-    "drop": 57,
-    "exit": 45,
-    "left": 25,
-    "up": 26,
-    "right": 27,
-    "down": 28,
-    "pause": 50,
-    "quickDown": 51
+    "resume": 82,
+    "drop": 68,
+    "exit": 27,
+    "left": 37,
+    "up": 38,
+    "right": 39,
+    "down": 40,
+    "pause": 80,
+    "quickDown": 81
   },
   "displayMode": {
     "normal": 1,

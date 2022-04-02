@@ -96,9 +96,11 @@ public class MainPage extends JFrame{
                         setVisible(false);
                         pageController = new PageController(buttons[buttonSelectorIndex].getText());
                         break;
+
                     default:
                         break;
                 }
+
             }
         });
 
