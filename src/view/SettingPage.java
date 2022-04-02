@@ -122,7 +122,17 @@ public class SettingPage extends JFrame{
         settingResetButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //파일 입출력을 통해 세팅 txt 초기화
+                Score score = new JsonScore();
+                Setting setting = new JsonSetting();
+
+                //점수 초기화
+                score.resetList();
+                //키세팅 초기화
+                setting.setDefaultKeySet();
+                //화면 크기 초기화
+                setting.setDisplaySize(500,800);
+                //난이도,게임모드, 색맹모드 초기화해야하는데, 일단 난이도 먼저
+
             }
         });
         scoreboardResetButton.addActionListener(new ActionListener() {

@@ -11,10 +11,9 @@
     "quickDown": 81
   },
   "difficulty": 1,
-
   "display": {
-    "width": 1000,
-    "height": 1000
+    "width": 500,
+    "height": 800
   },
   "gameMode": {
     "normal": 1,

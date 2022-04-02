@@ -167,18 +167,18 @@ public class GamePage extends JFrame{
         gameBoardPane.setMargin(new Insets(130,0,0,0));
         //여기서부턴 화면에 그리기
 
-        appendToPane(gameBoardPane,"XXXXXXXXXXXX\n",Color.BLACK);
+        drawTextWithColor(gameBoardPane,"XXXXXXXXXXXX\n",Color.BLACK);
 
         for(int i=0;i<20;i++)
         {
-            appendToPane(gameBoardPane,"X",Color.BLACK);
-            appendToPane(gameBoardPane,"AAAAAAAAAA",Color.WHITE);
-            appendToPane(gameBoardPane,"X\n",Color.BLACK);
+            drawTextWithColor(gameBoardPane,"X",Color.BLACK);
+            drawTextWithColor(gameBoardPane,"AAAAAAAAAA",Color.WHITE);
+            drawTextWithColor(gameBoardPane,"X\n",Color.BLACK);
         }
 
 
 
-        appendToPane(gameBoardPane,"XXXXXXXXXXXX",Color.BLACK);
+        drawTextWithColor(gameBoardPane,"XXXXXXXXXXXX",Color.BLACK);
 
 
         StyledDocument doc = gameBoardPane.getStyledDocument();
@@ -194,7 +194,7 @@ public class GamePage extends JFrame{
         * */
     }
 
-    private void appendToPane(JTextPane tp, String msg, Color c)
+    private void drawTextWithColor(JTextPane tp, String msg, Color c)
     {
         StyleContext sc = StyleContext.getDefaultStyleContext();
         AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, c);

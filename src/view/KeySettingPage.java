@@ -27,11 +27,23 @@ public class KeySettingPage extends JFrame {
     private JLabel valueForRight;
     private JLabel valueForLeft;
     private JButton resetButton;
+    private JLabel terminateButton;
+    private JLabel pauseButton;
+    private JLabel resumeButton;
+    private JLabel quickDownButton;
+    private JLabel dropButton;
+    private JLabel valueForTerminate;
+    private JLabel valueForPause;
+    private JLabel valueForResume;
+    private JLabel valueForQuickDown;
+    private JLabel valueForDrop;
 
     private PageController pageController;
 
-    private JLabel[] keyLabels = new JLabel[]{upButton, downButton, rightButton, leftButton};
-    private JLabel[] keyValues = new JLabel[]{valueForUp, valueForDown, valueForRight, valueForLeft};
+    private JLabel[] keyLabels = new JLabel[]{upButton, downButton, rightButton, leftButton, terminateButton,
+                                                pauseButton, resumeButton, quickDownButton,dropButton};
+    private JLabel[] keyValues = new JLabel[]{valueForUp, valueForDown, valueForRight, valueForLeft, valueForTerminate,
+                                                valueForPause,valueForResume, valueForQuickDown, valueForDrop};
     private int buttonSelectorIndex = 0;
     private boolean isSetting = false;
 
@@ -103,6 +115,10 @@ public class KeySettingPage extends JFrame {
                 jsonsetting.setDefaultKeySet();
                 //화면 초기화
                 displaySettingValues();
+
+                //포커스를 이 화면에 맟춰서 키 이벤트 받게 만듦
+                requestFocus();
+                setFocusable(true);
             }
         });
 
@@ -143,6 +159,18 @@ public class KeySettingPage extends JFrame {
                 else{
                     if(e.getKeyCode()==KeyEvent.VK_ENTER)
                     {
+                        for(int i=0;i<keyValues.length;i++)
+                        {
+                            if(i==buttonSelectorIndex) continue;
+
+                            if (keyValues[i].getText().equals(keyValues[buttonSelectorIndex].getText()))
+                            {
+                                System.out.println("key Duplicated");
+                                return;
+                            }
+                        }
+
+                        //여기 수정
                         isSetting = false;
                         keyLabels[buttonSelectorIndex].setBackground(Color.RED);
                     }
@@ -157,10 +185,8 @@ public class KeySettingPage extends JFrame {
         JsonSetting jsonsetting=new JsonSetting();
         HashMap<String,Integer> keyMap=jsonsetting.getKeyList();
 
-        valueForUp.setText(Integer.toString(keyMap.get("up")));
-        valueForDown.setText(Integer.toString(keyMap.get("down")));
-        valueForRight.setText(Integer.toString(keyMap.get("right")));
-        valueForLeft.setText(Integer.toString(keyMap.get("left")));
+        for(int i=0;i<keyValues.length;i++)
+            keyValues[i].setText(Integer.toString(keyMap.get(keyLabels[i].getText())));
 
 
     }
