@@ -140,14 +140,22 @@ public class JsonSetting implements Setting {
     @Override
     public void setDifficulty(int difficultyValue)
     {
-        if(difficultyValue == 0){
-            settingData.replace("difficulty", "normal");
-        } else if(difficultyValue == 1) {
-            settingData.replace("difficulty", "easy");
-        } else if(difficultyValue == 2) {
-            settingData.replace("difficulty", "hard");
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        try {
+            FileWriter fw = new FileWriter("src/setting.json");
+            if(difficultyValue == 0){
+                settingData.replace("difficulty", "normal");
+            } else if(difficultyValue == 1) {
+                settingData.replace("difficulty", "easy");
+            } else if(difficultyValue == 2) {
+                settingData.replace("difficulty", "hard");
+            }
+            gson.toJson(settingData, fw); // 로컬에 저장
+            fw.flush();
+            fw.close();
+        } catch (IOException e) {
+            System.out.println("입출력 에러");
         }
-
     }
 
     @Override
@@ -163,10 +171,19 @@ public class JsonSetting implements Setting {
 
     @Override
     public void setGameMode(int gameModeValue) {
-        if(gameModeValue == 0){
-            settingData.replace("gameMode", "normal");
-        } else if(gameModeValue == 1) {
-            settingData.replace("gameMode", "item");
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        try {
+            FileWriter fw = new FileWriter("src/setting.json");
+            if(gameModeValue == 0){
+                settingData.replace("gameMode", "normal");
+            } else if(gameModeValue == 1) {
+                settingData.replace("gameMode", "item");
+            }
+            gson.toJson(settingData, fw); // 로컬에 저장
+            fw.flush();
+            fw.close();
+        } catch (IOException e) {
+            System.out.println("입출력 에러");
         }
     }
 
@@ -183,10 +200,20 @@ public class JsonSetting implements Setting {
 
     @Override
     public void setDisplayMode(int displayModeValue) {
-        if(displayModeValue == 0){
-            settingData.replace("displayMode", "normal");
-        } else if(displayModeValue == 1) {
-            settingData.replace("displayMode", "blind");
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        try {
+            FileWriter fw = new FileWriter("src/setting.json");
+            if(displayModeValue == 0){
+                settingData.replace("displayMode", "normal");
+            } else if(displayModeValue == 1) {
+                settingData.replace("displayMode", "blind");
+            }
+            gson.toJson(settingData, fw); // 로컬에 저장
+            fw.flush();
+            fw.close();
+        } catch (IOException e) {
+            System.out.println("입출력 에러");
         }
+
     }
 }
