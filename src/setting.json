@@ -5,7 +5,7 @@
     "exit": 27,
     "left": 37,
     "up": 38,
-    "right": 39,
+    "right": 88,
     "down": 40,
     "pause": 80,
     "quickDown": 81
@@ -27,5 +27,5 @@
     "pause": 80,
     "quickDown": 81
   },
-  "displayMode": 0
+  "displayMode": 1
 }

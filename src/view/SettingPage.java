@@ -24,7 +24,7 @@ public class SettingPage extends JFrame{
     private JCheckBox colorBlindnessCheckBox;
     private JButton keySettingButton;
 
-    private Setting setting;
+
 
 
     public SettingPage() {
@@ -41,7 +41,7 @@ public class SettingPage extends JFrame{
     }
     private void initialize()
     {
-        setting = new JsonSetting();
+        Setting setting = new JsonSetting();
 
         this.add(settingPanel);
         this.setSize(500, 500);
@@ -52,6 +52,7 @@ public class SettingPage extends JFrame{
 
         //세팅 파일에서 읽어와서 display mode 1이면 색맹모드이니 체크박스 체크.
 
+        System.out.println(Integer.toString(setting.getDisplayMode()));
         if(setting.getDisplayMode()==1) colorBlindnessCheckBox.setSelected(true);
         else colorBlindnessCheckBox.setSelected(false);
 
@@ -77,7 +78,7 @@ public class SettingPage extends JFrame{
         resolutionButton1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                Setting setting= new JsonSetting();
                 setting.setDisplaySize(500,800);
 
             }
@@ -85,23 +86,40 @@ public class SettingPage extends JFrame{
         resolutionButton2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                Setting setting= new JsonSetting();
                 setting.setDisplaySize(500,800);
             }
         });
         resolutionButton3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                Setting setting= new JsonSetting();
                 setting.setDisplaySize(500,800);
             }
         });
 
-
+        colorBlindnessCheckBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange()==ItemEvent.SELECTED)
+                {
+                    Setting setting= new JsonSetting();
+                    System.out.println("bilnd mode selected");
+                    setting.setDisplayMode(1);
+                }
+                else if(e.getStateChange()==ItemEvent.DESELECTED){
+                    Setting setting= new JsonSetting();
+                    System.out.println("blind mode disselected");
+                    setting.setDisplayMode(0);
+                }
+            }
+        });
 
         settingResetButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Score score = new JsonScore();
-
+                Setting setting= new JsonSetting();
                 //점수 초기화
                 score.resetList();
                 //키세팅 초기화
