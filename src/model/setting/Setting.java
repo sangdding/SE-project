@@ -27,7 +27,7 @@ public interface Setting {
 
     void setGameMode(int gameMode);
 
-    int getDisplayMode();
+    long getDisplayMode();
 
     void setDisplayMode(int displayMode);
 }

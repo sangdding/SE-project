@@ -7,10 +7,7 @@ import model.setting.JsonSetting;
 import model.setting.Setting;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 
 public class SettingPage extends JFrame{
     private JPanel settingPanel;
@@ -27,15 +24,14 @@ public class SettingPage extends JFrame{
     private JCheckBox colorBlindnessCheckBox;
     private JButton keySettingButton;
 
-
+    private Setting setting;
 
 
     public SettingPage() {
 
 
         initialize();
-        //키보드 이벤트 처리 설정
-        setKeyEventController();
+
 
         setButtonClickController();
 
@@ -45,6 +41,8 @@ public class SettingPage extends JFrame{
     }
     private void initialize()
     {
+        setting = new JsonSetting();
+
         this.add(settingPanel);
         this.setSize(500, 500);
         this.setVisible(true);
@@ -52,9 +50,9 @@ public class SettingPage extends JFrame{
 
         this.setLocationRelativeTo(null);//화면 가운데에 생성
 
-        //세팅 파일에서 읽어와서 색맹모드 1이면 체크박스 체크. if 문 안에 세팅 파일 속 색맹모드 여부 체크
-        if(1==0) colorBlindnessCheckBox.setSelected(true);
+        //세팅 파일에서 읽어와서 display mode 1이면 색맹모드이니 체크박스 체크.
 
+        if(setting.getDisplayMode()==1) colorBlindnessCheckBox.setSelected(true);
         else colorBlindnessCheckBox.setSelected(false);
 
 
@@ -65,30 +63,7 @@ public class SettingPage extends JFrame{
 
 
 
-    private void setKeyEventController()
-    {
-        addKeyListener(new KeyAdapter() { //키 이벤트
-            @Override
-            public void keyPressed(KeyEvent e) { //키 눌렀을때
-                System.out.println("setting page key event enter");
-                System.out.println(e.getKeyCode());
-                // TODO Auto-generated method stub
-                switch (e.getKeyCode()) {//키 코드로 스위치
 
-                    case KeyEvent.VK_DOWN: //방향키(아래) 눌렀을때
-
-                        break;
-                    case KeyEvent.VK_UP: //방향키(위)눌렀을때
-
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-        });
-
-    }
 
     private void setButtonClickController(){
         mainButton.addActionListener(new ActionListener() {
@@ -103,27 +78,29 @@ public class SettingPage extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                setDisplaysize(500,800);
+                setting.setDisplaySize(500,800);
 
             }
         });
         resolutionButton2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setDisplaysize(800,800);
+                setting.setDisplaySize(500,800);
             }
         });
         resolutionButton3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setDisplaysize(1000,1500);
+                setting.setDisplaySize(500,800);
             }
         });
+
+
+
         settingResetButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Score score = new JsonScore();
-                Setting setting = new JsonSetting();
 
                 //점수 초기화
                 score.resetList();
@@ -131,7 +108,10 @@ public class SettingPage extends JFrame{
                 setting.setDefaultKeySet();
                 //화면 크기 초기화
                 setting.setDisplaySize(500,800);
-                //난이도,게임모드, 색맹모드 초기화해야하는데, 일단 난이도 먼저
+                //난이도,게임모드, 색맹모드 초기화
+                setting.setDifficulty(1);
+                setting.setGameMode(1);
+                setting.setDisplayMode(0);
 
             }
         });
@@ -154,9 +134,5 @@ public class SettingPage extends JFrame{
 
     }
 
-    private void setDisplaysize(int w, int h)
-    {
-        Setting setting = new JsonSetting();
-        setting.setDisplaySize(w,h);
-    }
+
 }

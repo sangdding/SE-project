@@ -145,8 +145,9 @@ public class JsonSetting implements Setting {
     }
 
     @Override
-    public int getDisplayMode() {
-        return (int)settingData.get("displayMode");
+    public long getDisplayMode() {
+        System.out.println(settingData.get("displayMode").getClass().getName());
+        return ((long)settingData.get("displayMode"));
     }
 
     @Override
