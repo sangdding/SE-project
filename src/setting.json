@@ -5,17 +5,17 @@
     "exit": 27,
     "left": 37,
     "up": 38,
-    "right": 88,
+    "right": 39,
     "down": 40,
     "pause": 80,
     "quickDown": 81
   },
-  "difficulty": "normal",
+  "difficulty": "easy",
   "display": {
-    "width": 500,
-    "height": 800
+    "width": 1000,
+    "height": 1500
   },
-  "gameMode": "normal",
+  "gameMode": "item",
   "defaultKey": {
     "resume": 82,
     "drop": 68,
@@ -27,5 +27,5 @@
     "pause": 80,
     "quickDown": 81
   },
-  "displayMode": "blind"
+  "displayMode": "normal"
 }

@@ -88,14 +88,14 @@ public class SettingPage extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                setting.setDisplaySize(500,800);
+                setting.setDisplaySize(800,800);
             }
         });
         resolutionButton3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                setting.setDisplaySize(500,800);
+                setting.setDisplaySize(1000,1500);
             }
         });
 
