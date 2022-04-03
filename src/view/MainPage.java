@@ -81,14 +81,14 @@ public class MainPage extends JFrame{
                     case KeyEvent.VK_DOWN: //방향키(아래) 눌렀을때
                         if (buttonSelectorIndex +1<buttons.length)
                         {
-                            buttons[buttonSelectorIndex].setBackground(new Color(238,238,238));
+                            buttons[buttonSelectorIndex].setBackground(null);
                             buttons[++buttonSelectorIndex].setBackground(Color.RED);
                         }
                         break;
                     case KeyEvent.VK_UP: //방향키(위)눌렀을때
                         if(buttonSelectorIndex >0)
                         {
-                            buttons[buttonSelectorIndex].setBackground(new Color(238,238,238));
+                            buttons[buttonSelectorIndex].setBackground(null);
                             buttons[--buttonSelectorIndex].setBackground(Color.RED);
                         }
                         break;
