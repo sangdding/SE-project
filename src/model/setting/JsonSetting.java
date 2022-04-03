@@ -183,10 +183,11 @@ public class JsonSetting implements Setting {
 
     @Override
     public void setDisplayMode(int displayModeValue) {
+        System.out.println(displayModeValue);
         if(displayModeValue == 0){
-            settingData.replace("displayMode", "normal");
+            settingData.replace("displayMod", "normal");
         } else if(displayModeValue == 1) {
-            settingData.replace("displayMode", "blind");
+            settingData.replace("displayMod", "blind");
         }
     }
 }

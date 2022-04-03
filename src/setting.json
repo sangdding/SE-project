@@ -10,12 +10,12 @@
     "pause": 80,
     "quickDown": 81
   },
-  "difficulty": 1,
+  "difficulty": "normal",
   "display": {
     "width": 500,
     "height": 800
   },
-  "gameMode": 1,
+  "gameMode": "normal",
   "defaultKey": {
     "resume": 82,
     "drop": 68,
@@ -27,5 +27,5 @@
     "pause": 80,
     "quickDown": 81
   },
-  "displayMode": 1
+  "displayMode": "blind"
 }
