@@ -19,15 +19,37 @@ public interface Setting {
 
     void setDisplaySize(int width, int height);
 
+    /**
+     *
+     * @return
+     * 0 : normal
+     * 1 : easy
+     * 2 : hard
+     * -1 : error
+     */
     int getDifficulty();
 
     void setDifficulty(int difficulty);
 
+    /**
+     *
+     * @return
+     * 0 : normal
+     * 1 : item
+     * -1 : error
+     */
     int getGameMode();
 
     void setGameMode(int gameMode);
 
-    long getDisplayMode();
+    /**
+     *
+     * @return
+     * 0 : normal
+     * 1 : blind
+     * -1 : error
+     */
+    int getDisplayMode();
 
     void setDisplayMode(int displayMode);
 }

@@ -126,32 +126,67 @@ public class JsonSetting implements Setting {
 
     @Override
     public int getDifficulty() {
-        return (int)settingData.get("difficulty");
+        if(settingData.get("difficulty").equals("normal")){
+            return 0;
+        } else if(settingData.get("difficulty").equals("easy")) {
+            return 1;
+        } else if(settingData.get("difficulty").equals("hard")) {
+            return 2;
+        } else {
+            return -1;
+        }
     }
 
     @Override
-    public void setDifficulty(int difficultyValue) {
-        settingData.replace("difficulty", difficultyValue);
+    public void setDifficulty(int difficultyValue)
+    {
+        if(difficultyValue == 0){
+            settingData.replace("difficulty", "normal");
+        } else if(difficultyValue == 1) {
+            settingData.replace("difficulty", "easy");
+        } else if(difficultyValue == 2) {
+            settingData.replace("difficulty", "hard");
+        }
+
     }
 
     @Override
     public int getGameMode() {
-        return (int)settingData.get("gameMode");
+        if(settingData.get("gameMode").equals("normal")) {
+            return 0;
+        } else if (settingData.get("gameMode").equals("item")) {
+            return 1;
+        } else {
+            return -1;
+        }
     }
 
     @Override
     public void setGameMode(int gameModeValue) {
-        settingData.replace("gameMode", gameModeValue);
+        if(gameModeValue == 0){
+            settingData.replace("gameMode", "normal");
+        } else if(gameModeValue == 1) {
+            settingData.replace("gameMode", "item");
+        }
     }
 
     @Override
-    public long getDisplayMode() {
-        System.out.println(settingData.get("displayMode").getClass().getName());
-        return ((long)settingData.get("displayMode"));
+    public int getDisplayMode() {
+        if (settingData.get("displayMode").equals("normal")) {
+            return 0;
+        } else if (settingData.get("displayMode").equals("blind")) {
+            return 1;
+        } else {
+            return -1;
+        }
     }
 
     @Override
     public void setDisplayMode(int displayModeValue) {
-       settingData.replace("displayMode", displayModeValue);
+        if(displayModeValue == 0){
+            settingData.replace("displayMode", "normal");
+        } else if(displayModeValue == 1) {
+            settingData.replace("displayMode", "blind");
+        }
     }
 }
