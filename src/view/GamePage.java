@@ -29,7 +29,7 @@ public class GamePage extends JFrame{
     private int score;
     private boolean isStop;
     private Timer timer;
-
+    private int isBlindMode;
 
     private char borderChar='X';
     private SimpleAttributeSet styleSet;
@@ -70,6 +70,14 @@ public class GamePage extends JFrame{
         this.setSize(settingMap.get("width"), settingMap.get("height"));
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // x표 눌럿을 때 프로그램 종료되게 만듦
+        //색맹모드 체크
+        isBlindMode=setting.getDisplayMode();
+
+        if(isBlindMode==1) {
+            System.out.println("blind mode printed in gamePage");
+        }else if(isBlindMode==0){
+            System.out.println("normal Display mode printed in gamePage");
+        }
 
 
         isStop=false;
