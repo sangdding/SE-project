@@ -58,24 +58,23 @@ class SettingTest {
 
     @Test
     void 난이도_설정하기() {
+        setting.setDifficulty(0);
+        Assertions.assertEquals(0, setting.getDifficulty());
+
         setting.setDifficulty(1);
         Assertions.assertEquals(1, setting.getDifficulty());
 
         setting.setDifficulty(2);
         Assertions.assertEquals(2, setting.getDifficulty());
-
-
-        setting.setDifficulty(3);
-        Assertions.assertEquals(3, setting.getDifficulty());
     }
 
 
     @Test
     void 화면표시모드_설정하기() {
+        setting.setDisplayMode(0);
+        System.out.println(setting.getDisplayMode());
+        Assertions.assertEquals(0, setting.getDisplayMode());
         setting.setDisplayMode(1);
         Assertions.assertEquals(1, setting.getDisplayMode());
-
-        setting.setDisplayMode(2);
-        Assertions.assertEquals(2, setting.getDisplayMode());
     }
 }
