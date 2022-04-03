@@ -2,13 +2,13 @@ package model.block;
 
 public class NormalBlock implements Block {
 
-    private int[][][] normalBlock =
+    private final int[][][] normalBlock =
             {{{1}, {1}, {1}, {1}}, {{1, 0, 0}, {1, 1, 1}}, {{0, 0, 1}, {1, 1, 1}}, {{1, 1}, {1, 1}},
                     {{0, 1, 1}, {1, 1, 0}}, {{0, 1, 0}, {1, 1, 1}}, {{1, 1, 0}, {0, 1, 1}}};
 
-    private int[][][][] rotateBlock = new int[7][4][][];
+    private final int[][][][] rotateBlock = new int[7][4][][];
 
-    private int[] color = {1, 2, 3, 4, 5, 6, 7};
+    private final int[] color = {1, 2, 3, 4, 5, 6, 7};
 
     public NormalBlock() {
         for (int i = 0; i < 7; i++) {

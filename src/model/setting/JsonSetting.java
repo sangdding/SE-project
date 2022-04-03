@@ -18,10 +18,14 @@ public class JsonSetting implements Setting {
     private JSONObject defaultKeyset;
     private JSONObject customKeyset;
     private JSONObject displaySet;
+    private JSONObject difficulty;
+    private JSONObject gameMode;
+    private JSONObject displayMode;
     private ObjectMapper objectMapper;
 
     public JsonSetting() {
         JSONParser parser = new JSONParser();
+        objectMapper = new ObjectMapper();
         try {
             Reader readerSetting = new FileReader("src/setting.json");
             settingData = (JSONObject) parser.parse(readerSetting);
@@ -41,7 +45,6 @@ public class JsonSetting implements Setting {
 
     @Override
     public HashMap<String, Integer> getKeyList() {
-        objectMapper = new ObjectMapper();
         HashMap<String, Integer> returnKeySet = null;
         try {
             returnKeySet = objectMapper.readValue(customKeyset.toJSONString(), new TypeReference<Map<String, Integer>>(){});
@@ -71,7 +74,6 @@ public class JsonSetting implements Setting {
     @Override
     public HashMap<String, Integer> getDefaultKeySet() {
         HashMap<String, Integer> returnDefaultKeySet = new HashMap<>();
-        objectMapper = new ObjectMapper();
         try {
             returnDefaultKeySet = objectMapper.readValue(defaultKeyset.toJSONString(), new TypeReference<Map<String, Integer>>() {
             });
@@ -97,7 +99,6 @@ public class JsonSetting implements Setting {
 
     @Override
     public HashMap<String, Integer> getDisplaySize() {
-        objectMapper = new ObjectMapper();
         HashMap<String, Integer> returnDisplayValue = new HashMap<>();
         try {
             returnDisplayValue = objectMapper.readValue(displaySet.toJSONString(), new TypeReference<Map<String, Integer>>(){});
@@ -121,5 +122,35 @@ public class JsonSetting implements Setting {
         } catch (IOException e) {
             System.out.println("입출력 에러");
         }
+    }
+
+    @Override
+    public int getDifficulty() {
+        return (int)settingData.get("difficulty");
+    }
+
+    @Override
+    public void setDifficulty(int difficultyValue) {
+        settingData.replace("difficulty", difficultyValue);
+    }
+
+    @Override
+    public int getGameMode() {
+        return (int)settingData.get("gameMode");
+    }
+
+    @Override
+    public void setGameMode(int gameModeValue) {
+        settingData.replace("gameMode", gameModeValue);
+    }
+
+    @Override
+    public int getDisplayMode() {
+        return (int)settingData.get("displayMode");
+    }
+
+    @Override
+    public void setDisplayMode(int displayModeValue) {
+       settingData.replace("displayMode", displayModeValue);
     }
 }

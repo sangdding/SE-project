@@ -9,6 +9,7 @@
 idea/
 .idea/
 test.iml
+SE-project.iml
 
 # User-specific stuff
 .idea/**/workspace.xml
