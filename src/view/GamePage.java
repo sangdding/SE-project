@@ -11,7 +11,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.HashMap;
+import controller.HashMapParser;
 
 public class GamePage extends JFrame{
     private JPanel mainPanel;
@@ -30,6 +32,8 @@ public class GamePage extends JFrame{
     private boolean isStop;
     private Timer timer;
     private int isBlindMode;
+    private HashMap<String,Integer> keySettingMap;
+
 
     private char borderChar='X';
     private SimpleAttributeSet styleSet;
@@ -73,6 +77,12 @@ public class GamePage extends JFrame{
         //색맹모드 체크
         isBlindMode=setting.getDisplayMode();
 
+        //설정한 키 값 불러오기
+        HashMapParser hashmapparser=new HashMapParser();
+        keySettingMap=setting.getKeyList();
+        System.out.println(keySettingMap);
+
+
         if(isBlindMode==1) {
             System.out.println("blind mode printed in gamePage");
         }else if(isBlindMode==0){
@@ -107,27 +117,48 @@ public class GamePage extends JFrame{
                 System.out.println("game page key event enter in GamePage");
                 System.out.println(e.getKeyCode());
                 // TODO Auto-generated method stub
-                switch (e.getKeyCode()) {//키 코드로 스위치
+                //원래 switch case문인데, case에 constant 값만 들어갈 수 있어서 if로 교체
+                int pressedKey=e.getKeyCode();
 
-                    case KeyEvent.VK_DOWN: //방향키(아래) 눌렀을때
+                if(pressedKey==keySettingMap.get("resume")){
 
-                        break;
-                    case KeyEvent.VK_UP: //방향키(위)눌렀을때
-
-                        break;
-                    case KeyEvent.VK_RIGHT:
-
-                        break;
-                    case KeyEvent.VK_LEFT:
-
-                        break;
-
-                    case KeyEvent.VK_S:
-                        //game stop
-                        break;
-                    default:
-                        break;
+                    if(isStop)
+                    {
+                        System.out.println("Game Restarted");
+                        isStop=false;
+                        timer.start();
+                    }
                 }
+                else if(pressedKey==keySettingMap.get("drop")){
+                    System.out.println("d");
+                }
+                else if(pressedKey==keySettingMap.get("exit")){
+                    System.out.println("esc");
+                }
+                else if(pressedKey==keySettingMap.get("left")){
+                    System.out.println("l");
+                }
+                else if(pressedKey==keySettingMap.get("up")){
+                    System.out.println("u");
+                }
+                else if(pressedKey==keySettingMap.get("right")){
+                    System.out.println("right");
+                }
+                else if(pressedKey==keySettingMap.get("down")){
+                    System.out.println("down");
+                }
+                else if(pressedKey==keySettingMap.get("pause")){
+                    if(!isStop) {
+                        System.out.println("Game Stoopped");
+                        isStop=true;
+                        timer.stop();
+                    }
+
+                }
+                else if(pressedKey==keySettingMap.get("quickDown")){
+                    System.out.println("q");
+                }
+
             }
         });
 
@@ -146,8 +177,11 @@ public class GamePage extends JFrame{
         stopButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                pageController = new PageController(e.getActionCommand());
-                JOptionPane.showMessageDialog(null, "stopped!!");
+                if(!isStop) {
+                    System.out.println("Game Stoopped");
+                    isStop=true;
+                    timer.stop();
+                }
             }
         });
         exitButton.addActionListener(new ActionListener() {
@@ -161,7 +195,7 @@ public class GamePage extends JFrame{
 
     private void setTimer()
     {
-        Timer timer = new Timer(1000, new ActionListener()
+        timer = new Timer(1000, new ActionListener()
 
         {
 
