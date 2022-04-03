@@ -12,8 +12,8 @@
   },
   "difficulty": "normal",
   "display": {
-    "width": 500,
-    "height": 800
+    "width": 1000,
+    "height": 1500
   },
   "gameMode": "normal",
   "defaultKey": {

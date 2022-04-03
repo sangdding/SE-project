@@ -1,6 +1,8 @@
 package view;
 
 import controller.PageController;
+import model.setting.JsonSetting;
+import model.setting.Setting;
 
 import javax.swing.*;
 import javax.swing.text.*;
@@ -9,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.HashMap;
 
 public class GamePage extends JFrame{
     private JPanel mainPanel;
@@ -27,10 +30,11 @@ public class GamePage extends JFrame{
     private boolean isStop;
     private Timer timer;
 
-    private int width=10;
-    private int height=20;
+
     private char borderChar='X';
     private SimpleAttributeSet styleSet;
+
+
 
     public GamePage() {
         //초기화
@@ -58,7 +62,12 @@ public class GamePage extends JFrame{
 
         gameBoardPane.setEditable(false);
         this.add(mainPanel);
-        this.setSize(500, 800); // 나중에 파일 입출력으로 세팅 파일에서 해상도 읽어오기
+
+        //설정 읽어오기
+        Setting setting = new JsonSetting();
+        //화면 크기 설정
+        HashMap<String,Integer> settingMap = setting.getDisplaySize();
+        this.setSize(settingMap.get("width"), settingMap.get("height"));
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // x표 눌럿을 때 프로그램 종료되게 만듦
 
