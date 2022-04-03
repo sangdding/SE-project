@@ -153,7 +153,7 @@ public class GamePage extends JFrame{
             {
 
                 System.out.println("timer activated in Game page");
-                //System.out.println("draw gameBoard in Game page");
+                //이차원 배열 = movedown();
                 //drawGameBoard();
 
             }
