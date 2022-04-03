@@ -18,4 +18,16 @@ public interface Setting {
     HashMap<String, Integer> getDisplaySize();
 
     void setDisplaySize(int width, int height);
+
+    int getDifficulty();
+
+    void setDifficulty(int difficulty);
+
+    int getGameMode();
+
+    void setGameMode(int gameMode);
+
+    int getDisplayMode();
+
+    void setDisplayMode(int displayMode);
 }

@@ -15,10 +15,7 @@
     "width": 500,
     "height": 800
   },
-  "gameMode": {
-    "normal": 1,
-    "item": 2
-  },
+  "gameMode": 1,
   "defaultKey": {
     "resume": 82,
     "drop": 68,
@@ -30,8 +27,5 @@
     "pause": 80,
     "quickDown": 81
   },
-  "displayMode": {
-    "normal": 1,
-    "blind": 2
-  }
+  "displayMode": 0
 }
