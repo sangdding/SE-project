@@ -1,4 +1,4 @@
-package controller;
+/*package controller;
 
 import controller.block.Block;
 import model.GameArea;
@@ -165,3 +165,6 @@ public class GameAreaController extends GameArea {
         }
     }
 }
+
+일단 주석 처리
+*/

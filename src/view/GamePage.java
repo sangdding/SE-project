@@ -1,6 +1,6 @@
 package view;
 
-import controller.GameAreaController;
+import controller.GameControl.GameAreaController;
 import controller.PageController;
 import model.setting.JsonSetting;
 import model.setting.Setting;

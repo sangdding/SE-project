@@ -1,4 +1,4 @@
-package model;
+/*package model;
 
 import model.TetrisBlock;
 
@@ -19,3 +19,6 @@ public class GameArea {
     }
 
 }
+
+일단 주석 처리
+*/

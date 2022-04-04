@@ -7,7 +7,8 @@ package model;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import controller.GameAreaController;
+import controller.GameControl.GameArea;
+import controller.GameControl.GameAreaController;
 import view.GamePage;
 
 public class GameThread extends Thread {
