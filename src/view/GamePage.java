@@ -106,7 +106,6 @@ public class GamePage extends JFrame{
     }
 
     public void setScore(int score){
-
         this.score=score;
     }
 
