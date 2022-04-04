@@ -167,4 +167,23 @@ public class GameAreaController extends GameArea implements gameFunction{
             }
         }
     }
+    public int[][] getBackground(){
+        return ga.background;
+    }
+    public int[][] newBackground(){
+        int[][] newBackground = ga.getBackground();
+        int x=ga.block.getX();
+        int y=ga.block.getY();
+        for(int r=x; r<x+ga.block.getHeight();r++){
+            for(int c=y;c<ga.block.getHeight()+y;c++){
+                if(ga.block.getShape()[r-x][c-y]==1){
+                    newBackground[r][c]=ga.block.getColor();
+                }
+            }
+        }
+        return newBackground;
+    }
+    public int getY(){
+        return ga.block.getY();
+    }
 }

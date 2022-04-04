@@ -13,6 +13,7 @@ public class GameArea {
         gridColumns = 10;
         gridRows = 20;
         background = new int[gridRows][gridColumns];
+        background[5][3]=3;
     }
     public int[][] getBackground(){
         return background;
