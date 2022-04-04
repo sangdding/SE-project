@@ -1,6 +1,9 @@
 package view;
 
+import controller.GameControl.GameAreaController;
 import controller.PageController;
+import model.setting.JsonSetting;
+import model.setting.Setting;
 
 import javax.swing.*;
 import javax.swing.text.*;
@@ -9,6 +12,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.HashMap;
+import controller.HashMapParser;
 
 public class GamePage extends JFrame{
     private JPanel mainPanel;
@@ -26,11 +32,14 @@ public class GamePage extends JFrame{
     private int score;
     private boolean isStop;
     private Timer timer;
+    private int isBlindMode;
+    private HashMap<String,Integer> keySettingMap;
 
-    private int width=10;
-    private int height=20;
+
+    private GameAreaController gameAreaController = new GameAreaController();
     private char borderChar='X';
     private SimpleAttributeSet styleSet;
+
 
     public GamePage() {
         //초기화
@@ -40,11 +49,10 @@ public class GamePage extends JFrame{
         setKeyEventController();
         //버튼 마우스 입력 처리 설정
         setButtonClickController();
-
+        gameAreaController.spawnBlock(1);
         //timer 설정
         setTimer();
     }
-
     private void initialize(){
 
         //스타일
@@ -54,13 +62,33 @@ public class GamePage extends JFrame{
         StyleConstants.setBold(styleSet, false);
         StyleConstants.setAlignment(styleSet, StyleConstants.ALIGN_CENTER);
 
-        drawGameBoard();
+        //블록 생성, 초기 게임 화면 그리기
+        //gameAreaController.spawnBlock(1);
 
         gameBoardPane.setEditable(false);
         this.add(mainPanel);
-        this.setSize(500, 800); // 나중에 파일 입출력으로 세팅 파일에서 해상도 읽어오기
+
+        //설정 읽어오기
+        Setting setting = new JsonSetting();
+        //화면 크기 설정
+        HashMap<String,Integer> settingMap = setting.getDisplaySize();
+        this.setSize(settingMap.get("width"), settingMap.get("height"));
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // x표 눌럿을 때 프로그램 종료되게 만듦
+        //색맹모드 체크
+        isBlindMode=setting.getDisplayMode();
+
+        //설정한 키 값 불러오기
+        HashMapParser hashmapparser=new HashMapParser();
+        keySettingMap=setting.getKeyList();
+        System.out.println(keySettingMap);
+
+
+        if(isBlindMode==1) {
+            System.out.println("blind mode printed in gamePage");
+        }else if(isBlindMode==0){
+            System.out.println("normal Display mode printed in gamePage");
+        }
 
 
         isStop=false;
@@ -80,6 +108,37 @@ public class GamePage extends JFrame{
         this.score=score;
     }
 
+    private void setTimer()
+    {
+        timer = new Timer(1000, new ActionListener()
+
+        {
+
+            public void actionPerformed (ActionEvent e)
+
+            {
+                System.out.println("timer activated in Game page");
+                gameAreaController.moveBlockDown();
+                System.out.println(gameAreaController.getY());
+                for(int i=0; i<20; i++){
+                    for(int j=0; j<10; j++){
+                        System.out.print(gameAreaController.getBackground()[i][j]);
+                    }
+                    System.out.println();
+                }
+                drawGameBoard(gameAreaController.getBackground());
+                if(!gameAreaController.checkBottom())
+                {
+                    gameAreaController.moveBlockToBackground();
+                    gameAreaController.spawnBlock(1);
+                }
+
+            }
+
+        });
+        timer.start();
+    }
+
 
     private void setKeyEventController()
     {
@@ -89,27 +148,48 @@ public class GamePage extends JFrame{
                 System.out.println("game page key event enter in GamePage");
                 System.out.println(e.getKeyCode());
                 // TODO Auto-generated method stub
-                switch (e.getKeyCode()) {//키 코드로 스위치
+                //원래 switch case문인데, case에 constant 값만 들어갈 수 있어서 if로 교체
+                int pressedKey=e.getKeyCode();
 
-                    case KeyEvent.VK_DOWN: //방향키(아래) 눌렀을때
+                if(pressedKey==keySettingMap.get("resume")){
 
-                        break;
-                    case KeyEvent.VK_UP: //방향키(위)눌렀을때
-
-                        break;
-                    case KeyEvent.VK_RIGHT:
-
-                        break;
-                    case KeyEvent.VK_LEFT:
-
-                        break;
-
-                    case KeyEvent.VK_S:
-                        //game stop
-                        break;
-                    default:
-                        break;
+                    if(isStop)
+                    {
+                        System.out.println("Game Restarted");
+                        isStop=false;
+                        timer.start();
+                    }
                 }
+                else if(pressedKey==keySettingMap.get("drop")){
+                    System.out.println("d");
+                }
+                else if(pressedKey==keySettingMap.get("exit")){
+                    System.out.println("esc");
+                }
+                else if(pressedKey==keySettingMap.get("left")){
+                    System.out.println("l");
+                }
+                else if(pressedKey==keySettingMap.get("up")){
+                    System.out.println("u");
+                }
+                else if(pressedKey==keySettingMap.get("right")){
+                    System.out.println("right");
+                }
+                else if(pressedKey==keySettingMap.get("down")){
+                    System.out.println("down");
+                }
+                else if(pressedKey==keySettingMap.get("pause")){
+                    if(!isStop) {
+                        System.out.println("Game Stoopped");
+                        isStop=true;
+                        timer.stop();
+                    }
+
+                }
+                else if(pressedKey==keySettingMap.get("quickDown")){
+                    System.out.println("q");
+                }
+
             }
         });
 
@@ -128,8 +208,11 @@ public class GamePage extends JFrame{
         stopButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                pageController = new PageController(e.getActionCommand());
-                JOptionPane.showMessageDialog(null, "stopped!!");
+                if(!isStop) {
+                    System.out.println("Game Stoopped");
+                    isStop=true;
+                    timer.stop();
+                }
             }
         });
         exitButton.addActionListener(new ActionListener() {
@@ -141,43 +224,24 @@ public class GamePage extends JFrame{
 
     }
 
-    private void setTimer()
-    {
-        Timer timer = new Timer(1000, new ActionListener()
-
-        {
-
-            public void actionPerformed (ActionEvent e)
-
-            {
-
-                System.out.println("timer activated in Game page");
-                //System.out.println("draw gameBoard in Game page");
-                //drawGameBoard();
-
-            }
-
-        });
-        timer.start();
-    }
-
-    private void drawGameBoard()
+    private void drawGameBoard(int[][] background)
     {
         gameBoardPane.setMargin(new Insets(130,0,0,0));
         //여기서부턴 화면에 그리기
-
-        appendToPane(gameBoardPane,"XXXXXXXXXXXX\n",Color.BLACK);
-
+        drawTextWithColor(gameBoardPane,"XXXXXXXXXXXX\n",Color.BLACK);
         for(int i=0;i<20;i++)
         {
-            appendToPane(gameBoardPane,"X",Color.BLACK);
-            appendToPane(gameBoardPane,"AAAAAAAAAA",Color.WHITE);
-            appendToPane(gameBoardPane,"X\n",Color.BLACK);
+            drawTextWithColor(gameBoardPane,"X",Color.BLACK);
+            for(int j=0;j<10;j++)
+            {
+                if(background[i][j]==0) drawTextWithColor(gameBoardPane,"A",Color.WHITE);
+                else drawTextWithColor(gameBoardPane,"A",Color.BLUE);
+            }
+            drawTextWithColor(gameBoardPane,"X\n",Color.BLACK);
         }
 
 
-
-        appendToPane(gameBoardPane,"XXXXXXXXXXXX",Color.BLACK);
+        drawTextWithColor(gameBoardPane,"XXXXXXXXXXXX",Color.BLACK);
 
 
         StyledDocument doc = gameBoardPane.getStyledDocument();
@@ -193,7 +257,7 @@ public class GamePage extends JFrame{
         * */
     }
 
-    private void appendToPane(JTextPane tp, String msg, Color c)
+    private void drawTextWithColor(JTextPane tp, String msg, Color c)
     {
         StyleContext sc = StyleContext.getDefaultStyleContext();
         AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, c);

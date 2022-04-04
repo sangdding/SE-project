@@ -1,14 +1,14 @@
 package view;
 
+import config.AppConfig;
 import controller.PageController;
 import model.score.JsonScore;
 import model.score.Score;
+import model.setting.JsonSetting;
+import model.setting.Setting;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 
 public class SettingPage extends JFrame{
     private JPanel settingPanel;
@@ -25,15 +25,15 @@ public class SettingPage extends JFrame{
     private JCheckBox colorBlindnessCheckBox;
     private JButton keySettingButton;
 
-
+    AppConfig appConfig = new AppConfig();
+    Setting setting = appConfig.setting();
 
 
     public SettingPage() {
 
 
         initialize();
-        //키보드 이벤트 처리 설정
-        setKeyEventController();
+
 
         setButtonClickController();
 
@@ -43,6 +43,8 @@ public class SettingPage extends JFrame{
     }
     private void initialize()
     {
+
+
         this.add(settingPanel);
         this.setSize(500, 500);
         this.setVisible(true);
@@ -50,9 +52,9 @@ public class SettingPage extends JFrame{
 
         this.setLocationRelativeTo(null);//화면 가운데에 생성
 
-        //세팅 파일에서 읽어와서 색맹모드 1이면 체크박스 체크. if 문 안에 세팅 파일 속 색맹모드 여부 체크
-        if(1==0) colorBlindnessCheckBox.setSelected(true);
+        //세팅 파일에서 읽어와서 display mode 1이면 색맹모드이니 체크박스 체크.
 
+        if(setting.getDisplayMode()==1) colorBlindnessCheckBox.setSelected(true);
         else colorBlindnessCheckBox.setSelected(false);
 
 
@@ -63,30 +65,7 @@ public class SettingPage extends JFrame{
 
 
 
-    private void setKeyEventController()
-    {
-        addKeyListener(new KeyAdapter() { //키 이벤트
-            @Override
-            public void keyPressed(KeyEvent e) { //키 눌렀을때
-                System.out.println("setting page key event enter");
-                System.out.println(e.getKeyCode());
-                // TODO Auto-generated method stub
-                switch (e.getKeyCode()) {//키 코드로 스위치
 
-                    case KeyEvent.VK_DOWN: //방향키(아래) 눌렀을때
-
-                        break;
-                    case KeyEvent.VK_UP: //방향키(위)눌렀을때
-
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-        });
-
-    }
 
     private void setButtonClickController(){
         mainButton.addActionListener(new ActionListener() {
@@ -100,25 +79,59 @@ public class SettingPage extends JFrame{
         resolutionButton1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //파일 입출력을 통해 세팅 txt에 해상도 사이즈 변경
+
+                setting.setDisplaySize(500,800);
+
             }
         });
         resolutionButton2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //파일 입출력을 통해 세팅 txt에 해상도 사이즈 변경
+
+                setting.setDisplaySize(800,800);
             }
         });
         resolutionButton3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //파일 입출력을 통해 세팅 txt에 해상도 사이즈 변경
+
+                setting.setDisplaySize(1000,1500);
             }
         });
+
+        colorBlindnessCheckBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange()==ItemEvent.SELECTED)
+                {
+
+                    System.out.println("bilnd mode selected");
+                    setting.setDisplayMode(1);
+                }
+                else if(e.getStateChange()==ItemEvent.DESELECTED){
+
+                    System.out.println("blind mode disselected");
+                    setting.setDisplayMode(0);
+                }
+            }
+        });
+
         settingResetButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //파일 입출력을 통해 세팅 txt 초기화
+                Score score = new JsonScore();
+
+                //점수 초기화
+                score.resetList();
+                //키세팅 초기화
+                setting.setDefaultKeySet();
+                //화면 크기 초기화
+                setting.setDisplaySize(500,800);
+                //난이도,게임모드, 색맹모드 초기화
+                setting.setDifficulty(1);
+                setting.setGameMode(1);
+                setting.setDisplayMode(0);
+
             }
         });
         scoreboardResetButton.addActionListener(new ActionListener() {
@@ -139,4 +152,6 @@ public class SettingPage extends JFrame{
         });
 
     }
+
+
 }

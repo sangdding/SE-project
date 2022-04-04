@@ -25,6 +25,7 @@ public class scoreBoard extends JPanel{
 
 
 
+        int checkedScoreNum=0;
         //배열 크기 맞추기
         for (int i = 0; i < 10 && i<orederedScoreInfo.size(); i++) {
 
@@ -37,6 +38,22 @@ public class scoreBoard extends JPanel{
             this.add(labels[3*i]);
             this.add(labels[3*i+1]);
             this.add(labels[3*i+2]);
+
+            checkedScoreNum++;
+        }
+
+        for (int i = checkedScoreNum; i < 10 ; i++) {
+
+
+            //align 맞추기
+            labels[3*i]=new JLabel(Integer.toString(i+1)+"위 : ");
+            labels[3*i+1]=new JLabel("-");
+            labels[3*i+2]=new JLabel("-");
+            this.add(labels[3*i]);
+            this.add(labels[3*i+1]);
+            this.add(labels[3*i+2]);
+
+            checkedScoreNum++;
         }
 
     }

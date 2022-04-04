@@ -1,11 +1,13 @@
-package controller;
+/*package controller;
 
-import model.GameArea;
 import controller.block.Block;
+import model.GameArea;
+
 public class GameAreaController extends GameArea {
     private GameArea ga;
-    public GameAreaController(GameArea ga){
-        this.ga=ga;
+
+    public GameAreaController(){
+        this.ga=new GameArea();
     }
     public boolean checkBottom() {
         if (ga.block.getBottomEdge() == ga.gridRows) {
@@ -163,3 +165,6 @@ public class GameAreaController extends GameArea {
         }
     }
 }
+
+일단 주석 처리
+*/
