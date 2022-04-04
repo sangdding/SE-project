@@ -1,5 +1,6 @@
 package view;
 
+import controller.GameAreaController;
 import controller.PageController;
 import model.setting.JsonSetting;
 import model.setting.Setting;
@@ -35,6 +36,7 @@ public class GamePage extends JFrame{
     private HashMap<String,Integer> keySettingMap;
 
 
+    private GameAreaController gameAreaController = new GameAreaController();
     private char borderChar='X';
     private SimpleAttributeSet styleSet;
 
@@ -62,7 +64,7 @@ public class GamePage extends JFrame{
         StyleConstants.setBold(styleSet, false);
         StyleConstants.setAlignment(styleSet, StyleConstants.ALIGN_CENTER);
 
-        drawGameBoard();
+        drawGameBoard(gameAreaController.getBackground());
 
         gameBoardPane.setEditable(false);
         this.add(mainPanel);
@@ -204,8 +206,8 @@ public class GamePage extends JFrame{
             {
 
                 System.out.println("timer activated in Game page");
-                //이차원 배열 = movedown();
-                //drawGameBoard();
+
+                drawGameBoard(gameAreaController.moveBlockDown());
 
             }
 
@@ -213,7 +215,7 @@ public class GamePage extends JFrame{
         timer.start();
     }
 
-    private void drawGameBoard()
+    private void drawGameBoard(int[][] background)
     {
         gameBoardPane.setMargin(new Insets(130,0,0,0));
         //여기서부턴 화면에 그리기
@@ -223,7 +225,11 @@ public class GamePage extends JFrame{
         for(int i=0;i<20;i++)
         {
             drawTextWithColor(gameBoardPane,"X",Color.BLACK);
-            drawTextWithColor(gameBoardPane,"AAAAAAAAAA",Color.WHITE);
+            for(int j=0;j<10;j++)
+            {
+                if(background[i][j]==0) drawTextWithColor(gameBoardPane,"A",Color.WHITE);
+                else drawTextWithColor(gameBoardPane,"A",Color.BLUE);
+            }
             drawTextWithColor(gameBoardPane,"X\n",Color.BLACK);
         }
 
