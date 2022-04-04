@@ -4,13 +4,15 @@
  */
 package model;
 
-import java.awt.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import controller.GameAreaController;
 import view.GamePage;
 
 public class GameThread extends Thread{
     private GameArea ga;
+    private GameAreaController gc;
     private GamePage gp;
     private Boolean C=false;
     private Boolean item=false;
@@ -26,21 +28,22 @@ public class GameThread extends Thread{
     public GameThread(GameArea ga,GamePage gp){ //gameArea를 넘김
     this.ga=ga;
     this.gp=gp;
+    this.gc= new GameAreaController(ga);
     }
 
     @Override
     public void run(){//런이 꺼지면 쓰레드가 날아가기때문에 무한루푸 실행해줘야함.
 
         while(true){
-            ga.spawnBlock(shapes[i],colors[i]); //블럭 추가
-            while(ga.checkBottom()){
+            gc.spawnBlock(i); //블럭 추가
+            while(gc.checkBottom()){
                 try {
                     Thread.sleep(wait);
                 } catch (InterruptedException ex) {
                     Logger.getLogger(GameThread.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            if(ga.isBlockOuOofBounds()){
+            if(gc.isBlockOuOofBounds()){
                 System.out.println("GameOver");
                 break;
             }
