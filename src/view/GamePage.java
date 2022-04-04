@@ -40,7 +40,6 @@ public class GamePage extends JFrame{
     private char borderChar='X';
     private SimpleAttributeSet styleSet;
 
-
     public GamePage() {
         //초기화
         initialize();
@@ -53,6 +52,7 @@ public class GamePage extends JFrame{
         //timer 설정
         setTimer();
     }
+
     private void initialize(){
 
         //스타일
@@ -63,7 +63,8 @@ public class GamePage extends JFrame{
         StyleConstants.setAlignment(styleSet, StyleConstants.ALIGN_CENTER);
 
         //블록 생성, 초기 게임 화면 그리기
-        //gameAreaController.spawnBlock(1);
+        gameAreaController.spawnBlock(1);
+        drawGameBoard(gameAreaController.getBackground());
 
         gameBoardPane.setEditable(false);
         this.add(mainPanel);
@@ -106,37 +107,6 @@ public class GamePage extends JFrame{
 
     public void setScore(int score){
         this.score=score;
-    }
-
-    private void setTimer()
-    {
-        timer = new Timer(1000, new ActionListener()
-
-        {
-
-            public void actionPerformed (ActionEvent e)
-
-            {
-                System.out.println("timer activated in Game page");
-                gameAreaController.moveBlockDown();
-                System.out.println(gameAreaController.getY());
-                for(int i=0; i<20; i++){
-                    for(int j=0; j<10; j++){
-                        System.out.print(gameAreaController.getBackground()[i][j]);
-                    }
-                    System.out.println();
-                }
-                drawGameBoard(gameAreaController.getBackground());
-                if(!gameAreaController.checkBottom())
-                {
-                    gameAreaController.moveBlockToBackground();
-                    gameAreaController.spawnBlock(1);
-                }
-
-            }
-
-        });
-        timer.start();
     }
 
 
@@ -224,21 +194,56 @@ public class GamePage extends JFrame{
 
     }
 
+    private void setTimer()
+    {
+        timer = new Timer(1000, new ActionListener()
+
+        {
+
+            public void actionPerformed (ActionEvent e)
+
+            {
+
+                System.out.println("timer activated in Game page");
+                int[][] temp=gameAreaController.moveBlockDown();
+                for(int i=0;i<20;i++){
+                    for(int j=0;j<10;j++){
+                        System.out.print(temp[i][j]);
+                    }
+                    System.out.println("");
+                }
+                System.out.println("");
+                drawGameBoard(temp);
+                if(!gameAreaController.checkBottom())
+                {
+                    gameAreaController.moveBlockToBackground();
+                    gameAreaController.spawnBlock(1);
+                }
+
+            }
+
+        });
+        timer.start();
+    }
+
     private void drawGameBoard(int[][] background)
     {
         gameBoardPane.setMargin(new Insets(130,0,0,0));
         //여기서부턴 화면에 그리기
+
         drawTextWithColor(gameBoardPane,"XXXXXXXXXXXX\n",Color.BLACK);
+
         for(int i=0;i<20;i++)
         {
             drawTextWithColor(gameBoardPane,"X",Color.BLACK);
             for(int j=0;j<10;j++)
             {
-                if(background[i][j]==0) drawTextWithColor(gameBoardPane,"A",Color.WHITE);
+                if(background[i][j]==0) drawTextWithColor(gameBoardPane,"A",Color.GREEN);
                 else drawTextWithColor(gameBoardPane,"A",Color.BLUE);
             }
             drawTextWithColor(gameBoardPane,"X\n",Color.BLACK);
         }
+
 
 
         drawTextWithColor(gameBoardPane,"XXXXXXXXXXXX",Color.BLACK);
