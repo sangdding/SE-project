@@ -40,6 +40,28 @@ public class GamePage extends JFrame{
     private char borderChar='X';
     private SimpleAttributeSet styleSet;
 
+    private int [][] testArray =new int[][] {
+            {0,0,0,0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0,0,0,0},
+            {0,0,0,1,1,1,1,0,0,0},
+            {0,0,0,0,0,0,1,0,0,0},
+            {0,0,0,0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0,0,0,0},};
+
 
 
     public GamePage() {
@@ -64,7 +86,9 @@ public class GamePage extends JFrame{
         StyleConstants.setBold(styleSet, false);
         StyleConstants.setAlignment(styleSet, StyleConstants.ALIGN_CENTER);
 
-        drawGameBoard(gameAreaController.getBackground());
+        //블록 생성, 초기 게임 화면 그리기
+        //gameAreaController.spawnBlock(1);
+        drawGameBoard(testArray);
 
         gameBoardPane.setEditable(false);
         this.add(mainPanel);
@@ -206,7 +230,12 @@ public class GamePage extends JFrame{
 
                 System.out.println("timer activated in Game page");
 
-                drawGameBoard(gameAreaController.moveBlockDown());
+                drawGameBoard(testArray);
+                /*if(gameAreaController.checkBottom())
+                {
+                    gameAreaController.moveBlockToBackground();
+                    gameAreaController.spawnBlock(1);
+                }*/
 
             }
 
