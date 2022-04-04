@@ -63,8 +63,8 @@ public class GamePage extends JFrame{
         StyleConstants.setAlignment(styleSet, StyleConstants.ALIGN_CENTER);
 
         //블록 생성, 초기 게임 화면 그리기
-        //gameAreaController.spawnBlock(1);
-        drawGameBoard(testArray);
+        gameAreaController.spawnBlock(1);
+        drawGameBoard(gameAreaController.getBackground());
 
         gameBoardPane.setEditable(false);
         this.add(mainPanel);
@@ -205,8 +205,17 @@ public class GamePage extends JFrame{
             {
 
                 System.out.println("timer activated in Game page");
+                int[][] temp=gameAreaController.moveBlockDown();
+                for(int i=0;i<20;i++){
+                    for(int j=0;j<10;j++){
+                        System.out.print(temp[i][j]);
+                    }
+                    System.out.println("");
 
-                drawGameBoard(testArray);
+
+                }
+                System.out.println("");
+                drawGameBoard(temp);
                 /*if(gameAreaController.checkBottom())
                 {
                     gameAreaController.moveBlockToBackground();
