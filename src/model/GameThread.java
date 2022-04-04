@@ -2,12 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
+/*
 package model;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import controller.GameAreaController;
+import controller.GameControl.GameArea;
+import GameControl.GameAreaController;
 import view.GamePage;
 
 public class GameThread extends Thread{
@@ -28,7 +30,7 @@ public class GameThread extends Thread{
     public GameThread(GameArea ga,GamePage gp){ //gameArea를 넘김
     this.ga=ga;
     this.gp=gp;
-    this.gc= new GameAreaController(ga);
+    this.gc= new GameAreaController();
     }
 
     @Override
@@ -55,6 +57,6 @@ public class GameThread extends Thread{
             if(ga.clearLines() != 0){wait -=50;}}}
         }
 
-
+*/
 
 
