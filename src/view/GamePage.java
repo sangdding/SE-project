@@ -40,6 +40,22 @@ public class GamePage extends JFrame{
     private char borderChar='X';
     private SimpleAttributeSet styleSet;
 
+    private Color []  colorForBlock = new Color[] {
+            Color.CYAN,Color.RED,Color.BLUE,Color.GREEN,Color.MAGENTA,Color.ORANGE,
+            Color.YELLOW, new Color(128,0,0), new Color(128,128,0), new Color(0,0,128),
+            new Color(128,0,128), new Color(0,139,139), new Color(255,105,180)
+    }; // 13 colors;
+
+    private Color [] colorFOrBlindModeBlock = new  Color[]{
+            Color.ORANGE, new Color(135,206,235), new Color(60,179,113), Color.YELLOW, Color.BLUE,
+            new Color(204,71,75), new Color(149, 53, 83), new Color(128,0,0), new Color(128,128,0), new Color(0,0,128),
+            new Color(128,0,128), new Color(0,139,139), new Color(255,105,180)
+    }; // 13 colors for blind
+
+    private char [] blockShape = new char [] {
+            'A', 'B', 'C', 'D','E','F','H','J','K','M','N','P','S'
+    };
+
 
 
     public GamePage() {

@@ -9,7 +9,10 @@ import java.util.Map;
 
 public class scoreBoard extends JPanel{
 
-    private JLabel[] labels=new JLabel[30];
+
+    private static final int numScoreLine = 10;
+    private static final int numLabelInTheLine = 3;
+    private JLabel[] labels=new JLabel[numLabelInTheLine*numScoreLine];
     scoreBoard()
     {
         GridLayout gl= new GridLayout(10,3);
@@ -27,7 +30,7 @@ public class scoreBoard extends JPanel{
 
         int checkedScoreNum=0;
         //배열 크기 맞추기
-        for (int i = 0; i < 10 && i<orederedScoreInfo.size(); i++) {
+        for (int i = 0; i < numScoreLine && i<orederedScoreInfo.size(); i++) {
 
             if(orederedScoreInfo.get(i).getKey().equals("admin")) continue;
 
@@ -42,7 +45,7 @@ public class scoreBoard extends JPanel{
             checkedScoreNum++;
         }
 
-        for (int i = checkedScoreNum; i < 10 ; i++) {
+        for (int i = checkedScoreNum; i < numScoreLine ; i++) {
 
 
             //align 맞추기
