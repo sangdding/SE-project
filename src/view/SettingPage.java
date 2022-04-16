@@ -4,7 +4,6 @@ import config.AppConfig;
 import controller.PageController;
 import model.score.JsonScore;
 import model.score.Score;
-import model.setting.JsonSetting;
 import model.setting.Setting;
 
 import javax.swing.*;
@@ -24,6 +23,9 @@ public class SettingPage extends JFrame{
     private JButton scoreboardResetButton;
     private JCheckBox colorBlindnessCheckBox;
     private JButton keySettingButton;
+    private JPanel difficultyPane;
+    private JComboBox difficultyComboBox;
+    private JLabel difficultyLable;
 
     AppConfig appConfig = new AppConfig();
     Setting setting = appConfig.setting();
@@ -36,7 +38,7 @@ public class SettingPage extends JFrame{
 
 
         setButtonClickController();
-
+        setComboBoxEventController();
 
 
 
@@ -53,10 +55,24 @@ public class SettingPage extends JFrame{
         this.setLocationRelativeTo(null);//화면 가운데에 생성
 
         //세팅 파일에서 읽어와서 display mode 1이면 색맹모드이니 체크박스 체크.
-
         if(setting.getDisplayMode()==1) colorBlindnessCheckBox.setSelected(true);
         else colorBlindnessCheckBox.setSelected(false);
 
+        //세팅 파일 읽어서 난이도 콤보박스 설정
+        switch (setting.getDifficulty())
+        {
+            case 0:
+                difficultyComboBox.setSelectedItem("normal");
+                break;
+            case 1:
+                difficultyComboBox.setSelectedItem("easy");
+                break;
+            case 2:
+                difficultyComboBox.setSelectedItem("hard");
+                break;
+            default:
+                break;
+        }
 
         //포커스를 이 화면에 맟춰서 키 이벤트 받게 만듦
         requestFocus();
@@ -128,9 +144,11 @@ public class SettingPage extends JFrame{
                 //화면 크기 초기화
                 setting.setDisplaySize(500,800);
                 //난이도,게임모드, 색맹모드 초기화
-                setting.setDifficulty(1);
-                setting.setGameMode(1);
+                setting.setDifficulty(0);
+                difficultyComboBox.setSelectedIndex(0);
+                setting.setGameMode(0);
                 setting.setDisplayMode(0);
+                colorBlindnessCheckBox.setSelected(false);
 
             }
         });
@@ -153,5 +171,14 @@ public class SettingPage extends JFrame{
 
     }
 
+    private void setComboBoxEventController(){
+        difficultyComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JComboBox cb = (JComboBox) e.getSource();
+                setting.setDifficulty(cb.getSelectedIndex());
+            }
+        });
+    }
 
 }
