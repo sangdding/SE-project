@@ -1,6 +1,8 @@
 package view;
 
 import controller.PageController;
+import model.setting.JsonSetting;
+import model.setting.Setting;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,6 +24,7 @@ public class MainPage extends JFrame{
     private JButton gameStartItemModeButton;
 
 
+    private Setting setting = new JsonSetting();
     private PageController pageController;
 
     private JButton[] buttons=new JButton[]{gameStartNormalModeButton, gameStartItemModeButton, settingButton,scoreBoardButton, exitButton };
@@ -111,6 +114,7 @@ public class MainPage extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
+                setting.setGameMode(0);
                 pageController = new PageController(e.getActionCommand());
             }
         });
@@ -120,6 +124,7 @@ public class MainPage extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
+                setting.setGameMode(1);
                 pageController = new PageController(e.getActionCommand());
             }
         });
