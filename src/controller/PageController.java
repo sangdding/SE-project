@@ -16,7 +16,7 @@ public class PageController {
             settingPage = new SettingPage();
         } else if (pageName.equals("Main")) {
             mainPage = new MainPage();
-        } else if (pageName.equals("Game Start") || pageName.equals("Game Restart")) {
+        } else if (pageName.equals("Game Start - Normal Mode") || pageName.equals("Game Restart")||pageName.equals("Game Start - Item Mode")) {
             gamePage = new GamePage();
         }
         else if (pageName.equals("ScoreBoard")) {

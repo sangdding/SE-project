@@ -17,12 +17,12 @@ public class KeySettingPage extends JFrame {
     private JPanel mainPanel;
     private JPanel settingPanel;
     private JPanel buttonPanel;
-    private JLabel upButton;
+    private JLabel rotateButton;
     private JLabel downButton;
     private JLabel rightButton;
     private JLabel leftButton;
     private JButton settingButton;
-    private JLabel valueForUp;
+    private JLabel valueForRotate;
     private JLabel valueForDown;
     private JLabel valueForRight;
     private JLabel valueForLeft;
@@ -30,20 +30,19 @@ public class KeySettingPage extends JFrame {
     private JLabel terminateButton;
     private JLabel pauseButton;
     private JLabel resumeButton;
-    private JLabel quickDownButton;
     private JLabel dropButton;
     private JLabel valueForTerminate;
     private JLabel valueForPause;
     private JLabel valueForResume;
-    private JLabel valueForQuickDown;
+
     private JLabel valueForDrop;
 
     private PageController pageController;
 
-    private JLabel[] keyLabels = new JLabel[]{upButton, downButton, rightButton, leftButton, terminateButton,
-                                                pauseButton, resumeButton, quickDownButton,dropButton};
-    private JLabel[] keyValues = new JLabel[]{valueForUp, valueForDown, valueForRight, valueForLeft, valueForTerminate,
-                                                valueForPause,valueForResume, valueForQuickDown, valueForDrop};
+    private JLabel[] keyLabels = new JLabel[]{rotateButton, downButton, rightButton, leftButton, terminateButton,
+                                                pauseButton, resumeButton, dropButton};
+    private JLabel[] keyValues = new JLabel[]{valueForRotate, valueForDown, valueForRight, valueForLeft, valueForTerminate,
+                                                valueForPause,valueForResume,  valueForDrop};
     private int buttonSelectorIndex = 0;
     private boolean isSetting = false;
 

@@ -15,15 +15,16 @@ public class MainPage extends JFrame{
 
     private JPanel mainPanel;
 
-    private JButton gameStartButton;
+    private JButton gameStartNormalModeButton;
     private JButton settingButton;
     private JButton scoreBoardButton;
     private JButton exitButton;
+    private JButton gameStartItemModeButton;
 
 
     private PageController pageController;
 
-    private JButton[] buttons=new JButton[]{gameStartButton,settingButton,scoreBoardButton, exitButton };
+    private JButton[] buttons=new JButton[]{gameStartNormalModeButton, gameStartItemModeButton, settingButton,scoreBoardButton, exitButton };
     private int buttonSelectorIndex =0;
 
 
@@ -106,14 +107,22 @@ public class MainPage extends JFrame{
 
     }
     private void setButtonClickController(){
-        gameStartButton.addActionListener(new ActionListener() {
+        gameStartNormalModeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
                 pageController = new PageController(e.getActionCommand());
             }
         });
-
+        
+        //아이템전 시작하는 기능 추가 해야 함
+        gameStartItemModeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setVisible(false);
+                pageController = new PageController(e.getActionCommand());
+            }
+        });
 
 
         settingButton.addActionListener(new ActionListener() {

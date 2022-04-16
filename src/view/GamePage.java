@@ -262,7 +262,7 @@ public class GamePage extends JFrame{
 
             for(int j=0;j<10;j++)
             {
-                if(background[i][j]==0) drawTextWithColor(gameBoardPane,"A",Color.GREEN);
+                if(background[i][j]==0) drawTextWithColor(gameBoardPane,"A",Color.WHITE);
                 else if (background[i][j] != 0){
                     System.out.println("call the Blue Coloring");
                     drawTextWithColor(gameBoardPane,"B",Color.BLUE);

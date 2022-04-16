@@ -3,12 +3,11 @@
     "resume": 82,
     "drop": 68,
     "exit": 27,
+    "rotate": 38,
     "left": 37,
-    "up": 38,
     "right": 39,
     "down": 40,
-    "pause": 80,
-    "quickDown": 81
+    "pause": 80
   },
   "difficulty": "normal",
   "display": {
@@ -20,12 +19,11 @@
     "resume": 82,
     "drop": 68,
     "exit": 27,
+    "rotate": 38,
     "left": 37,
-    "up": 38,
     "right": 39,
     "down": 40,
-    "pause": 80,
-    "quickDown": 81
+    "pause": 80
   },
   "displayMode": "blind"
 }
