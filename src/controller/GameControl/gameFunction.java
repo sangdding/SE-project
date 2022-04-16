@@ -8,7 +8,7 @@ public interface gameFunction {
     public int[][] moveBlockDown(); //블럭 밑으로 움직
     public int[][] moveBlockRight(); //블럭 오른쪽 움직
     public int[][] moveBlockLeft(); //블럭 왼쪽
-    public int[][] dropBlock(); //블럭 한번에 떨구기
+    public void dropBlock(); //블럭 한번에 떨구기
     public int[][] rotateBlock(); //블럭 회전
     /****************************************************/
     public int clearLines(); //행 제거

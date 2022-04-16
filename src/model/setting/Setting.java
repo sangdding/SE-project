@@ -40,6 +40,11 @@ public interface Setting {
      */
     int getGameMode();
 
+
+    /**
+    * 0 : normal mode
+     * 1 : item mode
+    * */
     void setGameMode(int gameMode);
 
     /**

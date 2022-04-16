@@ -1,7 +1,6 @@
 package controller.block;
 
 import model.block.NormalBlock;
-
 import java.util.Random;
 
 public class Block {
@@ -27,6 +26,10 @@ public class Block {
         x= r.nextInt(gridWidth-getWidth());
     }
     public int[][] getShape(){return this.shape;} //지금 형태를 2차원 배열로 리턴
+    public int[][] getNextShape(){
+        if(currentRotation==3){return inf.getBlockShape(bln,0);}
+        return inf.getBlockShape(bln,currentRotation+1);
+    }
     public int getColor(){return this.color;} // 컬러 받기
     public int getHeight(){return shape.length;}
     public int getWidth(){return shape[0].length;}

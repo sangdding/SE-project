@@ -44,13 +44,16 @@ public class Generator {
                     int temp=this.arr[rr1];
                     this.arr[rr1]=this.arr[rr2];
                     this.arr[rr2]=temp;}
-                else{i++;}
+                else{i--;}
             }
         }
     }
     public void show(){
         for(int i=0; i<this.arr.length;i++){
             System.out.println(this.arr[i]);}
+    }
+    public int[] getArr(){
+        return arr;
     }
     public void count(){
         int[] arr = new int[]{0,1,2,3,4,5,6};
