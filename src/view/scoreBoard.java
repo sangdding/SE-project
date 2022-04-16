@@ -15,7 +15,7 @@ public class scoreBoard extends JPanel{
     private JLabel[] labels=new JLabel[numLabelInTheLine*numScoreLine];
     scoreBoard()
     {
-        GridLayout gl= new GridLayout(10,3);
+        GridLayout gl= new GridLayout(numScoreLine,numLabelInTheLine);
         this.setLayout(gl);
 
         HashMap<String, Integer> scoreInfo = new JsonScore().getList();

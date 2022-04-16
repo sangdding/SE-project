@@ -137,6 +137,9 @@ public class GamePage extends JFrame{
             public void actionPerformed (ActionEvent e)
 
             {
+                requestFocus();
+                setFocusable(true);
+
                 System.out.println("timer activated in Game page");
                 gameAreaController.moveBlockDown();
 
@@ -180,11 +183,16 @@ public class GamePage extends JFrame{
                 }
                 else if(pressedKey==keySettingMap.get("exit")){
                     System.out.println("esc");
+                    timer.stop();
+                    dispose();
+
+                    pageController = new PageController("Main");
+
                 }
                 else if(pressedKey==keySettingMap.get("left")){
                     System.out.println("l");
                 }
-                else if(pressedKey==keySettingMap.get("up")){
+                else if(pressedKey==keySettingMap.get("rotate")){
                     System.out.println("u");
                 }
                 else if(pressedKey==keySettingMap.get("right")){
@@ -201,9 +209,7 @@ public class GamePage extends JFrame{
                     }
 
                 }
-                else if(pressedKey==keySettingMap.get("quickDown")){
-                    System.out.println("q");
-                }
+
 
             }
         });
@@ -215,7 +221,10 @@ public class GamePage extends JFrame{
         mainButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setVisible(false);
+
+                timer.stop();
+                dispose();
+
                 pageController = new PageController(e.getActionCommand());
             }
         });
@@ -227,6 +236,16 @@ public class GamePage extends JFrame{
                     System.out.println("Game Stoopped");
                     isStop=true;
                     timer.stop();
+
+                    requestFocus();
+                    setFocusable(true);
+
+                }
+                else
+                {
+                    System.out.println("Game Restarted");
+                    isStop=false;
+                    timer.start();
                 }
             }
         });
