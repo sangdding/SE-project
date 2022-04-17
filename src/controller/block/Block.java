@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class Block {
     private int bln;
-    private int[][] shape;
+    public int[][] shape;
     private int color;
     private int x,y;
     private int[][][] shapes;
@@ -24,6 +24,18 @@ public class Block {
         shape=inf.getBlockShape(bln,currentRotation);
         y= -getHeight();
         x= r.nextInt(gridWidth-getWidth());
+    }
+    public void invertToItem(int r){
+        Random r2 = new Random();
+        int wid= this.shape[0].length;
+        int hei = this.shape.length;
+        int index =r2.nextInt(wid*hei);
+        int Q = index / wid - index % wid ;
+        do{
+            if(this.shape[Q][index%wid]==1){
+                this.shape[Q][index%wid]=r;
+            }
+        }while(this.shape[Q][index%wid]==0);
     }
     public int[][] getShape(){return this.shape;} //지금 형태를 2차원 배열로 리턴
     public int[][] getNextShape(){

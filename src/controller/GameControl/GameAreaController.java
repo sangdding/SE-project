@@ -12,17 +12,15 @@ public class GameAreaController extends GameArea implements gameFunction{
         int[][] shape = ga.block.getShape();
         int w = ga.block.getWidth();
         int h = ga.block.getHeight();
-        for (int col = 0; col < w; col++) {
-            for (int row = h - 1; row >= 0; row--) {
+        for (int row = h - 1; row >= 0; row--) {
+            for (int col = 0; col < w; col++){
                 if (shape[row][col] != 0) {
                     int x = col + ga.block.getX();
                     int y = row + ga.block.getY() + 1;
                     if (y < 0) break;
                     if (ga.background[y][x] != 0) return false;
-                    break;
-                }
+                }}
             }
-        }
         return true;
     }
     private boolean checkLeft() {
@@ -88,6 +86,21 @@ public class GameAreaController extends GameArea implements gameFunction{
         ga.block = new Block(bln);
         ga.block.spawn(gridColumns);
     }
+    public void spawnBlock2(int bln, int random){
+        if(random==9){//불도저 만들기
+            ga.block = new Block(0);
+            ga.block.spawn(gridColumns);
+            ga.block.rotate();
+            for(int i=0 ; i<4; i++){
+                ga.block.shape[0][i]=9;
+            }
+             }
+        else {
+            ga.block = new Block(bln);
+            ga.block.spawn(gridColumns);
+            ga.block.invertToItem(random);
+        }
+    }
     @Override
     public boolean isBlockOuOofBounds() {
         if (ga.block.getY() < 0) { //맨 위 프레임을 건들여, 게임에서 진 상황
@@ -97,10 +110,10 @@ public class GameAreaController extends GameArea implements gameFunction{
         return false;
     }
     @Override
-    public int[][] moveBlockDown() {
-        if(checkBottom()==false){return background;}
-        ga.block.moveDown();
-        return ga.background;
+    public void moveBlockDown() {
+        if(ga.block==null){}
+        if(!checkBottom()){}
+        else{ga.block.moveDown();}
     }
     @Override
     public int[][] moveBlockRight() {
@@ -117,11 +130,12 @@ public class GameAreaController extends GameArea implements gameFunction{
         return ga.background;
     }
     @Override
-    public void dropBlock() {
-        if(ga.block == null){}
+    public boolean dropBlock() {
+        if(ga.block == null){return false;}
         else{while (checkBottom()) {
             ga.block.moveDown();
         }}
+        return true;
     }
     @Override
     public int[][] rotateBlock(){
@@ -217,19 +231,7 @@ public class GameAreaController extends GameArea implements gameFunction{
 
             }
         }
-        /*
-        for(int r=y; r>y+ga.block.getHeight();r--){
-            for(int c=x;c<ga.block.getWidth()+x;c++){
-                if(r<0){break;}
-                if(ga.block.getShape()[r-y][c-x]==1)
-                {
-                    newBackground[r][c]=ga.block.getColor();
-                }
-            }
-        }
-        */
-
-        return newBackground;
+      return newBackground;
     }
     public int getY(){
         return ga.block.getY();

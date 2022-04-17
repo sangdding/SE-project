@@ -5,7 +5,7 @@ import controller.PageController;
 import model.Generator;
 import model.setting.JsonSetting;
 import model.setting.Setting;
-
+import model.block.NormalBlock;
 import javax.swing.*;
 import javax.swing.text.*;
 import java.awt.*;
@@ -13,7 +13,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 import java.util.HashMap;
 import controller.HashMapParser;
 import java.util.Random;
@@ -21,6 +20,7 @@ public class GamePage extends JFrame{
     private JPanel mainPanel;
     private javax.swing.JPanel gameBoardPanel;
     private Random r = new Random();
+    private Random r2= new Random();
     private Generator gen;
     private GameAreaController GameAreaController;
     private JButton mainButton;
@@ -36,15 +36,14 @@ public class GamePage extends JFrame{
     private boolean isStop;
     private Timer timer;
     private int isBlindMode;
-    private JsonSetting setting;
+    private JsonSetting setting = new JsonSetting();
     private HashMap<String,Integer> keySettingMap;
     private int next;
-
-
+    private int lines=0;
+    private NormalBlock BlockModel = new NormalBlock();
     private GameAreaController gameAreaController = new GameAreaController();
     private char borderChar='X';
     private SimpleAttributeSet styleSet;
-
     private Color []  colorForBlock = new Color[] {
             Color.CYAN,Color.RED,Color.BLUE,Color.GREEN,Color.MAGENTA,Color.ORANGE,
             Color.YELLOW, new Color(128,0,0), new Color(128,128,0), new Color(0,0,128),
@@ -71,9 +70,12 @@ public class GamePage extends JFrame{
         setKeyEventController();
         //버튼 마우스 입력 처리 설정
         setButtonClickController();
-
-        //timer 설정
-        setTimer();
+        if(setting.getGameMode()==0){
+            setTimer();
+        }
+        else{
+            setTimer2();
+        }
     }
 
     private void initialize(){
@@ -94,27 +96,10 @@ public class GamePage extends JFrame{
         this.add(mainPanel);
 
         //설정 읽어오기
-        Setting setting = new JsonSetting();
+
         //난이도별 생성기 세팅
-        int a=0;int b=0;
-        switch(setting.getDifficulty()) {
-            case 0: //normal
-                a = 142;
-                b = 142;
-                break;
-            case 1: //easy
-                a = 170;
-                b = 114;
-                break;
-            case 2: //hard
-                a = 114;
-                b = 170;
-                break;
-        }
-        Generator gen = new Generator(a,b);
+        this.gen = new Generator(setting.getDifficulty());
         this.next = r.nextInt(1000);
-        this.gen = gen;
-        gen.count();
         gameAreaController.spawnBlock(gen.getArr()[r.nextInt(1000)]);
         //화면 크기 설정
         HashMap<String,Integer> settingMap = setting.getDisplaySize();
@@ -147,7 +132,7 @@ public class GamePage extends JFrame{
 
         //화면 가운데에 생성
         this.setLocationRelativeTo(null);
-        //블럭 생성
+        //timer 설정
 
 
     }
@@ -167,10 +152,8 @@ public class GamePage extends JFrame{
             {
                 requestFocus();
                 setFocusable(true);
-
                 System.out.println("timer activated in Game page");
                 gameAreaController.moveBlockDown();
-
                 drawGameBoard(gameAreaController.newBackground());
                 if(!gameAreaController.checkBottom())
                 {
@@ -178,6 +161,7 @@ public class GamePage extends JFrame{
                     gameAreaController.spawnBlock(gen.getArr()[next]);
                     int current_score=gameAreaController.clearLines();
                     drawGameBoard(gameAreaController.newBackground());
+                    lines+=current_score;
                     score+=current_score*current_score;
                     next=r.nextInt(1000);
                 }
@@ -186,7 +170,47 @@ public class GamePage extends JFrame{
         });
         timer.start();
     }
+    private void setTimer2() //아이템 모드의 타이머 액션
+    {
+        timer = new Timer(1000, new ActionListener()
 
+        {
+
+            public void actionPerformed (ActionEvent e)
+
+            {
+                requestFocus();
+                setFocusable(true);
+
+                System.out.println("timer activated in Game page");
+                gameAreaController.moveBlockDown();
+                drawGameBoard(gameAreaController.newBackground());
+                for(int i=0; i<20; i++){
+                    for(int j=0;j<10;j++){
+                        System.out.print(gameAreaController.newBackground()[i][j]);
+                    }
+                    System.out.println();
+                }
+                if(!gameAreaController.checkBottom())
+                {
+                    gameAreaController.moveBlockToBackground();
+                    int current_score=gameAreaController.clearLines();
+                    drawGameBoard(gameAreaController.newBackground());
+                    lines+=current_score;
+                    score+=current_score*current_score;
+                    if(lines%10>=0){
+                        int c=r2.nextInt(8,13);
+                        gameAreaController.spawnBlock2(gen.getArr()[next],c);
+                        lines-=10;
+                    }
+                    else{gameAreaController.spawnBlock(gen.getArr()[next]);}
+                    next=r.nextInt(1000);
+                }
+            }
+
+        });
+        timer.start();
+    }
 
     private void setKeyEventController()
     {
@@ -237,7 +261,7 @@ public class GamePage extends JFrame{
                 }
                 else if(pressedKey==keySettingMap.get("down")){
                     System.out.println("down");
-                    gameAreaController.moveBlockDown();
+                    gameAreaController.dropBlock();
                     drawGameBoard(gameAreaController.newBackground());
                 }
                 else if(pressedKey==keySettingMap.get("pause")){
@@ -365,8 +389,9 @@ public class GamePage extends JFrame{
         tp.replaceSelection(msg);
 
     }
-
-
+    private int[][] getNext(){
+        return BlockModel.getBlockShape(next,0);
+    }
 }
 
 
