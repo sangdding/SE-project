@@ -31,6 +31,7 @@ public class GamePage extends JFrame{
     private JTextPane nextBlockPane;
     private JPanel scorePanel;
     private JButton exitButton;
+    private JLabel scoreLabel;
     private PageController pageController;
     public boolean doubleScore; //아이템 변수
     public boolean fifth; //아이템 변수
@@ -47,17 +48,17 @@ public class GamePage extends JFrame{
     private char borderChar='X';
     private SimpleAttributeSet styleSet;
 
-    private Color []  colorForBlock = new Color[] {
+    private Color []  colorForBlock = new Color[] {Color.WHITE,
             Color.CYAN,Color.RED,Color.BLUE,Color.GREEN,Color.MAGENTA,Color.ORANGE,
             Color.YELLOW, new Color(128,0,0), new Color(128,128,0), new Color(0,0,128),
             new Color(128,0,128), new Color(0,139,139), new Color(255,105,180)
-    }; // 13 colors;
+    }; // white for backgroind + 13 colors;
 
-    private Color [] colorFOrBlindModeBlock = new  Color[]{
+    private Color [] colorFOrBlindModeBlock = new  Color[]{Color.WHITE,
             Color.ORANGE, new Color(135,206,235), new Color(60,179,113), Color.YELLOW, Color.BLUE,
             new Color(204,71,75), new Color(149, 53, 83), new Color(128,0,0), new Color(128,128,0), new Color(0,0,128),
             new Color(128,0,128), new Color(0,139,139), new Color(255,105,180)
-    }; // 13 colors for blind
+    }; // white for backgroind + 13 colors for blind block
 
     private char [] blockShape = new char [] {
             'A', 'B', 'C', 'D','E','F','H','J','K','M','N','P','S'
@@ -90,6 +91,7 @@ public class GamePage extends JFrame{
         StyleConstants.setBold(styleSet, false);
         StyleConstants.setAlignment(styleSet, StyleConstants.ALIGN_CENTER);
         gameAreaController = new GameAreaController(this);
+
         //초기 게임 화면 그리기
         gameBoardPane.setMargin(new Insets(130,0,0,0));
         drawGameBoard(gameAreaController.getBackground());
@@ -98,6 +100,9 @@ public class GamePage extends JFrame{
         this.add(mainPanel);
 
         //설정 읽어오기
+
+        //점수 label 설정
+        scoreLabel.setText("0");
 
         //난이도별 생성기 세팅
         this.gen = new Generator(setting.getDifficulty());
@@ -140,9 +145,7 @@ public class GamePage extends JFrame{
 
     }
 
-    public void setScore(int score){
-        this.score=score;
-    }
+
 
     private void setTimer()
     {
@@ -166,8 +169,10 @@ public class GamePage extends JFrame{
                     drawGameBoard(gameAreaController.newBackground());
                     lines+=current_score;
                     score+=current_score*current_score;
+                    score+=((1000-delay)/100); // delay에 의한 추가 점수
                     next=r.nextInt(1000);
                 }
+                scoreLabel.setText(Integer.toString(score));
             }
 
         });
@@ -200,7 +205,7 @@ public class GamePage extends JFrame{
                         lines += current_score;
                         score += current_score * current_score;
                         if (lines % 10 >= 0) {
-                            int c = r2.nextInt(8, 13);
+                            int c = r2.nextInt(5)+8; // 0, 1, 2, 3, 4 중에 하나 생성되고, 거기에 8이 더해져서 8, 9, 10, 11, 12가 된다.
                             gameAreaController.spawnBlock2(gen.getArr()[next], c);
                             lines -= 10;
                         } else {
@@ -265,7 +270,7 @@ public class GamePage extends JFrame{
                 }
                 else if(pressedKey==keySettingMap.get("down")){
                     System.out.println("down");
-                    gameAreaController.dropBlock();
+                    gameAreaController.moveBlockDown();
                     drawGameBoard(gameAreaController.newBackground());
                 }
                 else if(pressedKey==keySettingMap.get("pause")){
@@ -325,44 +330,27 @@ public class GamePage extends JFrame{
 
     }
 
-    private void drawGameBoard(int[][] background)
-    {
+    private void drawGameBoard(int[][] background) {
 
         //이전 화면 지우기
         gameBoardPane.setText("");
         //여기서부턴 화면에 그리기
 
 
+        drawTextWithColor(gameBoardPane, "XXXXXXXXXXXX\n", Color.BLACK);
 
-        drawTextWithColor(gameBoardPane,"XXXXXXXXXXXX\n",Color.BLACK);
 
-       /* for(int i=0; i<20; i++){
-            for(int j=0; j<10; j++){
-                System.out.print(background[i][j]);
+        for (int i = 0; i < 20; i++) {
+            drawTextWithColor(gameBoardPane, "X", Color.BLACK);
+
+            for (int j = 0; j < 10; j++) {
+                drawTextWithColor(gameBoardPane, String.valueOf(blockShape[background[i][j]]), colorForBlock[background[i][j]]);
             }
-            System.out.println();
-        }*/
-        for(int i=0;i<20;i++)
-        {
-            drawTextWithColor(gameBoardPane,"X",Color.BLACK);
-
-            for(int j=0;j<10;j++)
-            {
-                if(background[i][j]==0) drawTextWithColor(gameBoardPane,"A",Color.WHITE);
-                else if (background[i][j] != 0){
-                    System.out.println("call the Blue Coloring");
-                    drawTextWithColor(gameBoardPane,"B",Color.BLUE);
-                }
-
-
-            }
-            drawTextWithColor(gameBoardPane,"X\n",Color.BLACK);
-        }
-
+            drawTextWithColor(gameBoardPane, "X\n", Color.BLACK);
         }
 
 
-        drawTextWithColor(gameBoardPane,"XXXXXXXXXXXX",Color.BLACK);
+        drawTextWithColor(gameBoardPane, "XXXXXXXXXXXX", Color.BLACK);
 
         System.out.println("draw end");
         //이거 없어도 보드는 그려진다. 뭔가 스타일 관련 코드인 듯
@@ -371,11 +359,7 @@ public class GamePage extends JFrame{
         gameBoardPane.setStyledDocument(doc);
 
 
-        /* 이건 블럭 별로 색깔 넣기
-        StyledDocument doc = pane.getStyledDocument();
-		SimpleAttributeSet styles = new SimpleAttributeSet();
-		StyleConstants.setForeground(styles, curr.getColor());
-        * */
+
     }
 
     private void drawTextWithColor(JTextPane tp, String msg, Color c)

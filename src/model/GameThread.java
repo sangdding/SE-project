@@ -2,6 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
+/*
 package model;
 
 import java.util.logging.Level;
@@ -53,7 +54,7 @@ public class GameThread extends Thread {
             } else {
                 i++;
             }
-            /*ga.moveBlockToBackground();
+            ga.moveBlockToBackground();
             if (ga.clearLines() > 1) {
                 score = score + ga.clearLines() * 2;
             } else {
@@ -62,11 +63,11 @@ public class GameThread extends Thread {
             gp.setScore(score);
             if (ga.clearLines() != 0) {
                 wait -= 50;
-            }*/
+            }
         }
     }
 }
 
 
 
-
+*/
