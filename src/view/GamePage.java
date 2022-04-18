@@ -50,12 +50,12 @@ public class GamePage extends JFrame{
 
     private Color []  colorForBlock = new Color[] {Color.WHITE,
             Color.CYAN,Color.RED,Color.BLUE,Color.GREEN,Color.MAGENTA,Color.ORANGE,
-            Color.YELLOW, new Color(128,0,0), new Color(128,128,0), new Color(0,0,128),
+            Color.PINK, new Color(128,0,0), new Color(128,128,0), new Color(0,0,128),
             new Color(128,0,128), new Color(0,139,139), new Color(255,105,180)
     }; // white for backgroind + 13 colors;
 
     private Color [] colorFOrBlindModeBlock = new  Color[]{Color.WHITE,
-            Color.ORANGE, new Color(135,206,235), new Color(60,179,113), Color.YELLOW, Color.BLUE,
+            Color.ORANGE, new Color(135,206,235), new Color(60,179,113), Color.PINK, Color.BLUE,
             new Color(204,71,75), new Color(149, 53, 83), new Color(128,0,0), new Color(128,128,0), new Color(0,0,128),
             new Color(128,0,128), new Color(0,139,139), new Color(255,105,180)
     }; // white for backgroind + 13 colors for blind block
@@ -365,6 +365,32 @@ public class GamePage extends JFrame{
         gameBoardPane.setStyledDocument(doc);
 
 
+
+    }
+
+
+    private void drawNextBlock(int[][] background) {
+
+        //이전 화면 지우기
+        gameBoardPane.setText("");
+
+        //여기서부턴 화면에 그리기
+        //민재 형 이거 만들어 줘
+        int nextBlock[][] = getnextBlock();
+
+        for (int i = 0; i < nextBlock.length; i++) {
+
+            for (int j = 0; j < nextBlock[i].length; j++) {
+                drawTextWithColor(nextBlockPane, String.valueOf(blockShape[background[i][j]]), colorForBlock[background[i][j]]);
+            }
+
+            drawTextWithColor(nextBlockPane,"\n",Color.BLACK);
+        }
+        System.out.println("next Block draw end");
+        //이거 없어도 보드는 그려진다. 뭔가 스타일 관련 코드인 듯
+        StyledDocument doc = gameBoardPane.getStyledDocument();
+        doc.setParagraphAttributes(0, doc.getLength(), styleSet, false);
+        gameBoardPane.setStyledDocument(doc);
 
     }
 
