@@ -8,7 +8,7 @@ public class GameArea {
     protected int gridRows; //행의 수
     protected int gridColumns; //열의 수
     protected int[][] background;
-    protected Block block;
+    public Block block;
     public GameArea() {//생성자
         gridColumns = 10;
         gridRows = 20;

@@ -30,7 +30,7 @@ public class Block {
         int wid= this.shape[0].length;
         int hei = this.shape.length;
         int index =r2.nextInt(wid*hei);
-        int Q = index / wid - index % wid ;
+        int Q = (int)index / wid ;
         do{
             if(this.shape[Q][index%wid]==1){
                 this.shape[Q][index%wid]=r;

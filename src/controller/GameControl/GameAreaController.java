@@ -1,9 +1,12 @@
 package controller.GameControl;
 import controller.block.Block;
+import view.GamePage;
 public class GameAreaController extends GameArea implements gameFunction{
-    private GameArea ga;
-    public GameAreaController(){
+    public GameArea ga;
+    public GamePage gp;
+    public GameAreaController(GamePage gp){
         this.ga=new GameArea();
+        this.gp=gp;
     }
     public boolean checkBottom() {
         if (ga.block.getBottomEdge() == ga.gridRows) {
@@ -112,6 +115,24 @@ public class GameAreaController extends GameArea implements gameFunction{
     @Override
     public void moveBlockDown() {
         if(ga.block==null){}
+        if(ga.block.shape[0][0]==9){
+            //불도저아이템인 경우
+            int y = ga.block.getY();
+            if(y<0){ga.block.moveDown();}
+            else{
+                if(y+1!=gridRows){
+                    int x=ga.block.getX();
+                    for(int c=x; c<x+4;c++){
+                        ga.background[y+1][c]=0;
+                    }
+                    ga.block.moveDown();
+
+                }
+                else{
+                    ga.block=null;
+                }
+        }
+        }
         if(!checkBottom()){}
         else{ga.block.moveDown();}
     }
@@ -166,6 +187,10 @@ public class GameAreaController extends GameArea implements gameFunction{
     //행제거
     public int clearLines() {
         boolean lineFilled;
+        boolean Line=false;
+        boolean Time=false;
+        boolean Sco=false;
+        boolean fifth=false;
         int linesCleared = 0;
         for (int r = ga.gridRows - 1; r >= 0; r--) {
             lineFilled = true;
@@ -173,16 +198,35 @@ public class GameAreaController extends GameArea implements gameFunction{
                 if (ga.background[r][c] == 0) {
                     lineFilled = false;
                 }
+                switch(ga.background[r][c]){
+                    case 8:
+                        Line=true;
+                        break;
+                    case 10:
+                        Time=true;
+                        break;
+                    case 11:
+                        Sco=true;
+                        break;
+                    case 12:
+                        fifth=true;
+                        break;
+                }
             }
-            if (lineFilled) {
+            if (lineFilled || Line) { //Line 아이템이 있거나 라인이 다 차있는 경우
                 linesCleared++;
                 clearLine(r);
                 shiftDown(r);
                 clearLine(0);
                 r++; //한줄만 지워지는거 제외
             }
-
+            else{
+                Time=false;Sco=false;fifth=false;
+            }
         }
+        if(Time){gp.delay+=300;}
+        if(Sco){gp.doubleScore=true;}
+        if(fifth){gp.fifth=true;}
         return linesCleared;
     }
     //행제거

@@ -22,7 +22,7 @@ public class GamePage extends JFrame{
     private Random r = new Random();
     private Random r2= new Random();
     private Generator gen;
-    private GameAreaController GameAreaController;
+    private GameAreaController gameAreaController;
     private JButton mainButton;
     private JButton stopButton;
     private JPanel buttonPanel;
@@ -32,16 +32,18 @@ public class GamePage extends JFrame{
     private JPanel scorePanel;
     private JButton exitButton;
     private PageController pageController;
-    private int score;
+    public boolean doubleScore; //아이템 변수
+    public boolean fifth; //아이템 변수
+    public int delay; //아이템 변수
     private boolean isStop;
     private Timer timer;
     private int isBlindMode;
+    private int score;
     private JsonSetting setting = new JsonSetting();
     private HashMap<String,Integer> keySettingMap;
     private int next;
     private int lines=0;
     private NormalBlock BlockModel = new NormalBlock();
-    private GameAreaController gameAreaController = new GameAreaController();
     private char borderChar='X';
     private SimpleAttributeSet styleSet;
     private Color []  colorForBlock = new Color[] {
@@ -86,8 +88,7 @@ public class GamePage extends JFrame{
         StyleConstants.setFontFamily(styleSet, "comic sans");
         StyleConstants.setBold(styleSet, false);
         StyleConstants.setAlignment(styleSet, StyleConstants.ALIGN_CENTER);
-
-
+        gameAreaController = new GameAreaController(this);
         //초기 게임 화면 그리기
         gameBoardPane.setMargin(new Insets(130,0,0,0));
         drawGameBoard(gameAreaController.getBackground());
@@ -132,8 +133,9 @@ public class GamePage extends JFrame{
 
         //화면 가운데에 생성
         this.setLocationRelativeTo(null);
-        //timer 설정
-
+        //맨 처음 타임유닛, 점수 설정
+        this.delay=1000;
+        this.doubleScore=false;
 
     }
 
@@ -143,7 +145,7 @@ public class GamePage extends JFrame{
 
     private void setTimer()
     {
-        timer = new Timer(1000, new ActionListener()
+        timer = new Timer(delay, new ActionListener()
 
         {
 
@@ -172,39 +174,39 @@ public class GamePage extends JFrame{
     }
     private void setTimer2() //아이템 모드의 타이머 액션
     {
-        timer = new Timer(1000, new ActionListener()
+        timer = new Timer(delay, new ActionListener()
 
         {
 
-            public void actionPerformed (ActionEvent e)
-
-            {
+            public void actionPerformed (ActionEvent e) {
                 requestFocus();
                 setFocusable(true);
 
                 System.out.println("timer activated in Game page");
                 gameAreaController.moveBlockDown();
                 drawGameBoard(gameAreaController.newBackground());
-                for(int i=0; i<20; i++){
-                    for(int j=0;j<10;j++){
-                        System.out.print(gameAreaController.newBackground()[i][j]);
+                if (gameAreaController.ga.block.shape[0][0] == 9) { //불도저 아이템 시
+                    if (gameAreaController.ga.block == null) {
+                        gameAreaController.spawnBlock(gen.getArr()[next]);
+                        next = r.nextInt(1000);
                     }
-                    System.out.println();
                 }
-                if(!gameAreaController.checkBottom())
-                {
-                    gameAreaController.moveBlockToBackground();
-                    int current_score=gameAreaController.clearLines();
-                    drawGameBoard(gameAreaController.newBackground());
-                    lines+=current_score;
-                    score+=current_score*current_score;
-                    if(lines%10>=0){
-                        int c=r2.nextInt(8,13);
-                        gameAreaController.spawnBlock2(gen.getArr()[next],c);
-                        lines-=10;
+                else {
+                    if (!gameAreaController.checkBottom()) {
+                        gameAreaController.moveBlockToBackground();
+                        int current_score = gameAreaController.clearLines();
+                        drawGameBoard(gameAreaController.newBackground());
+                        lines += current_score;
+                        score += current_score * current_score;
+                        if (lines % 10 >= 0) {
+                            int c = r2.nextInt(8, 13);
+                            gameAreaController.spawnBlock2(gen.getArr()[next], c);
+                            lines -= 10;
+                        } else {
+                            gameAreaController.spawnBlock(gen.getArr()[next]);
+                        }
+                        next = r.nextInt(1000);
                     }
-                    else{gameAreaController.spawnBlock(gen.getArr()[next]);}
-                    next=r.nextInt(1000);
                 }
             }
 
@@ -392,6 +394,7 @@ public class GamePage extends JFrame{
     private int[][] getNext(){
         return BlockModel.getBlockShape(next,0);
     }
+
 }
 
 
