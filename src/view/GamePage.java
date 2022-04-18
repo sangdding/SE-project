@@ -172,6 +172,8 @@ public class GamePage extends JFrame{
                     score+=((1000-delay)/100); // delay에 의한 추가 점수
                     next=r.nextInt(1000);
                 }
+                
+                //화면에 점수 출력
                 scoreLabel.setText(Integer.toString(score));
             }
 
@@ -214,6 +216,10 @@ public class GamePage extends JFrame{
                         next = r.nextInt(1000);
                     }
                 }
+                //민재 형, 점수 계산 하는 코드 넣어 줘
+                
+                //화면에 점수 출력
+                scoreLabel.setText(Integer.toString(score));
             }
 
         });
