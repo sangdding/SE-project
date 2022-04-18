@@ -5,9 +5,21 @@ public class Generator {
     private int percent2;
     private int percent;
     private int[] arr = new int[1000];
-    public Generator(int percent1,int percent2){
-        this.percent1=percent1;
-        this.percent2=percent2;
+    public Generator(int gameMode){
+        int c=-1; int b=-1;
+        switch(gameMode){
+            case 0: //Normal
+                c=142;b=142;
+                break;
+            case 1: //easy
+                c=170;b=114;
+                break;
+            case 2: //hard
+                c=114;b=170;
+                break;
+        }
+        this.percent1=c;
+        this.percent2=b;
         this.percent=((1000-percent1-percent2)-(1000-percent1-percent2)%5)/5;
         for(int i=0; i<percent1; i++){
             this.arr[i]=0;
@@ -44,13 +56,16 @@ public class Generator {
                     int temp=this.arr[rr1];
                     this.arr[rr1]=this.arr[rr2];
                     this.arr[rr2]=temp;}
-                else{i++;}
+                else{i--;}
             }
         }
     }
     public void show(){
         for(int i=0; i<this.arr.length;i++){
             System.out.println(this.arr[i]);}
+    }
+    public int[] getArr(){
+        return arr;
     }
     public void count(){
         int[] arr = new int[]{0,1,2,3,4,5,6};

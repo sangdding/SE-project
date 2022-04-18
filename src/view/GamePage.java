@@ -2,9 +2,10 @@ package view;
 
 import controller.GameControl.GameAreaController;
 import controller.PageController;
+import model.Generator;
 import model.setting.JsonSetting;
 import model.setting.Setting;
-
+import model.block.NormalBlock;
 import javax.swing.*;
 import javax.swing.text.*;
 import java.awt.*;
@@ -12,14 +13,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 import java.util.HashMap;
 import controller.HashMapParser;
-
+import java.util.Random;
 public class GamePage extends JFrame{
     private JPanel mainPanel;
     private javax.swing.JPanel gameBoardPanel;
-
+    private Random r = new Random();
+    private Random r2= new Random();
+    private Generator gen;
+    private GameAreaController gameAreaController;
     private JButton mainButton;
     private JButton stopButton;
     private JPanel buttonPanel;
@@ -29,14 +32,18 @@ public class GamePage extends JFrame{
     private JPanel scorePanel;
     private JButton exitButton;
     private PageController pageController;
-    private int score;
+    public boolean doubleScore; //아이템 변수
+    public boolean fifth; //아이템 변수
+    public int delay; //아이템 변수
     private boolean isStop;
     private Timer timer;
     private int isBlindMode;
+    private int score;
+    private JsonSetting setting = new JsonSetting();
     private HashMap<String,Integer> keySettingMap;
-
-
-    private GameAreaController gameAreaController = new GameAreaController();
+    private int next;
+    private int lines=0;
+    private NormalBlock BlockModel = new NormalBlock();
     private char borderChar='X';
     private SimpleAttributeSet styleSet;
 
@@ -66,9 +73,12 @@ public class GamePage extends JFrame{
         setKeyEventController();
         //버튼 마우스 입력 처리 설정
         setButtonClickController();
-
-        //timer 설정
-        setTimer();
+        if(setting.getGameMode()==0){
+            setTimer();
+        }
+        else{
+            setTimer2();
+        }
     }
 
     private void initialize(){
@@ -79,9 +89,8 @@ public class GamePage extends JFrame{
         StyleConstants.setFontFamily(styleSet, "comic sans");
         StyleConstants.setBold(styleSet, false);
         StyleConstants.setAlignment(styleSet, StyleConstants.ALIGN_CENTER);
-
-        //블록 생성, 초기 게임 화면 그리기
-        gameAreaController.spawnBlock(1);
+        gameAreaController = new GameAreaController(this);
+        //초기 게임 화면 그리기
         gameBoardPane.setMargin(new Insets(130,0,0,0));
         drawGameBoard(gameAreaController.getBackground());
 
@@ -89,7 +98,11 @@ public class GamePage extends JFrame{
         this.add(mainPanel);
 
         //설정 읽어오기
-        Setting setting = new JsonSetting();
+
+        //난이도별 생성기 세팅
+        this.gen = new Generator(setting.getDifficulty());
+        this.next = r.nextInt(1000);
+        gameAreaController.spawnBlock(gen.getArr()[r.nextInt(1000)]);
         //화면 크기 설정
         HashMap<String,Integer> settingMap = setting.getDisplaySize();
         this.setSize(settingMap.get("width"), settingMap.get("height"));
@@ -121,6 +134,9 @@ public class GamePage extends JFrame{
 
         //화면 가운데에 생성
         this.setLocationRelativeTo(null);
+        //맨 처음 타임유닛, 점수 설정
+        this.delay=1000;
+        this.doubleScore=false;
 
     }
 
@@ -130,7 +146,7 @@ public class GamePage extends JFrame{
 
     private void setTimer()
     {
-        timer = new Timer(1000, new ActionListener()
+        timer = new Timer(delay, new ActionListener()
 
         {
 
@@ -139,24 +155,65 @@ public class GamePage extends JFrame{
             {
                 requestFocus();
                 setFocusable(true);
-
                 System.out.println("timer activated in Game page");
                 gameAreaController.moveBlockDown();
-
-
-                drawGameBoard(gameAreaController.getBackground());
+                drawGameBoard(gameAreaController.newBackground());
                 if(!gameAreaController.checkBottom())
                 {
                     gameAreaController.moveBlockToBackground();
-                    gameAreaController.spawnBlock(1);
+                    gameAreaController.spawnBlock(gen.getArr()[next]);
+                    int current_score=gameAreaController.clearLines();
+                    drawGameBoard(gameAreaController.newBackground());
+                    lines+=current_score;
+                    score+=current_score*current_score;
+                    next=r.nextInt(1000);
                 }
-
             }
 
         });
         timer.start();
     }
+    private void setTimer2() //아이템 모드의 타이머 액션
+    {
+        timer = new Timer(delay, new ActionListener()
 
+        {
+
+            public void actionPerformed (ActionEvent e) {
+                requestFocus();
+                setFocusable(true);
+
+                System.out.println("timer activated in Game page");
+                gameAreaController.moveBlockDown();
+                drawGameBoard(gameAreaController.newBackground());
+                if (gameAreaController.ga.block.shape[0][0] == 9) { //불도저 아이템 시
+                    if (gameAreaController.ga.block == null) {
+                        gameAreaController.spawnBlock(gen.getArr()[next]);
+                        next = r.nextInt(1000);
+                    }
+                }
+                else {
+                    if (!gameAreaController.checkBottom()) {
+                        gameAreaController.moveBlockToBackground();
+                        int current_score = gameAreaController.clearLines();
+                        drawGameBoard(gameAreaController.newBackground());
+                        lines += current_score;
+                        score += current_score * current_score;
+                        if (lines % 10 >= 0) {
+                            int c = r2.nextInt(8, 13);
+                            gameAreaController.spawnBlock2(gen.getArr()[next], c);
+                            lines -= 10;
+                        } else {
+                            gameAreaController.spawnBlock(gen.getArr()[next]);
+                        }
+                        next = r.nextInt(1000);
+                    }
+                }
+            }
+
+        });
+        timer.start();
+    }
 
     private void setKeyEventController()
     {
@@ -180,6 +237,8 @@ public class GamePage extends JFrame{
                 }
                 else if(pressedKey==keySettingMap.get("drop")){
                     System.out.println("d");
+                    gameAreaController.dropBlock();
+                    drawGameBoard(gameAreaController.newBackground());
                 }
                 else if(pressedKey==keySettingMap.get("exit")){
                     System.out.println("esc");
@@ -191,15 +250,23 @@ public class GamePage extends JFrame{
                 }
                 else if(pressedKey==keySettingMap.get("left")){
                     System.out.println("l");
+                    gameAreaController.moveBlockLeft();
+                    drawGameBoard(gameAreaController.newBackground());
                 }
                 else if(pressedKey==keySettingMap.get("rotate")){
                     System.out.println("u");
+                    gameAreaController.rotateBlock();
+                    drawGameBoard(gameAreaController.newBackground());
                 }
                 else if(pressedKey==keySettingMap.get("right")){
                     System.out.println("right");
+                    gameAreaController.moveBlockRight();
+                    drawGameBoard(gameAreaController.newBackground());
                 }
                 else if(pressedKey==keySettingMap.get("down")){
                     System.out.println("down");
+                    gameAreaController.dropBlock();
+                    drawGameBoard(gameAreaController.newBackground());
                 }
                 else if(pressedKey==keySettingMap.get("pause")){
                     if(!isStop) {
@@ -290,6 +357,7 @@ public class GamePage extends JFrame{
 
             }
             drawTextWithColor(gameBoardPane,"X\n",Color.BLACK);
+        }
 
         }
 
@@ -326,8 +394,4 @@ public class GamePage extends JFrame{
         tp.replaceSelection(msg);
 
     }
-
-
 }
-
-
