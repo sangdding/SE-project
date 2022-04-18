@@ -376,7 +376,7 @@ public class GamePage extends JFrame{
 
         //여기서부턴 화면에 그리기
         //민재 형 이거 만들어 줘
-        int nextBlock[][] = getnextBlock();
+        int nextBlock[][] = getNextBlock();
 
         for (int i = 0; i < nextBlock.length; i++) {
 
