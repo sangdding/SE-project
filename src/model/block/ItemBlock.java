@@ -1,52 +1,71 @@
 package model.block;
+
+import java.util.ArrayList;
 import java.util.Random;
+
 public class ItemBlock implements Block {
 
     private int[][][] normalBlock =
             {{{1}, {1}, {1}, {1}}, {{1, 0, 0}, {1, 1, 1}}, {{0, 0, 1}, {1, 1, 1}}, {{1, 1}, {1, 1}},
                     {{0, 1, 1}, {1, 1, 0}}, {{0, 1, 0}, {1, 1, 1}}, {{1, 1, 0}, {0, 1, 1}}};
 
-    private int[][][][] rotateBlock = new int[7][4][][];
+    private int[][][] itemBlock = {{{1}}, {{0, 1, 1, 0}, {1, 1, 1, 1}}, {{0}}, {{0, 1, 0}, {1, 1, 1}, {0, 1, 0}}, {}};
+    private final int[][][][] rotateItemBlock = new int[3][4][][];
 
-    private int[] color = {1, 2, 3, 4, 5, 6, 7};
+    private final int[] color = {8, 9, 10, 11, 12};
 
-    public ItemBlock(int random) {
-        Random r2 = new Random();
-        for(int i=0; i<7; i++){
-        int wid= this.normalBlock[i][0].length;
-        int hei = this.normalBlock[i].length;
-        int index =r2.nextInt(wid*hei);
-        int Q = (int)index / wid ;
-        do{
-            if(this.normalBlock[i][Q][index%wid]==1){
-                this.normalBlock[i][Q][index%wid]=random;
-            }
-        }while(this.normalBlock[i][Q][index%wid]==0);}
-        for (int i = 0; i < 7; i++) {
-            int[][] tempBlock = normalBlock[i];
+    private Random random = new Random();
+
+    public ItemBlock() {
+        int select = random.nextInt(7);
+        itemBlock[2] = itemGenerator(normalBlock[select]);
+
+        for (int i = 0; i < 3; i++) {
+            int[][] tempBlock = itemBlock[i];
             for (int j = 0; j < 4; j++) {
-                int r = tempBlock[0].length; //행
-                int c = tempBlock.length;   //열
-                rotateBlock[i][j] = new int[r][c];
+                int r = tempBlock[0].length;
+                int c = tempBlock.length;
+                rotateItemBlock[i][j] = new int[r][c];
                 for (int y = 0; y < r; y++) {
                     for (int x = 0; x < c; x++) {
-                        rotateBlock[i][j][y][x] = tempBlock[c - x - 1][y];
+                        rotateItemBlock[i][j][y][x] = tempBlock[c - x - 1][y];
                     }
                 }
-                tempBlock = rotateBlock[i][j];
+                tempBlock = rotateItemBlock[i][j];
             }
         }
     }
 
+    private int[][] itemGenerator(int[][] blockInfo) {
+
+        ArrayList<int[]> index = new ArrayList<>();
+        int[] temp = new int[2];
+
+        for (int i = 0; i < blockInfo.length; i++) {
+            for (int j = 0; j < blockInfo[i].length; j++) {
+                if(blockInfo[i][j] == 1) {
+                    temp[0] = i;
+                    temp[1] = j;
+                    index.add(temp);
+                }
+            }
+        }
+
+        int select = random.nextInt(index.size()-1);
+        temp = index.get(select);
+        blockInfo[temp[0]][temp[1]] = 2;
+
+        return blockInfo;
+    }
 
     @Override
     public int[][][] getBlockList() {
-        return normalBlock;
+        return itemBlock;
     }
 
     @Override
     public int[][] getBlockShape(int index, int rotateNum) {
-        return rotateBlock[index][rotateNum];
+        return rotateItemBlock[index][rotateNum];
     }
 
     @Override

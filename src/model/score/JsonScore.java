@@ -2,7 +2,6 @@ package model.score;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import model.score.Score;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -18,6 +17,8 @@ import java.util.Map;
 public class JsonScore implements Score {
 
     private JSONObject scoreInfo;
+    private JSONObject itemScoreInfo;
+    private JSONObject normalScoreInfo;
     private ObjectMapper objectMapper;
 
 
@@ -26,6 +27,8 @@ public class JsonScore implements Score {
         try {
             Reader readerScore = new FileReader("src/score.json");
             scoreInfo = (JSONObject) parser.parse(readerScore);
+            itemScoreInfo = (JSONObject) scoreInfo.get("item");
+            normalScoreInfo = (JSONObject) scoreInfo.get("normal");
             readerScore.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -37,15 +40,21 @@ public class JsonScore implements Score {
     }
 
     @Override
-    public int save(String name, int score) {
+    public int save(String name, int score, int mode) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        JSONObject tempObj;
+        if (mode == 0) {
+            tempObj = normalScoreInfo;
+        } else {
+            tempObj = itemScoreInfo;
+        }
         try {
-            if (scoreInfo.containsKey(name)) {
+            if (tempObj.containsKey(name)) {
                 return 1;
             } else {
                 FileWriter fw = new FileWriter("src/score.json");
-                scoreInfo.put(name, score); // json 파일에 점수 저장
-                gson.toJson(scoreInfo, fw); // 로컬에 저장
+                tempObj.put(name, score); // json 파일에 점수 저장
+                gson.toJson(tempObj, fw); // 로컬에 저장
                 fw.flush();
                 fw.close();
                 return 0;
@@ -56,11 +65,17 @@ public class JsonScore implements Score {
     }
 
     @Override
-    public HashMap<String, Integer> getList() {
+    public HashMap<String, Integer> getList(int mode) {
         HashMap<String, Integer> returnScoreInfo = null;
+        JSONObject tempObj;
+        if (mode == 0) {
+            tempObj = (JSONObject) scoreInfo.get("normal");
+        } else {
+            tempObj = (JSONObject) scoreInfo.get("item");
+        }
         objectMapper = new ObjectMapper();
         try {
-            returnScoreInfo = objectMapper.readValue(scoreInfo.toJSONString(), new TypeReference<Map<String, Integer>>() {
+            returnScoreInfo = objectMapper.readValue(tempObj.toJSONString(), new TypeReference<Map<String, Integer>>() {
             });
         } catch (JsonMappingException e) {
             System.out.println("JsonMapping 에러");
