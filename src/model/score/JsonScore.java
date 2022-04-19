@@ -54,7 +54,12 @@ public class JsonScore implements Score {
             } else {
                 FileWriter fw = new FileWriter("src/score.json");
                 tempObj.put(name, score); // json 파일에 점수 저장
-                gson.toJson(tempObj, fw); // 로컬에 저장
+                if (mode == 0) {
+                    scoreInfo.replace("normal", tempObj);
+                } else {
+                    scoreInfo.replace("item", tempObj);
+                }
+                gson.toJson(scoreInfo, fw); // 로컬에 저장
                 fw.flush();
                 fw.close();
                 return 0;
