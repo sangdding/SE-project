@@ -2,7 +2,7 @@ package model.block;
 
 public class NormalBlock implements Block {
 
-    private int[][][] normalBlock =
+    public int[][][] normalBlock =
             {{{1}, {1}, {1}, {1}}, {{1, 0, 0}, {1, 1, 1}}, {{0, 0, 1}, {1, 1, 1}}, {{1, 1}, {1, 1}},
                     {{0, 1, 1}, {1, 1, 0}}, {{0, 1, 0}, {1, 1, 1}}, {{1, 1, 0}, {0, 1, 1}}};
 

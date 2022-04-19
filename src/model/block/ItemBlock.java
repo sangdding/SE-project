@@ -4,25 +4,28 @@ public class ItemBlock implements Block {
 
     private int[][][] normalBlock =
             {{{1}, {1}, {1}, {1}}, {{1, 0, 0}, {1, 1, 1}}, {{0, 0, 1}, {1, 1, 1}}, {{1, 1}, {1, 1}},
-                    {{0, 1, 1}, {1, 1, 0}}, {{0, 1, 0}, {1, 1, 1}}, {{1, 1, 0}, {0, 1, 1}}};
+                    {{0, 1, 1}, {1, 1, 0}}, {{0, 1, 0}, {1, 1, 1}}, {{1, 1, 0}, {0, 1, 1}},{{1}},{{9,9,9,9}}};
 
-    private int[][][][] rotateBlock = new int[7][4][][];
+    private int[][][][] rotateBlock = new int[9][4][][];
 
-    private int[] color = {1, 2, 3, 4, 5, 6, 7};
+    private int[] color = {1, 2, 3, 4, 5, 6, 7,7,7,7,7,7};
 
-    public ItemBlock(int random) {
+    public ItemBlock(int random,boolean item) {
+        if(item){
         Random r2 = new Random();
         for(int i=0; i<7; i++){
-        int wid= this.normalBlock[i][0].length;
-        int hei = this.normalBlock[i].length;
-        int index =r2.nextInt(wid*hei);
-        int Q = (int)index / wid ;
-        do{
-            if(this.normalBlock[i][Q][index%wid]==1){
-                this.normalBlock[i][Q][index%wid]=random;
+            int wid= this.normalBlock[i][0].length;
+            int hei = this.normalBlock[i].length;
+            int index = r2.nextInt(wid*hei);
+            if(random!=9) {
+                while(this.normalBlock[i][(int)(index/wid)][index%wid]==0){
+                    index=r2.nextInt(wid*hei);
+                    System.out.print(index);
+                    }
+                this.normalBlock[i][(int)(index/wid)][index%wid]=random;
             }
-        }while(this.normalBlock[i][Q][index%wid]==0);}
-        for (int i = 0; i < 7; i++) {
+        }}
+        for (int i = 0; i <= 8; i++) {
             int[][] tempBlock = normalBlock[i];
             for (int j = 0; j < 4; j++) {
                 int r = tempBlock[0].length; //행
