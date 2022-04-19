@@ -2,6 +2,8 @@ package view;
 
 import controller.PageController;
 import model.score.JsonScore;
+import model.setting.JsonSetting;
+import model.setting.Setting;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,6 +25,9 @@ public class GameEndPage extends JFrame {
     private JPanel scoreBoardPanel;
     private PageController pageController;
 
+
+    private Setting setting;
+
     private boolean scoreIsEntered =false;
 
     public GameEndPage() {
@@ -32,6 +37,9 @@ public class GameEndPage extends JFrame {
     }
 
     private void initialize() {
+
+
+        setting= new JsonSetting();
 
         //프레임 설정
         BorderLayout bl = new BorderLayout();
@@ -57,7 +65,7 @@ public class GameEndPage extends JFrame {
 
 
         //패널 컴포넌트 연결
-        scoreBoardPanel=new scoreBoard();
+        scoreBoardPanel=new scoreBoard(setting.getGameMode());
 
         InsertPanel.add(nameLabel);
         InsertPanel.add(nameTextField);
@@ -124,7 +132,7 @@ public class GameEndPage extends JFrame {
                 {
                     JsonScore score=new JsonScore();
 
-                    int retSave=score.save(nameTextField.getText(),3000);
+                    int retSave=score.save(nameTextField.getText(),3000,setting.getGameMode());
                     if(retSave==1){
                         System.out.println("Duplicated Name");
                         return;
@@ -177,7 +185,7 @@ public class GameEndPage extends JFrame {
     private void updateScoreBoard()
     {
         this.remove(scoreBoardPanel);
-        this.scoreBoardPanel=new scoreBoard();
+        this.scoreBoardPanel=new scoreBoard(setting.getGameMode());
         this.add(scoreBoardPanel,BorderLayout.CENTER);
         this.validate();
     }

@@ -369,7 +369,7 @@ public class GamePage extends JFrame{
     }
 
 
-    private void drawNextBlock(int[][] background) {
+   /* private void drawNextBlock(int[][] background) {
 
         //이전 화면 지우기
         gameBoardPane.setText("");
@@ -392,7 +392,7 @@ public class GamePage extends JFrame{
         doc.setParagraphAttributes(0, doc.getLength(), styleSet, false);
         gameBoardPane.setStyledDocument(doc);
 
-    }
+    }*/
 
     private void drawTextWithColor(JTextPane tp, String msg, Color c)
     {

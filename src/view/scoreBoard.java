@@ -1,6 +1,8 @@
 package view;
 import controller.HashMapParser;
 import model.score.JsonScore;
+import model.setting.JsonSetting;
+import model.setting.Setting;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,12 +15,15 @@ public class scoreBoard extends JPanel{
     private static final int numScoreLine = 10;
     private static final int numLabelInTheLine = 3;
     private JLabel[] labels=new JLabel[numLabelInTheLine*numScoreLine];
-    scoreBoard()
+
+    private Setting setting = new JsonSetting();
+
+    scoreBoard(int gamemode)
     {
         GridLayout gl= new GridLayout(numScoreLine,numLabelInTheLine);
         this.setLayout(gl);
 
-        HashMap<String, Integer> scoreInfo = new JsonScore().getList();
+        HashMap<String, Integer> scoreInfo = new JsonScore().getList(gamemode);
         HashMapParser hashmapparser = new HashMapParser();
 
         //hashmap은 정렬이 안 되어서 list로 변경

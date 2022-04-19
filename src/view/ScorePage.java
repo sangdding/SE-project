@@ -18,9 +18,13 @@ public class ScorePage extends JFrame {
     private JLabel titleLabel;
 
 
+    private int gameMode;
+
     private PageController pageController;
 
-    public ScorePage() {
+    public ScorePage(int gamemode) {
+
+        this.gameMode=gamemode;
 
         initialize();
         setButtonClickController();
@@ -44,7 +48,7 @@ public class ScorePage extends JFrame {
         titleLabel=new JLabel("Score");
 
         //패널 컴포넌트 연결
-        ScorePanel.add(new scoreBoard());
+        ScorePanel.add(new scoreBoard(this.gameMode));
         ButtonPanel.add(mainButton);
 
         //패널 add
