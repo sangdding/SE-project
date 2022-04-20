@@ -23,7 +23,8 @@ public class ItemBlockController {
         Random r= new Random();
         currentRotation=r.nextInt(4);
         shape=inf.getBlockShape(bln,currentRotation);
-        y= -getHeight();
+        if(getHeight()>1){y= -getHeight()+1;}
+        else{y=-getHeight();}
         x= r.nextInt(gridWidth-getWidth());
     }
     public void doser(int gridWidth){
@@ -43,6 +44,7 @@ public class ItemBlockController {
     public int getX(){ return x;}
     public int getY(){ return y;}
     public void moveDown(){y++;}
+    public void moveUp(){y--;}
     public void moveRight(){x++;}
     public void moveLeft(){x--;}
     public void rotate(){
