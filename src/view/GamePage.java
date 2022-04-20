@@ -212,6 +212,7 @@ public class GamePage extends JFrame {
                         score += (int) ((1000 - (int) (delay / velocity)) / 100) * current_line + lines; // delay에 의한 추가 점수
                         if (delay >= 100) {
                             timer.setDelay((int)(delay-(lines * 40 / velocity)));
+                            delay -= (int) lines * 40 / velocity;
                         }
                         next++;
                     }
@@ -288,6 +289,7 @@ public class GamePage extends JFrame {
                             drawGameBoard(itemGameAreaController.newBackground());
                             if (delay >= 100) {
                                 timer.setDelay((int)(delay-(lines * 40 / velocity)));
+                                delay -= (int) lines * 40 / velocity;
                             }
                             next++;
                         }
