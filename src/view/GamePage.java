@@ -64,6 +64,7 @@ public class GamePage extends JFrame{
             'A', 'B', 'C', 'D','E','F','H','J','K','M','N','P','S'
     };
 
+    private int gameMode;
 
 
     public GamePage() {
@@ -83,6 +84,8 @@ public class GamePage extends JFrame{
     }
 
     private void initialize(){
+
+        gameMode=setting.getGameMode();
 
         //스타일
         styleSet = new SimpleAttributeSet();
@@ -350,7 +353,12 @@ public class GamePage extends JFrame{
             drawTextWithColor(gameBoardPane, "X", Color.BLACK);
 
             for (int j = 0; j < 10; j++) {
-                drawTextWithColor(gameBoardPane, String.valueOf(blockShape[background[i][j]]), colorForBlock[background[i][j]]);
+                if (gameMode==0) { //일반모드 그리기
+                    drawTextWithColor(gameBoardPane, "x", colorForBlock[background[i][j]]);
+                }
+                else{ // 색맹모드 그리기
+                    drawTextWithColor(gameBoardPane, "x", colorFOrBlindModeBlock[background[i][j]]);
+                }
             }
             drawTextWithColor(gameBoardPane, "X\n", Color.BLACK);
         }
