@@ -10,6 +10,7 @@ public class GameAreaController extends GameArea implements gameFunction{
         this.ga=new GameArea();
         this.gp=gp;
     }
+
     public boolean checkBottom() {
         if (ga.block.getBottomEdge() == ga.gridRows) {
             return false;
@@ -229,6 +230,7 @@ public class GameAreaController extends GameArea implements gameFunction{
             ga.background[r][i] = 0;
         }
     }
+    @Override
     public int clearLines2() {
         boolean lineFilled;
         boolean Line=false;
@@ -267,6 +269,7 @@ public class GameAreaController extends GameArea implements gameFunction{
     public int[][] getBackground(){
         return ga.background;
     }
+    @Override
     public int[][] newBackground(){
         int[][] newBackground = new int[gridRows][gridColumns];
         for(int i=0; i<20; i++){
