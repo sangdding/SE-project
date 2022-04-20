@@ -93,13 +93,19 @@ public class JsonScore implements Score {
     }
 
     @Override
-    public void resetList() {
+    public void resetList(int mode) {
         HashMap<String, Integer> resetScore = new HashMap<>();
         resetScore.put("admin", -1);
+        JSONObject tempObj = (JSONObject) resetScore;
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try {
             FileWriter fw = new FileWriter("src/score.json");
-            gson.toJson(resetScore, fw);
+            if (mode == 0) {
+                scoreInfo.replace("normal", resetScore);
+            } else {
+                scoreInfo.replace("item", resetScore);
+            }
+            gson.toJson(scoreInfo, fw);
             fw.flush();
             fw.close();
         } catch (IOException e) {

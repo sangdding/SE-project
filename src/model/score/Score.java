@@ -19,5 +19,5 @@ public interface Score {
      * reset을 호출하면 "admin" : -1을 저장하고 다른 데이터는 다 삭제
      * 나중에 getList로 호춣하면 key값 admin을 제외하고 출력하시면 됩니다.
      */
-    void resetList();
+    void resetList(int mode);
 }
