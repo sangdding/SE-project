@@ -23,6 +23,7 @@ public class GameAreaController extends GameArea implements gameFunction{
                     int x = col + ga.block.getX();
                     int y = row + ga.block.getY() + 1;
                     if (y < 0) break;
+                    if(y>=20){return false;}
                     if (ga.background[y][x] != 0) return false;
                 }}
             }
@@ -153,13 +154,22 @@ public class GameAreaController extends GameArea implements gameFunction{
         ga.block.rotate();
         if(ga.block.getX()+ga.block.getWidth()-1>=10){
             if(checkLeft())
-            {   while(ga.block.getX()+ga.block.getWidth()-1>=10)
-                {ga.block.moveLeft();}
+            {
+                while(ga.block.getX()+ga.block.getWidth()-1>=10)
+                {
+                    ga.block.moveLeft();
+                }
             }
             else{
                 for(int i=0 ;i<3;i++){
-                    ga.block.rotate();
-                }
+                    ga.block.rotate();}
+                if(!checkBottom()){for(int i=0 ;i<3;i++){
+                    ga.block.rotate();}}
+            }
+        }
+        if(!checkBottom()){
+            while(!checkBottom()){
+                ga.block.moveUp();
             }
         }
         return ga.background;

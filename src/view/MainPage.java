@@ -19,15 +19,16 @@ public class MainPage extends JFrame{
 
     private JButton gameStartNormalModeButton;
     private JButton settingButton;
-    private JButton scoreBoardButton;
+    private JButton scoreBoardNormalButton;
     private JButton exitButton;
     private JButton gameStartItemModeButton;
+    private JButton scoreBoardItemButton;
 
 
     private Setting setting = new JsonSetting();
     private PageController pageController;
 
-    private JButton[] buttons=new JButton[]{gameStartNormalModeButton, gameStartItemModeButton, settingButton,scoreBoardButton, exitButton };
+    private JButton[] buttons=new JButton[]{gameStartNormalModeButton, gameStartItemModeButton, settingButton, scoreBoardNormalButton, scoreBoardItemButton, exitButton };
     private int buttonSelectorIndex =0;
 
 
@@ -139,7 +140,14 @@ public class MainPage extends JFrame{
 
         });
 
-        scoreBoardButton.addActionListener(new ActionListener() {
+        scoreBoardNormalButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setVisible(false);
+                pageController = new PageController(e.getActionCommand());
+            }
+        });
+        scoreBoardItemButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);

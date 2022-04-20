@@ -22,7 +22,8 @@ public class Block {
         Random r= new Random();
         currentRotation=r.nextInt(4);
         shape=inf.getBlockShape(bln,currentRotation);
-        y= -getHeight();
+        if(getHeight()>1){y= -getHeight()+1;}
+        else{y=-getHeight();}
         x= r.nextInt(gridWidth-getWidth());
     }
     public void invertToItem(int r){
@@ -49,6 +50,7 @@ public class Block {
     public int getY(){ return y;}
     public void moveDown(){y++;}
     public void moveRight(){x++;}
+    public void moveUp(){y--;}
     public void moveLeft(){x--;}
     public void rotate(){
         currentRotation++;

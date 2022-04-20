@@ -138,7 +138,8 @@ public class SettingPage extends JFrame{
                 Score score = new JsonScore();
 
                 //점수 초기화
-                score.resetList();
+                score.resetList(0);
+                score.resetList(1);
                 //키세팅 초기화
                 setting.setDefaultKeySet();
                 //화면 크기 초기화
@@ -156,7 +157,8 @@ public class SettingPage extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 Score score= new JsonScore();
-                score.resetList();
+                score.resetList(0);
+                score.resetList(1);
             }
         });
 

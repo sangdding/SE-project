@@ -1,7 +1,6 @@
 package view;
 
 import controller.GameControl.GameAreaController;
-import controller.ItemGameControl.ItemGameAreaController;
 import controller.PageController;
 import controller.block.ItemBlockController;
 import controller.ItemGameControl.ItemGameAreaController;
@@ -20,11 +19,11 @@ import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import controller.HashMapParser;
 import java.util.Random;
-public class GamePage extends JFrame{
+public class GamePage extends JFrame {
     private JPanel mainPanel;
     private javax.swing.JPanel gameBoardPanel;
     private Random r = new Random();
-    private Random r2= new Random();
+    private Random r2 = new Random();
     private Generator gen;
     private GameAreaController gameAreaController;
     private ItemGameAreaController itemGameAreaController;
@@ -49,29 +48,31 @@ public class GamePage extends JFrame{
     private int score;
     private int lineIndex;
     private JsonSetting setting = new JsonSetting();
-    private HashMap<String,Integer> keySettingMap;
+    private HashMap<String, Integer> keySettingMap;
     private int next;
     public int lines;
     public boolean chew;
     private NormalBlock BlockModel = new NormalBlock();
-    private char borderChar='X';
+    private char borderChar = 'X';
     private SimpleAttributeSet styleSet;
-    private Color []  colorForBlock = new Color[] {Color.WHITE,
-            Color.CYAN,Color.RED,Color.BLUE,Color.GREEN,Color.MAGENTA,Color.ORANGE,
-            Color.PINK, new Color(128,0,0), new Color(128,128,0), new Color(0,0,128),
-            new Color(128,0,128), new Color(0,139,139), new Color(255,105,180)
+
+    private Color[] colorForBlock = new Color[]{Color.WHITE,
+            Color.CYAN, Color.RED, Color.BLUE, Color.GREEN, Color.MAGENTA, Color.ORANGE,
+            Color.PINK, new Color(128, 0, 0), new Color(128, 128, 0), new Color(0, 0, 128),
+            new Color(128, 0, 128), new Color(0, 139, 139), new Color(255, 105, 180)
     }; // white for backgroind + 13 colors;
 
-    private Color [] colorFOrBlindModeBlock = new  Color[]{Color.WHITE,
-            Color.ORANGE, new Color(135,206,235), new Color(60,179,113), Color.PINK, Color.BLUE,
-            new Color(204,71,75), new Color(149, 53, 83), new Color(128,0,0), new Color(128,128,0), new Color(0,0,128),
-            new Color(128,0,128), new Color(0,139,139), new Color(255,105,180)
+    private Color[] colorFOrBlindModeBlock = new Color[]{Color.WHITE,
+            Color.ORANGE, new Color(135, 206, 235), new Color(60, 179, 113), Color.PINK, Color.BLUE,
+            new Color(204, 71, 75), new Color(149, 53, 83), new Color(128, 0, 0), new Color(128, 128, 0), new Color(0, 0, 128),
+            new Color(128, 0, 128), new Color(0, 139, 139), new Color(255, 105, 180)
     }; // white for backgroind + 13 colors for blind block
 
     private char [] blockShape = new char [] {
-            'A', 'B', 'C', 'D','E','F','H','J','K','M','N','P','S'
+            'A', 'B', 'C', 'D','E','F','H','J','L','O','T','S','Q'
     };
 
+    private int gameMode;
 
 
     public GamePage() {
@@ -82,21 +83,20 @@ public class GamePage extends JFrame{
         setKeyEventController();
         //버튼 마우스 입력 처리 설정
         setButtonClickController();
-        if(setting.getGameMode()==0){
+        if (setting.getGameMode() == 0) {
             drawGameBoard(gameAreaController.getBackground());
             gameAreaController.spawnBlock(gen.getArr()[0]);
             setTimer();
-        }
-        else{
+        } else {
             drawGameBoard(itemGameAreaController.getBackground());
-            System.out.println("draw");
-            itemGameAreaController.spawnBlock2(gen.getArr()[0],1,false);
-            System.out.println("sapwn");
+            itemGameAreaController.spawnBlock2(gen.getArr()[0], 1, false);
             setTimer2();
         }
     }
 
-    private void initialize(){
+    private void initialize() {
+
+        gameMode = setting.getGameMode();
 
         //스타일
         styleSet = new SimpleAttributeSet();
@@ -104,11 +104,13 @@ public class GamePage extends JFrame{
         StyleConstants.setFontFamily(styleSet, "comic sans");
         StyleConstants.setBold(styleSet, false);
         StyleConstants.setAlignment(styleSet, StyleConstants.ALIGN_CENTER);
+
         gameAreaController = new GameAreaController(this);
         itemGameAreaController = new ItemGameAreaController(this);
-        //초기 게임 화면 그리기
-        gameBoardPane.setMargin(new Insets(130,0,0,0));
 
+        //초기 게임 화면 그리기
+        gameBoardPane.setMargin(new Insets(150, 0, 0, 0));
+        nextBlockPane.setMargin(new Insets(300,0,0,0));
 
         gameBoardPane.setEditable(true);
         this.add(mainPanel);
@@ -122,78 +124,79 @@ public class GamePage extends JFrame{
         this.gen = new Generator(setting.getDifficulty());
         this.next = 1;
         //화면 크기 설정
-        HashMap<String,Integer> settingMap = setting.getDisplaySize();
+        HashMap<String, Integer> settingMap = setting.getDisplaySize();
         this.setSize(settingMap.get("width"), settingMap.get("height"));
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // x표 눌럿을 때 프로그램 종료되게 만듦
         //색맹모드 체크
-        isBlindMode=setting.getDisplayMode();
+        isBlindMode = setting.getDisplayMode();
 
         //설정한 키 값 불러오기
-        HashMapParser hashmapparser=new HashMapParser();
-        keySettingMap=setting.getKeyList();
+        HashMapParser hashmapparser = new HashMapParser();
+        keySettingMap = setting.getKeyList();
         System.out.println(keySettingMap);
 
 
-        if(isBlindMode==1) {
+        if (isBlindMode == 1) {
             System.out.println("blind mode printed in gamePage");
-        }else if(isBlindMode==0){
+        } else if (isBlindMode == 0) {
             System.out.println("normal Display mode printed in gamePage");
         }
 
 
-        isStop=false;
+        isStop = false;
 
         //포커스를 이 화면에 맟춰서 키 이벤트 받게 만듦
         requestFocus();
         setFocusable(true);
 
 
-
         //화면 가운데에 생성
         this.setLocationRelativeTo(null);
         //맨 처음 타임유닛, 점수 설정
 
-        this.doubleScore=false;
-        this.doubleIndex=0;
-        this.lines=0;
-        this.chew=false;
-        switch(setting.getDifficulty()){
+        this.doubleScore = false;
+        this.doubleIndex = 0;
+        this.lines = 0;
+        this.chew = false;
+        switch (setting.getDifficulty()) {
             case 0://normal
-                this.velocity=1;
+                this.velocity = 1;
                 break;
             case 1://easy
-                this.velocity=0.8;
+                this.velocity = 0.8;
                 break;
             case 2:
-                this.velocity=1.2;
+                this.velocity = 1.2;
                 break;
             default:
                 break;
         }
-        this.delay=1000/velocity;
-        this.lineIndex=0;
+        this.delay = 1000 / velocity;
+        this.lineIndex = 0;
     }
 
 
+    private void setTimer() {
+        timer = new Timer((int) delay, new ActionListener() {
 
-    private void setTimer()
-    {
-        timer = new Timer((int)delay, new ActionListener()
-
-        {
-
-            public void actionPerformed (ActionEvent e)
-
-            {
+            public void actionPerformed(ActionEvent e) {
                 requestFocus();
                 setFocusable(true);
                 System.out.println("timer activated in Game page");
                 gameAreaController.moveBlockDown();
                 drawGameBoard(gameAreaController.newBackground());
-                if(!gameAreaController.checkBottom())
-                {
-                    if(gameAreaController.isBlockOuOofBounds()){System.out.print("END");} //게임 종료시
+                if (!gameAreaController.checkBottom()) {
+                    if (gameAreaController.isBlockOuOofBounds()) {
+                        //게임 종료시
+                        System.out.print("END");
+                        timer.stop();
+                        dispose();
+                        pageController = new PageController();
+                        pageController.setScore(score);
+                        pageController.createGameEndPage();
+                    }
+
                     else {
                         gameAreaController.moveBlockToBackground();
                         gameAreaController.spawnBlock(gen.getArr()[next]);
@@ -201,50 +204,67 @@ public class GamePage extends JFrame{
                         drawGameBoard(gameAreaController.newBackground());
                         lines += current_line;
                         score += current_line * current_line;
-                        score += (int) ((1000 - (int) (delay / velocity)) / 100) * current_line + lines; // delay에 의한 추가 점수
-                        if(delay>=100) {
-                            delay -= (int) lines * 40 / velocity;
+                        score += (int) ((1000 - (int) (delay / velocity)) / 100) * current_line + lines*current_line; // delay에 의한 추가 점수
+                        if (delay >= 100) {
+                            delay -= (int) current_line * 20 / velocity;
+                            timer.setDelay((int)delay);
                         }
                         next++;
                     }
                 }
-                
+
                 //화면에 점수 출력
                 scoreLabel.setText(Integer.toString(score));
+
+                //다음 블럭 그리기
+                drawNextBlock(getNextBlock());
+
             }
 
         });
         timer.start();
     }
+
     private void setTimer2() //아이템 모드의 타이머 액션
     {
-        timer = new Timer((int)delay, new ActionListener()
+        timer = new Timer((int) delay, new ActionListener() {
 
-        {
-            public void actionPerformed (ActionEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 requestFocus();
                 setFocusable(true);
                 System.out.println("timer activated in Game page");
-                if(itemGameAreaController.ga.block==null){}
-                else if (itemGameAreaController.ga.block.shape[0][0] == 9) {
+                if (itemGameAreaController.ga.block == null) {
+                } else if (itemGameAreaController.ga.block.shape[0][0] == 9) {
                     itemGameAreaController.moveBlockDown2();//아이템 처리는 다 되고 올라갈 일이 없음.
                     drawGameBoard(itemGameAreaController.newBackground());
-                    if(itemGameAreaController.ga.block==null){
-                        itemGameAreaController.spawnBlock2(gen.getArr()[next],1,false);
+                    if (itemGameAreaController.ga.block == null) {
+                        itemGameAreaController.spawnBlock2(gen.getArr()[next], 1, false);
                         next++;
-                        chew=false;
+                        chew = false;
                     }
                 } else {
                     itemGameAreaController.moveBlockDown();
                     drawGameBoard(itemGameAreaController.newBackground());
                     if (!itemGameAreaController.checkBottom()) {
-                        if (itemGameAreaController.isBlockOuOofBounds()) { //게임 끝날시(아이템전)
-                        } else {
+
+                        if (itemGameAreaController.isBlockOuOofBounds()) {
+                            //게임 종료
+                            // (아이템전)
+                            System.out.print("END");
+                            timer.stop();
+                            dispose();
+
+                            pageController = new PageController();
+                            pageController.setScore(score);
+                            pageController.createGameEndPage();
+                        }
+
+                        else {
                             itemGameAreaController.moveBlockToBackground();
                             int current_lines = itemGameAreaController.clearLines();
                             lines += current_lines;
                             lineIndex += current_lines;
-                            int current_score = 2 * (current_lines * current_lines + (int) ((1000 - (int) (delay / velocity)) / 100) * current_lines + lines);
+                            int current_score = 2 * (current_lines * current_lines + (int) ((1000 - (int) (delay / velocity)) / 100) * current_lines + lines*current_lines);
                             //현재 화면 점수 -> 행이 한번에 많이 지워지면 가산점, delay가 적으면 가산점, 지금까지 누적으로 지운 라인이 많으면 가산점
                             if (doubleIndex > 0) {
                                 //점수2배이벤트
@@ -260,9 +280,12 @@ public class GamePage extends JFrame{
                             } else {
                                 itemGameAreaController.spawnBlock2(gen.getArr()[next], 1, false);//노말아이템
                             }
+                            System.out.print("COLOR+"+itemGameAreaController.ga.block.getColor());
+                            System.out.print(BlockModel.getColor(gen.getArr()[next]));
                             drawGameBoard(itemGameAreaController.newBackground());
-                            if(delay>=100) {
-                                delay -= (int) lines * 40 / velocity;
+                            if (delay >= 100) {
+                                delay -= (int) current_lines * 20 / velocity;
+                                timer.setDelay((int)delay);
                             }
                             next++;
                         }
@@ -272,6 +295,8 @@ public class GamePage extends JFrame{
 
                     //화면에 점수 출력
                     scoreLabel.setText(Integer.toString(score));
+                    //다음 블럭 그리기
+                    drawNextBlock(getNextBlock());
                 }
             }
 
@@ -280,8 +305,7 @@ public class GamePage extends JFrame{
         timer.start();
     }
 
-    private void setKeyEventController()
-    {
+    private void setKeyEventController() {
         addKeyListener(new KeyAdapter() { //키 이벤트
             @Override
             public void keyPressed(KeyEvent e) { //키 눌렀을때
@@ -289,16 +313,42 @@ public class GamePage extends JFrame{
                 System.out.println(e.getKeyCode());
                 // TODO Auto-generated method stub
                 //원래 switch case문인데, case에 constant 값만 들어갈 수 있어서 if로 교체
-                int pressedKey=e.getKeyCode();
-                if(pressedKey==keySettingMap.get("resume")){
-                    if(isStop)
-                    {
+                int pressedKey = e.getKeyCode();
+
+                if (pressedKey == keySettingMap.get("resume")) {
+                    if (isStop) {
                         System.out.println("Game Restarted");
-                        isStop=false;
+                        isStop = false;
                         timer.start();
                     }
                 }
-                else if(pressedKey==keySettingMap.get("exit")){
+
+                else if (pressedKey == keySettingMap.get("drop")) {
+                    System.out.println("d");
+                    if (setting.getGameMode() == 0) {
+                        if (gameAreaController.ga.block == null) {
+                        } else {
+                            gameAreaController.dropBlock();
+                            drawGameBoard(gameAreaController.newBackground());
+                        }
+                    } else {
+                        if (itemGameAreaController.ga.block.shape[0][0] == 9) {
+                            if (chew) {
+                            } else {
+                                itemGameAreaController.dropBlock();
+                                drawGameBoard(itemGameAreaController.newBackground());
+                            }
+                        } else {
+                            if (itemGameAreaController.ga.block == null) {
+                            } else {
+                                itemGameAreaController.dropBlock();
+                                drawGameBoard(itemGameAreaController.newBackground());
+                            }
+                        }
+                    }
+                }
+
+                else if (pressedKey == keySettingMap.get("exit")) {
                     System.out.println("esc");
                     timer.stop();
                     dispose();
@@ -306,61 +356,30 @@ public class GamePage extends JFrame{
                     pageController = new PageController("Main");
 
                 }
-                else if(pressedKey==keySettingMap.get("drop")){
-                    System.out.println("d");
-                    if(setting.getGameMode()==0) {
-                        if (gameAreaController.ga.block == null) {
-                        } else {
-                            gameAreaController.dropBlock();
-                            drawGameBoard(gameAreaController.newBackground());
-                        }
-                    }
-                    else{
-                        if(itemGameAreaController.ga.block.shape[0][0]==9){
-                            if(chew){}
-                            else{
-                                itemGameAreaController.dropBlock();
-                                drawGameBoard(itemGameAreaController.newBackground());
-                            }
-                        }else {
-                            if(itemGameAreaController.ga.block==null){}
-                            else {
-                                itemGameAreaController.dropBlock();
-                                drawGameBoard(itemGameAreaController.newBackground());
-                            }
-                        }
-                    }
-                }
-                else if(pressedKey==keySettingMap.get("pause")){
-                    if(!isStop) {
-                        System.out.println("Game Stoopped");
-                        isStop=true;
-                        timer.stop();
-                    }
 
+                else if ((setting.getGameMode() == 0 && gameAreaController.ga.block == null) ||
+                        (setting.getGameMode() == 1 && itemGameAreaController.ga.block == null)) {
                 }
-                else if((setting.getGameMode()==0&&gameAreaController.ga.block==null)||
-                        (setting.getGameMode()==1&&itemGameAreaController.ga.block==null)){}
-                else if(pressedKey==keySettingMap.get("left")){
+
+                else if (pressedKey == keySettingMap.get("left")) {
                     System.out.println("l");
-                    if(setting.getGameMode()==0) {
+                    if (setting.getGameMode() == 0) {
                         if (gameAreaController.ga.block == null) {
                         } else {
                             gameAreaController.moveBlockLeft();
                             drawGameBoard(gameAreaController.newBackground());
                         }
                     }
-                    else{
-                        if(itemGameAreaController.ga.block.shape[0][0]==9){
-                            if(chew){}
-                            else{
+                    else {
+                        if (itemGameAreaController.ga.block.shape[0][0] == 9) {
+                            if (chew) {
+                            } else {
                                 itemGameAreaController.moveBlockLeft();
                                 drawGameBoard(itemGameAreaController.newBackground());
                             }
-                        }
-                        else {
-                            if(itemGameAreaController.ga.block==null){}
-                            else {
+                        } else {
+                            if (itemGameAreaController.ga.block == null) {
+                            } else {
                                 itemGameAreaController.moveBlockLeft();
                                 drawGameBoard(itemGameAreaController.newBackground());
                             }
@@ -368,78 +387,85 @@ public class GamePage extends JFrame{
                     }
 
                 }
-                else if(pressedKey==keySettingMap.get("rotate")){
+
+
+                else if (pressedKey == keySettingMap.get("rotate")) {
                     System.out.println("u");
-                    if(setting.getGameMode()==0) {
+                    if (setting.getGameMode() == 0) {
                         if (gameAreaController.ga.block == null) {
                         } else {
                             gameAreaController.rotateBlock();
                             drawGameBoard(gameAreaController.newBackground());
                         }
-                    }
-                    else{
-                        if(itemGameAreaController.ga.block.shape[0][0]==9){}
-                        else{
-                            if(itemGameAreaController.ga.block==null){}
-                            else{itemGameAreaController.rotateBlock();
-                            drawGameBoard(itemGameAreaController.newBackground());
+                    } else {
+                        if (itemGameAreaController.ga.block.shape[0][0] == 9) {
+                        } else {
+                            if (itemGameAreaController.ga.block == null) {
+                            } else {
+                                itemGameAreaController.rotateBlock();
+                                drawGameBoard(itemGameAreaController.newBackground());
                             }
 
                         }
                     }
                 }
-                else if(pressedKey==keySettingMap.get("right")){
+
+                else if (pressedKey == keySettingMap.get("right")) {
                     System.out.println("right");
-                    if(setting.getGameMode()==0) {
+                    if (setting.getGameMode() == 0) {
                         if (gameAreaController.ga.block == null) {
                         } else {
                             gameAreaController.moveBlockRight();
                             drawGameBoard(gameAreaController.newBackground());
                         }
-                    }
-                    else{
-                        if(itemGameAreaController.ga.block.shape[0][0]==9){
-                            if(chew){}
-                            else{
+                    } else {
+                        if (itemGameAreaController.ga.block.shape[0][0] == 9) {
+                            if (chew) {
+                            } else {
                                 itemGameAreaController.moveBlockRight();
                                 drawGameBoard(itemGameAreaController.newBackground());
                             }
-                        }else {
-                            if(itemGameAreaController.ga.block==null){}
-                            else {
+                        } else {
+                            if (itemGameAreaController.ga.block == null) {
+                            } else {
                                 itemGameAreaController.moveBlockRight();
                                 drawGameBoard(itemGameAreaController.newBackground());
                             }
                         }
                     }
                 }
-                else if(pressedKey==keySettingMap.get("down")){
+
+                else if (pressedKey == keySettingMap.get("down")) {
                     System.out.println("down");
-                    if(setting.getGameMode()==0) {
+                    if (setting.getGameMode() == 0) {
                         if (gameAreaController.ga.block == null) {
                         } else {
                             gameAreaController.moveBlockDown();
                             drawGameBoard(gameAreaController.newBackground());
                         }
                     }
-                    else{
-                        if(itemGameAreaController.ga.block==null){}
-                        else {
-                            itemGameAreaController.moveBlockDown();
-                            drawGameBoard(itemGameAreaController.newBackground());
+
+                     else {
+                            if (itemGameAreaController.ga.block == null) {
+                            } else {
+                                itemGameAreaController.moveBlockDown();
+                                drawGameBoard(itemGameAreaController.newBackground());
+                            }
                         }
                     }
+
+                else if (pressedKey == keySettingMap.get("pause")) {
+                    if (!isStop) {
+                        System.out.println("Game Stoopped");
+                        isStop = true;
+                        timer.stop();
+                    }
                 }
-
-
-
             }
         });
-
     }
 
-    private void setButtonClickController()
-    {
+    private void setButtonClickController() {
         mainButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -454,19 +480,17 @@ public class GamePage extends JFrame{
         stopButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(!isStop) {
+                if (!isStop) {
                     System.out.println("Game Stoopped");
-                    isStop=true;
+                    isStop = true;
                     timer.stop();
 
                     requestFocus();
                     setFocusable(true);
 
-                }
-                else
-                {
+                } else {
                     System.out.println("Game Restarted");
-                    isStop=false;
+                    isStop = false;
                     timer.start();
                 }
             }
@@ -480,7 +504,7 @@ public class GamePage extends JFrame{
 
     }
 
-    public void drawGameBoard(int[][] background) {
+    private void drawGameBoard(int[][] background) {
 
         //이전 화면 지우기
         gameBoardPane.setText("");
@@ -494,7 +518,23 @@ public class GamePage extends JFrame{
             drawTextWithColor(gameBoardPane, "X", Color.BLACK);
 
             for (int j = 0; j < 10; j++) {
-                drawTextWithColor(gameBoardPane, String.valueOf(blockShape[background[i][j]]), colorForBlock[background[i][j]]);
+                //일반 블럭 그리기
+                if(background[i][j]<8){
+                    if (gameMode == 0) { //일반모드 그리기
+                        drawTextWithColor(gameBoardPane, "X", colorForBlock[background[i][j]]);
+                    } else { // 색맹모드 그리기
+                        drawTextWithColor(gameBoardPane, "X", colorFOrBlindModeBlock[background[i][j]]);
+                    }
+                }
+                else
+                {
+                    if (gameMode == 0) { //일반모드 그리기
+                        drawTextWithColor(gameBoardPane, String.valueOf(blockShape[background[i][j]]), colorForBlock[background[i][j]]);
+                    } else { // 색맹모드 그리기
+                        drawTextWithColor(gameBoardPane, String.valueOf(blockShape[background[i][j]]), colorFOrBlindModeBlock[background[i][j]]);
+                    }
+                }
+
             }
             drawTextWithColor(gameBoardPane, "X\n", Color.BLACK);
         }
@@ -514,30 +554,32 @@ public class GamePage extends JFrame{
     private void drawNextBlock(int[][] background) {
 
         //이전 화면 지우기
-        gameBoardPane.setText("");
+        nextBlockPane.setText("");
+
 
         //여기서부턴 화면에 그리기
         //민재 형 이거 만들어 줘
-        int nextBlock[][] = getNextBlock();
+        int nextBlock[][] = background;
 
         for (int i = 0; i < nextBlock.length; i++) {
 
             for (int j = 0; j < nextBlock[i].length; j++) {
-                drawTextWithColor(nextBlockPane, String.valueOf(blockShape[background[i][j]]), colorForBlock[background[i][j]]);
+                drawTextWithColor(nextBlockPane, "X", colorForBlock[background[i][j]]);
             }
 
-            drawTextWithColor(nextBlockPane,"\n",Color.BLACK);
+            drawTextWithColor(nextBlockPane, "\n", Color.BLACK);
         }
         System.out.println("next Block draw end");
         //이거 없어도 보드는 그려진다. 뭔가 스타일 관련 코드인 듯
-        StyledDocument doc = gameBoardPane.getStyledDocument();
+        StyledDocument doc = nextBlockPane.getStyledDocument();
+
+
         doc.setParagraphAttributes(0, doc.getLength(), styleSet, false);
-        gameBoardPane.setStyledDocument(doc);
+        nextBlockPane.setStyledDocument(doc);
 
     }
 
-    private void drawTextWithColor(JTextPane tp, String msg, Color c)
-    {
+    private void drawTextWithColor(JTextPane tp, String msg, Color c) {
         StyleContext sc = StyleContext.getDefaultStyleContext();
         AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, c);
 
@@ -553,8 +595,19 @@ public class GamePage extends JFrame{
 
     }
 
-    int[][] getNextBlock(){
-        return BlockModel.normalBlock[gen.getArr()[next]];
+    int[][] getNextBlock() {
+        int[][] now = BlockModel.normalBlock[gen.getArr()[next]];
+        int color;
+        if(setting.getGameMode()==0){color=BlockModel.getColor(gen.getArr()[next]);}
+        else{color=BlockModel.getColor(gen.getArr()[next]);}
+        for(int r=0; r<now.length;r++){
+            for(int c=0; c<now[0].length;c++){
+                if(now[r][c]!=0){
+                    now[r][c]=color;
+                }
+            }
+        }
+        return  now;
     }
 
 }

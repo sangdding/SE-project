@@ -2,6 +2,8 @@ package view;
 
 import controller.PageController;
 import model.score.JsonScore;
+import model.setting.JsonSetting;
+import model.setting.Setting;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,15 +25,24 @@ public class GameEndPage extends JFrame {
     private JPanel scoreBoardPanel;
     private PageController pageController;
 
+
+    private Setting setting;
+
+    private int score;
+
     private boolean scoreIsEntered =false;
 
-    public GameEndPage() {
+    public GameEndPage(int score) {
 
+        this.score=score;
         initialize();
         setButtonClickController();
     }
 
     private void initialize() {
+
+
+        setting= new JsonSetting();
 
         //프레임 설정
         BorderLayout bl = new BorderLayout();
@@ -48,7 +59,7 @@ public class GameEndPage extends JFrame {
         //컴포넌트 생성
         nameEnterButton=new JButton("Enter");
         nameTextField = new JTextField("",10);
-        gameScoreLabel = new JLabel("1111");
+        gameScoreLabel = new JLabel(Integer.toString(this.score));
         nameLabel=new JLabel("Name");
 
         mainButton=new JButton("Main");
@@ -57,7 +68,7 @@ public class GameEndPage extends JFrame {
 
 
         //패널 컴포넌트 연결
-        scoreBoardPanel=new scoreBoard();
+        scoreBoardPanel=new scoreBoard(setting.getGameMode());
 
         InsertPanel.add(nameLabel);
         InsertPanel.add(nameTextField);
@@ -122,9 +133,9 @@ public class GameEndPage extends JFrame {
 
                 if(!nameTextField.getText().isEmpty())
                 {
-                    JsonScore score=new JsonScore();
+                    JsonScore jsonscore=new JsonScore();
 
-                    int retSave=score.save(nameTextField.getText(),3000);
+                    int retSave=jsonscore.save(nameTextField.getText(),score,setting.getGameMode());
                     if(retSave==1){
                         System.out.println("Duplicated Name");
                         return;
@@ -177,7 +188,7 @@ public class GameEndPage extends JFrame {
     private void updateScoreBoard()
     {
         this.remove(scoreBoardPanel);
-        this.scoreBoardPanel=new scoreBoard();
+        this.scoreBoardPanel=new scoreBoard(setting.getGameMode());
         this.add(scoreBoardPanel,BorderLayout.CENTER);
         this.validate();
     }

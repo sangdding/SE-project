@@ -11,6 +11,12 @@ public class PageController {
     private GameEndPage gameEndPage;
     private KeySettingPage keySettingPage;
 
+
+    private int score=0;
+
+    public PageController()
+    {}
+
     public PageController(String pageName) {
         if (pageName.equals("Setting")) {
             settingPage = new SettingPage();
@@ -19,13 +25,26 @@ public class PageController {
         } else if (pageName.equals("Game Start - Normal Mode") || pageName.equals("Game Restart")||pageName.equals("Game Start - Item Mode")) {
             gamePage = new GamePage();
         }
-        else if (pageName.equals("ScoreBoard")) {
-             scorePage=new ScorePage();
+        else if (pageName.equals("ScoreBoard - Normal")) {
+             scorePage=new ScorePage(0);
+        }
+        else if (pageName.equals("ScoreBoard - Item")) {
+            scorePage=new ScorePage(1);
         }
         else if (pageName.equals("Key Setting")){
             keySettingPage=new KeySettingPage();
         }
+        else if (pageName.equals("Game End")){
+            gameEndPage=new GameEndPage(score);
+        }
     }
 
-
+    public void setScore(int score)
+    {
+        this.score=score;
+    }
+    public void createGameEndPage()
+    {
+        gameEndPage=new GameEndPage(score);
+    }
 }

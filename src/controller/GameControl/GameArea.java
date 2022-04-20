@@ -15,9 +15,7 @@ public class GameArea {
         gridColumns = 10;
         gridRows = 20;
         background = new int[gridRows][gridColumns];
-        for(int i=0; i<10; i++){
-            background[10][i]=1;
-        }
+
     }
     public int[][] getBackground(){
         return background;
