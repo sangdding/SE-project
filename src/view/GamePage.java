@@ -68,7 +68,9 @@ public class GamePage extends JFrame {
             new Color(128, 0, 128), new Color(0, 139, 139), new Color(255, 105, 180)
     }; // white for backgroind + 13 colors for blind block
 
-
+    private char [] blockShape = new char [] {
+            'A', 'B', 'C', 'D','E','F','H','J','L','O','T','S','Q'
+    };
 
     private int gameMode;
 
@@ -518,11 +520,23 @@ public class GamePage extends JFrame {
             drawTextWithColor(gameBoardPane, "X", Color.BLACK);
 
             for (int j = 0; j < 10; j++) {
-                if (gameMode == 0) { //일반모드 그리기
-                    drawTextWithColor(gameBoardPane, "X", colorForBlock[background[i][j]]);
-                } else { // 색맹모드 그리기
-                    drawTextWithColor(gameBoardPane, "X", colorFOrBlindModeBlock[background[i][j]]);
+                //일반 블럭 그리기
+                if(background[i][j]<8){
+                    if (gameMode == 0) { //일반모드 그리기
+                        drawTextWithColor(gameBoardPane, "X", colorForBlock[background[i][j]]);
+                    } else { // 색맹모드 그리기
+                        drawTextWithColor(gameBoardPane, "X", colorFOrBlindModeBlock[background[i][j]]);
+                    }
                 }
+                else
+                {
+                    if (gameMode == 0) { //일반모드 그리기
+                        drawTextWithColor(gameBoardPane, String.valueOf(blockShape[background[i][j]]), colorForBlock[background[i][j]]);
+                    } else { // 색맹모드 그리기
+                        drawTextWithColor(gameBoardPane, String.valueOf(blockShape[background[i][j]]), colorFOrBlindModeBlock[background[i][j]]);
+                    }
+                }
+
             }
             drawTextWithColor(gameBoardPane, "X\n", Color.BLACK);
         }
@@ -585,7 +599,16 @@ public class GamePage extends JFrame {
     }
 
     int[][] getNextBlock() {
-        return BlockModel.normalBlock[gen.getArr()[next]];
+        int[][] now = BlockModel.normalBlock[gen.getArr()[next]];
+        int color = BlockModel.getColor(gen.getArr()[next]);
+        for(int r=0; r<now.length;r++){
+            for(int c=0; c<now[0].length;c++){
+                if(now[r][c]!=0){
+                    now[r][c]=color;
+                }
+            }
+        }
+        return  now;
     }
 
 }
