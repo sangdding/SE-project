@@ -3,13 +3,21 @@ import controller.GameControl.GameArea;
 import controller.block.Block;
 import controller.block.ItemBlockController;
 import view.GamePage;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionListener;
+import java.util.Timer;
+import java.util.HashMap;
 public class ItemGameAreaController extends GameAreaItem implements ItemMode {
     public GameAreaItem ga;
     public GamePage gp;
+    public int i=0;
     public ItemGameAreaController(GamePage gp){
         this.ga=new GameAreaItem();
         this.gp=gp;
     }
+
     public boolean checkBottom() {
         if (ga.block.getBottomEdge() == ga.gridRows) {
             return false;
@@ -245,6 +253,7 @@ public class ItemGameAreaController extends GameAreaItem implements ItemMode {
                 if(ga.background[r][c]==11){Sco++;}
             }
             if(Line){lineFilled=true;}
+            if(ga.background[r][0]==13){lineFilled=true;}
             if(lineFilled){ //Line 아이템이 있거나 라인이 다 차있는 경우
                 Line=false;
                 linesCleared++;
@@ -260,6 +269,45 @@ public class ItemGameAreaController extends GameAreaItem implements ItemMode {
             }
         }
         return linesCleared;
+    }
+    public int clearLines2() {
+        boolean lineFilled;
+        boolean Line=false;
+        boolean Time=false;
+        int Sco=0;
+        boolean Sco2=false;
+        int linesCleared = 0;
+        for(int i=0; i<20;i++) {
+            for(int j=0; j<10; j++){
+                System.out.print(ga.background[i][j]);}
+            System.out.println();
+        }
+        for (int r = ga.gridRows - 1; r >= 0; r--) {
+            lineFilled = true;
+            for (int c = 0; c < ga.gridColumns; c++) {
+                if(ga.background[r][c]==0){lineFilled=false;}
+                if(ga.background[r][c]==8){Line=true;}
+                if(ga.background[r][c]==10){Time=true;;}
+                if(ga.background[r][c]==11){Sco++;}
+            }
+            if(Line){lineFilled=true;}
+            if(lineFilled){ //Line 아이템이 있거나 라인이 다 차있는 경우
+                Line=false;
+                linesCleared++;
+                clearLine2(r);
+                if(Time){gp.delay+=300*gp.velocity;}
+                if(Sco>0){for(int i=0; i<Sco;i++){gp.doubleIndex+=10;}}
+            }
+            else{
+                Time=false;Sco=0;
+            }
+        }
+        return linesCleared;
+    }
+    private void clearLine2(int r) {
+        for (int i = 0; i < ga.gridColumns; i++) {
+            ga.background[r][i] = 13;
+        }
     }
     //행제거
     private void clearLine(int r) {
