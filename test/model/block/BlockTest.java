@@ -1,4 +1,4 @@
-package model.block;
+/*package model.block;
 
 import org.junit.jupiter.api.Test;
 
@@ -43,4 +43,4 @@ class BlockTest {
         }
     }
 
-}
+}*/

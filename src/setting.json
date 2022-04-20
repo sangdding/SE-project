@@ -11,10 +11,10 @@
   },
   "difficulty": "hard",
   "display": {
-    "width": 1000,
-    "height": 1500
+    "width": 500,
+    "height": 800
   },
-  "gameMode": "normal",
+  "gameMode": "item",
   "defaultKey": {
     "resume": 82,
     "drop": 68,
