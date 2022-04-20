@@ -28,10 +28,13 @@ public class GameEndPage extends JFrame {
 
     private Setting setting;
 
+    private int score;
+
     private boolean scoreIsEntered =false;
 
-    public GameEndPage() {
+    public GameEndPage(int score) {
 
+        this.score=score;
         initialize();
         setButtonClickController();
     }
@@ -56,7 +59,7 @@ public class GameEndPage extends JFrame {
         //컴포넌트 생성
         nameEnterButton=new JButton("Enter");
         nameTextField = new JTextField("",10);
-        gameScoreLabel = new JLabel("1111");
+        gameScoreLabel = new JLabel(Integer.toString(this.score));
         nameLabel=new JLabel("Name");
 
         mainButton=new JButton("Main");
@@ -130,9 +133,9 @@ public class GameEndPage extends JFrame {
 
                 if(!nameTextField.getText().isEmpty())
                 {
-                    JsonScore score=new JsonScore();
+                    JsonScore jsonscore=new JsonScore();
 
-                    int retSave=score.save(nameTextField.getText(),3000,setting.getGameMode());
+                    int retSave=jsonscore.save(nameTextField.getText(),score,setting.getGameMode());
                     if(retSave==1){
                         System.out.println("Duplicated Name");
                         return;

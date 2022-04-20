@@ -188,8 +188,17 @@ public class GamePage extends JFrame {
                 drawGameBoard(gameAreaController.newBackground());
                 if (!gameAreaController.checkBottom()) {
                     if (gameAreaController.isBlockOuOofBounds()) {
+                        //게임 종료시
                         System.out.print("END");
-                    } //게임 종료시
+
+                        timer.stop();
+                        dispose();
+
+
+                        pageController = new PageController();
+                        pageController.setScore(score);
+                        pageController.createGameEndPage();
+                    }
 
                     else {
                         gameAreaController.moveBlockToBackground();
@@ -239,8 +248,21 @@ public class GamePage extends JFrame {
                     itemGameAreaController.moveBlockDown();
                     drawGameBoard(itemGameAreaController.newBackground());
                     if (!itemGameAreaController.checkBottom()) {
-                        if (itemGameAreaController.isBlockOuOofBounds()) { //게임 끝날시(아이템전)
-                        } else {
+
+                        if (itemGameAreaController.isBlockOuOofBounds()) {
+                            //게임 종료
+                            // (아이템전)
+                            System.out.print("END");
+
+                            timer.stop();
+                            dispose();
+
+                            pageController = new PageController();
+                            pageController.setScore(score);
+                            pageController.createGameEndPage();
+                        }
+
+                        else {
                             itemGameAreaController.moveBlockToBackground();
                             int current_lines = itemGameAreaController.clearLines();
                             lines += current_lines;

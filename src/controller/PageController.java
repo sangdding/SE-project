@@ -11,6 +11,12 @@ public class PageController {
     private GameEndPage gameEndPage;
     private KeySettingPage keySettingPage;
 
+
+    private int score=0;
+
+    public PageController()
+    {}
+
     public PageController(String pageName) {
         if (pageName.equals("Setting")) {
             settingPage = new SettingPage();
@@ -28,7 +34,17 @@ public class PageController {
         else if (pageName.equals("Key Setting")){
             keySettingPage=new KeySettingPage();
         }
+        else if (pageName.equals("Game End")){
+            gameEndPage=new GameEndPage(score);
+        }
     }
 
-
+    public void setScore(int score)
+    {
+        this.score=score;
+    }
+    public void createGameEndPage()
+    {
+        gameEndPage=new GameEndPage(score);
+    }
 }
