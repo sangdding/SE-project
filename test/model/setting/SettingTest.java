@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.Set;
 
+import static java.awt.event.KeyEvent.VK_DOWN;
 import static java.awt.event.KeyEvent.VK_I;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,21 +21,21 @@ class SettingTest {
     @Test
     void 키_세팅정보_가져오기() {
         HashMap<String, Integer> keySet = setting.getKeyList();
-        Assertions.assertEquals(9, keySet.size());
+        Assertions.assertEquals(8, keySet.size());
     }
 
     @Test
     void 키_세팅정보_저장하기() {
         HashMap<String, Integer> changekeySet = setting.getDefaultKeySet();
-        changekeySet.put("up", VK_I);
+        changekeySet.put("down", VK_DOWN);
         setting.setKeyList(changekeySet);
-        Assertions.assertEquals(VK_I, setting.getKeyList().get("up"));
+        Assertions.assertEquals(VK_DOWN, setting.getKeyList().get("down"));
     }
 
     @Test
     void 기본키_세팅_가져오기() {
         HashMap<String, Integer> keySet = setting.getDefaultKeySet();
-        Assertions.assertEquals(9, keySet.size());
+        Assertions.assertEquals(8, keySet.size());
     }
 
     @Test
@@ -74,8 +75,20 @@ class SettingTest {
         setting.setDisplayMode(0);
         System.out.println(setting.getDisplayMode());
         Assertions.assertEquals(0, setting.getDisplayMode());
-//        setting.setDisplayMode(1);
-//        System.out.println(setting.getDisplayMode());
-//        Assertions.assertEquals(1, setting.getDisplayMode());
+
+
+        setting.setDisplayMode(1);
+        System.out.println(setting.getDisplayMode());
+        Assertions.assertEquals(1, setting.getDisplayMode());
+    }
+
+    @Test
+    void 게임모드_설정하기() {
+        setting.setGameMode(0);
+        Assertions.assertEquals(0, setting.getGameMode());
+
+
+        setting.setGameMode(1);
+        Assertions.assertEquals(1, setting.getGameMode());
     }
 }
