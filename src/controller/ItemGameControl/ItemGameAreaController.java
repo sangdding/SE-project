@@ -187,9 +187,13 @@ public class ItemGameAreaController extends GameAreaItem implements ItemMode {
     @Override
     public boolean dropBlock() {
         if(ga.block == null){return false;}
-        else{while (checkBottom()) {
+        else{
+            int i=0;
+            while (checkBottom()) {
+                i++;
             ga.block.moveDown();
-        }}
+        }
+        gp.score+=i;}
         return true;
     }
     @Override
