@@ -523,6 +523,7 @@ public class GamePage extends JFrame {
                         drawTextWithColor(gameBoardPane, "X", colorFOrBlindModeBlock[background[i][j]]);
                     }
                 }
+                //아이템 블럭 그리기
                 else {
                     if (gameMode == 0) { //일반모드 그리기
                         drawTextWithColor(gameBoardPane, String.valueOf(blockShape[background[i][j]]), colorForBlock[background[i][j]]);
