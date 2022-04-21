@@ -20,6 +20,8 @@ public class JsonScore implements Score {
     private JSONObject scoreInfo;
     private JSONObject itemScoreInfo;
     private JSONObject normalScoreInfo;
+    private JSONObject itemDifficultyInfo;
+    private JSONObject normalDifficultyInfo;
     private ObjectMapper objectMapper;
 
 
@@ -30,6 +32,8 @@ public class JsonScore implements Score {
             scoreInfo = (JSONObject) parser.parse(readerScore);
             itemScoreInfo = (JSONObject) scoreInfo.get("item");
             normalScoreInfo = (JSONObject) scoreInfo.get("normal");
+            itemDifficultyInfo = (JSONObject) scoreInfo.get("itemDifficulty");
+            normalDifficultyInfo = (JSONObject) scoreInfo.get("normalDifficulty");
             readerScore.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -43,23 +47,29 @@ public class JsonScore implements Score {
     @Override
     public int save(String name, int score, int mode, int difficulty) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        JSONObject tempObj;
+        JSONObject tempObj1;
+        JSONObject tempObj2;
         int[] info = {score, difficulty};
         if (mode == 0) {
-            tempObj = normalScoreInfo;
+            tempObj1 = normalScoreInfo;
+            tempObj2 = normalDifficultyInfo;
         } else {
-            tempObj = itemScoreInfo;
+            tempObj1 = itemScoreInfo;
+            tempObj2 = itemDifficultyInfo
         }
         try {
-            if (tempObj.containsKey(name)) {
+            if (tempObj1.containsKey(name)) {
                 return 1;
             } else {
                 FileWriter fw = new FileWriter("src/score.json");
-                tempObj.put(name, info); // json 파일에 점수 저장
+                tempObj1.put(name, score); // json 파일에 점수 저장
+                tempObj2.put(name, difficulty);
                 if (mode == 0) {
-                    scoreInfo.replace("normal", tempObj);
+                    scoreInfo.replace("normal", tempObj1);
+                    scoreInfo.replace("normalDifficulty", tempObj2);
                 } else {
-                    scoreInfo.replace("item", tempObj);
+                    scoreInfo.replace("item", tempObj1);
+                    scoreInfo.replace("itemDifficulty", tempObj2);
                 }
                 gson.toJson(scoreInfo, fw); // 로컬에 저장
                 fw.flush();
@@ -72,17 +82,22 @@ public class JsonScore implements Score {
     }
 
     @Override
-    public HashMap<String, int[]> getList(int mode) {
-        HashMap<String, int[]> returnScoreInfo = null;
-        JSONObject tempObj;
+    public HashMap<String, Integer> getList(int mode) {
+        HashMap<String, Integer> returnScoreInfo = null;
+        JSONObject tempObj1;
+        JSONObject tempObj2;
         objectMapper = new ObjectMapper();
         if (mode == 0) {
-            tempObj = objectMapper.convertValue(scoreInfo.get("normal"), JSONObject.class);
+            tempObj1 = objectMapper.convertValue(scoreInfo.get("normal"), JSONObject.class);
+            tempObj2 = objectMapper.convertValue(scoreInfo.get("normalDifficulty"), JSONObject.class);
         } else {
-            tempObj = objectMapper.convertValue(scoreInfo.get("item"), JSONObject.class);
+            tempObj1 = objectMapper.convertValue(scoreInfo.get("item"), JSONObject.class);
+            tempObj2 = objectMapper.convertValue(scoreInfo.get("itemDifficulty"), JSONObject.class);
         }
         try {
-            returnScoreInfo = objectMapper.readValue(tempObj.toJSONString(), new TypeReference<Map<String, Object>>() {
+            returnScoreInfo = objectMapper.readValue(tempObj1.toJSONString(), new TypeReference<Map<String, Integer>>() {
+            });
+            returnScoreInfo = objectMapper.readValue(tempObj2.toJSONString(), new TypeReference<Map<String, Integer>>() {
             });
         } catch (JsonMappingException e) {
             System.out.println("JsonMapping 에러");
@@ -104,8 +119,10 @@ public class JsonScore implements Score {
             FileWriter fw = new FileWriter("src/score.json");
             if (mode == 0) {
                 scoreInfo.replace("normal", resetScore);
+                scoreInfo.replace("normalDifficulty", resetScore);
             } else {
                 scoreInfo.replace("item", resetScore);
+                scoreInfo.replace("itemDifficulty", resetScore);
             }
             gson.toJson(scoreInfo, fw);
             fw.flush();

@@ -1,18 +1,17 @@
 {
   "normal": {
-
-    "DAFDD": [
-      122412,
-      1
-    ]
+    "admin": -1,
+    "AAAA": 23423
+  },
+  "noramlDifficulty": {
+    "AAAA": 1
 
   },
   "item": {
-    "DAFDD": [
-      122412,
-      1
-    ]
-
-
+    "admin": -1,
+    "AAAA": 23423
+  },
+  "itemDifficulty": {
+    "AAAA": 1
   }
 }
