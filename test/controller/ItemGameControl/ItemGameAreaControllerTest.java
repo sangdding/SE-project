@@ -1,6 +1,6 @@
-package controller.GameControl;
+package controller.ItemGameControl;
 
-import controller.block.Block;
+import controller.GameControl.GameAreaController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,15 +11,14 @@ import java.lang.reflect.Field;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class GameAreaControllerTest extends GameArea {
-
+class ItemGameAreaControllerTest {
     private GamePage gamePage = new GamePage();
-    private GameAreaController gameAreaController = new GameAreaController(gamePage);
+    private ItemGameAreaController gameAreaController = new ItemGameAreaController(gamePage);
     private int[][] forTest = new int[][]{
-            {0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 7, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -67,23 +66,26 @@ class GameAreaControllerTest extends GameArea {
     @Test
     @DisplayName("블록 좌우 하단 체크")
     void checkSide() throws NoSuchFieldException, IllegalAccessException {
-        gameAreaController.spawnBlock(0);
+        gameAreaController.spawnBlock2(0, 9, true);
         gameAreaController.ga.block.rotate();
         Field x = gameAreaController.ga.block.getClass().getDeclaredField("x");
         Field y = gameAreaController.ga.block.getClass().getDeclaredField("y");
         x.setAccessible(true);
         y.setAccessible(true);
-        x.setInt(gameAreaController.ga.block, 3);
+        x.setInt(gameAreaController.ga.block, 10);
         y.setInt(gameAreaController.ga.block, 0);
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> gameAreaController.moveBlockDown());
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> gameAreaController.moveBlockDown2());
         int i;
+        gameAreaController.rotateBlock();
         for (i = 0; i < gameAreaController.ga.background.length; i++) {
             if (!gameAreaController.checkBottom()) {
+                Assertions.assertEquals(14, i);
                 break;
             }
             gameAreaController.ga.block.moveDown();
         }
-        Assertions.assertEquals(3, gameAreaController.ga.block.getX());
-        Assertions.assertEquals(20, gameAreaController.ga.block.getY());
+
     }
 
     @Test
@@ -96,7 +98,7 @@ class GameAreaControllerTest extends GameArea {
     @Test
     @DisplayName("새로운 배경 출력")
     void getNewBackground() throws NoSuchFieldException, IllegalAccessException {
-        gameAreaController.spawnBlock(0);
+        gameAreaController.spawnBlock2(0, 12, true);
         Field x = gameAreaController.ga.block.getClass().getDeclaredField("x");
         Field y = gameAreaController.ga.block.getClass().getDeclaredField("y");
         x.setAccessible(true);
@@ -115,7 +117,7 @@ class GameAreaControllerTest extends GameArea {
     @Test
     @DisplayName("위에 닿았는지 체크")
     void checkUp() throws NoSuchFieldException, IllegalAccessException {
-        gameAreaController.spawnBlock(0);
+        gameAreaController.spawnBlock2(0, 4, true);
         Field x = gameAreaController.ga.block.getClass().getDeclaredField("x");
         Field y = gameAreaController.ga.block.getClass().getDeclaredField("y");
         x.setAccessible(true);
@@ -124,6 +126,4 @@ class GameAreaControllerTest extends GameArea {
         y.setInt(gameAreaController.ga.block, -1);
         assertTrue(gameAreaController.isBlockOuOofBounds());
     }
-
-
 }

@@ -255,11 +255,6 @@ public class ItemGameAreaController extends GameAreaItem implements ItemMode {
         int Sco=0;
         boolean Sco2=false;
         int linesCleared = 0;
-        for(int i=0; i<20;i++) {
-            for(int j=0; j<10; j++){
-            System.out.print(ga.background[i][j]);}
-            System.out.println();
-        }
         for (int r = ga.gridRows - 1; r >= 0; r--) {
             lineFilled = true;
             for (int c = 0; c < ga.gridColumns; c++) {
@@ -294,11 +289,6 @@ public class ItemGameAreaController extends GameAreaItem implements ItemMode {
         int Sco=0;
         boolean Sco2=false;
         int linesCleared = 0;
-        for(int i=0; i<20;i++) {
-            for(int j=0; j<10; j++){
-                System.out.print(ga.background[i][j]);}
-            System.out.println();
-        }
         for (int r = ga.gridRows - 1; r >= 0; r--) {
             lineFilled = true;
             for (int c = 0; c < ga.gridColumns; c++) {

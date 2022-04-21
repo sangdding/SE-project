@@ -33,6 +33,12 @@ class BlockTest {
         }
     }
 
+    @RepeatedTest(1000)
+    @DisplayName("easy mode일 때 i형 블록 얼마나 생성되는지 테스트")
+    void iSpwan() {
+        Block block = new Block(random.nextInt());
+    }
+
     @RepeatedTest(20)
     @DisplayName("아이템블록 생성 테스트")
     void itemSpawn() throws NoSuchFieldException, IllegalAccessException {

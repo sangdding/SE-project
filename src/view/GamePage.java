@@ -136,7 +136,6 @@ public class GamePage extends JFrame {
         //설정한 키 값 불러오기
         HashMapParser hashmapparser = new HashMapParser();
         keySettingMap = setting.getKeyList();
-        System.out.println(keySettingMap);
 
 
         isStop = false;
@@ -260,7 +259,6 @@ public class GamePage extends JFrame {
                         if (itemGameAreaController.isBlockOuOofBounds()) {
                             //게임 종료
                             // (아이템전)
-                            System.out.print("END");
                             timer.stop();
                             dispose();
 
@@ -291,8 +289,6 @@ public class GamePage extends JFrame {
                             } else {
                                 itemGameAreaController.spawnBlock2(gen.getArr()[next], 1, false);//노말아이템
                             }
-                            System.out.print("COLOR+" + itemGameAreaController.ga.block.getColor());
-                            System.out.print(BlockModel.getColor(gen.getArr()[next]));
                             drawGameBoard(itemGameAreaController.newBackground());
                             if (delay >= 100) {
                                 delay -= (int) current_lines * 20 / velocity;
@@ -320,14 +316,12 @@ public class GamePage extends JFrame {
         addKeyListener(new KeyAdapter() { //키 이벤트
             @Override
             public void keyPressed(KeyEvent e) { //키 눌렀을때
-                System.out.println(e.getKeyCode());
                 // TODO Auto-generated method stub
                 //원래 switch case문인데, case에 constant 값만 들어갈 수 있어서 if로 교체
                 int pressedKey = e.getKeyCode();
 
                 if (pressedKey == keySettingMap.get("resume")) {
                     if (isStop) {
-                        System.out.println("Game Restarted");
                         isStop = false;
                         timer.start();
                     }
@@ -455,7 +449,6 @@ public class GamePage extends JFrame {
                 }
                 else if (pressedKey == keySettingMap.get("pause")) {
                     if (!isStop) {
-                        System.out.println("Game Stoopped");
                         isStop = true;
                         timer.stop();
                     }
