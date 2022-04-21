@@ -81,7 +81,7 @@ public class JsonScore implements Score {
     }
 
     @Override
-    public HashMap<String, Integer> getScoreList(int mode) {
+    public HashMap<String, Integer> getScorelist(int mode) {
         HashMap<String, Integer> returnScoreInfo = null;
         JSONObject tempObj;
         objectMapper = new ObjectMapper();

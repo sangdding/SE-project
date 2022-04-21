@@ -109,7 +109,8 @@ public class GameAreaController extends GameArea implements gameFunction{
         }
         }
         if(!checkBottom()){}
-        else{ga.block.moveDown();}
+        else{ga.block.moveDown();
+        gp.score++;}
     }
     @Override
     public int[][] moveBlockRight() {
@@ -128,9 +129,13 @@ public class GameAreaController extends GameArea implements gameFunction{
     @Override
     public boolean dropBlock() {
         if(ga.block == null){return false;}
-        else{while (checkBottom()) {
+        else{
+            int i=0;
+            while (checkBottom()) {
+                i++;
             ga.block.moveDown();
-        }}
+        }
+        gp.score+=i;}
         return true;
     }
     @Override
