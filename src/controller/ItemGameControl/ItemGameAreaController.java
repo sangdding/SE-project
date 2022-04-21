@@ -136,7 +136,8 @@ public class ItemGameAreaController extends GameAreaItem implements ItemMode {
             }
         }
         if(!checkBottom()){}
-        else{ga.block.moveDown();}
+        else{ga.block.moveDown();
+        gp.score++;}
     }
     @Override
     public void moveBlockDown2(){
@@ -165,6 +166,7 @@ public class ItemGameAreaController extends GameAreaItem implements ItemMode {
                     }
                 }
                 ga.block.moveDown();
+                gp.score++;
             }
         }
     }
