@@ -9,12 +9,12 @@
     "down": 40,
     "pause": 80
   },
-  "difficulty": "easy",
+  "difficulty": "hard",
   "display": {
     "width": 1000,
     "height": 1000
   },
-  "gameMode": "normal",
+  "gameMode": "item",
   "defaultKey": {
     "resume": 82,
     "drop": 68,
@@ -25,5 +25,5 @@
     "down": 40,
     "pause": 80
   },
-  "displayMode": "normal"
+  "displayMode": "blind"
 }
