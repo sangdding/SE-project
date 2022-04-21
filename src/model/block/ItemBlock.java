@@ -8,7 +8,7 @@ public class ItemBlock implements Block {
 
     private int[][][][] rotateBlock = new int[9][4][][];
 
-    private int[] color = {1, 2, 3, 4, 5, 6, 7,7,7,7,7,7};
+    private int[] color = {1, 2, 3, 4, 5, 6, 7, 7, 7, 7, 7, 7};
 
     public ItemBlock(int random,boolean item) {
         if(item){

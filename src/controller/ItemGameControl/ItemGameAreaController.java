@@ -19,42 +19,50 @@ public class ItemGameAreaController extends GameAreaItem implements ItemMode {
     }
 
     public boolean checkBottom() {
-        if (ga.block.getBottomEdge() == ga.gridRows) {
+        if (ga.block == null) {
             return false;
-        }
-        int[][] shape = ga.block.getShape();
-        int w = ga.block.getWidth();
-        int h = ga.block.getHeight();
-        for (int row = h - 1; row >= 0; row--) {
-            for (int col = 0; col < w; col++){
-                if (shape[row][col] != 0) {
-                    int x = col + ga.block.getX();
-                    int y = row + ga.block.getY() + 1;
-                    if (y < 0) break;
-                    if(y>=20){return false;}
-                    if (ga.background[y][x] != 0) return false;
-                }}
-        }
-        return true;
-    }
-    private boolean checkLeft() {
-        if (ga.block.getLeftEdge() == 0) return false;
-        int[][] shape = ga.block.getShape();
-        int w = ga.block.getWidth();
-        int h = ga.block.getHeight();
-        for (int row = 0; row < h; row++) {
-            for (int col = 0; col < w; col++) {
-                if (shape[row][col] != 0) {
-                    int x = col + ga.block.getX() - 1;
-                    int y = row + ga.block.getY();
-                    if (y < 0) break;
-                    if (ga.background[y][x] != 0) return false;
-                    break;
+        } else {
+            if (ga.block.getBottomEdge() == ga.gridRows) {
+                return false;
+            }
+            int[][] shape = ga.block.getShape();
+            int w = ga.block.getWidth();
+            int h = ga.block.getHeight();
+            for (int row = h - 1; row >= 0; row--) {
+                for (int col = 0; col < w; col++) {
+                    if (shape[row][col] != 0) {
+                        int x = col + ga.block.getX();
+                        int y = row + ga.block.getY() + 1;
+                        if (y < 0) break;
+                        if (y >= 20) {
+                            return false;
+                        }
+                        if (ga.background[y][x] != 0) return false;
+                    }
                 }
             }
+            return true;
         }
-        return true;
     }
+    private boolean checkLeft() {
+            if (ga.block.getLeftEdge() == 0) return false;
+            int[][] shape = ga.block.getShape();
+            int w = ga.block.getWidth();
+            int h = ga.block.getHeight();
+            for (int row = 0; row < h; row++) {
+                for (int col = 0; col < w; col++) {
+                    if (shape[row][col] != 0) {
+                        int x = col + ga.block.getX() - 1;
+                        int y = row + ga.block.getY();
+                        if (y < 0) break;
+                        if (ga.background[y][x] != 0) return false;
+                        break;
+                    }
+                }
+            }
+            return true;
+        }
+
     private boolean checkRight() {
         if (ga.block.getRightEdge() == ga.gridColumns) return false;
         int[][] shape = ga.block.getShape();
@@ -146,26 +154,32 @@ public class ItemGameAreaController extends GameAreaItem implements ItemMode {
     }
     @Override
     public void moveBlockDown2(){
-        int y= ga.block.getY();
-        int x= ga.block.getX();
-        if(y==19){ga.block=null;}
+        if(ga.block==null){}
         else {
-            for (int c = x; c < x + 4; c++) {
-                if(ga.background[y+1][c]!=0){gp.chew=true;}
-                if (ga.background[y + 1][c] <= 7) {
-                    ga.background[y + 1][c] = 0;
-                } else {
-                    if (ga.background[y + 1][c] == 10) {
-                        gp.delay += (int)(300/gp.velocity);
-                        ga.background[y + 1][c] = 0;
+            int y = ga.block.getY();
+            int x = ga.block.getX();
+            if (y == 19) {
+                gp.end=true;
+            } else {
+                for (int c = x; c < x + 4; c++) {
+                    if (ga.background[y + 1][c] != 0) {
+                        gp.chew = true;
                     }
-                    if (ga.background[y + 1][c] == 11) {
-                        gp.doubleIndex+=10;
+                    if (ga.background[y + 1][c] <= 7) {
                         ga.background[y + 1][c] = 0;
+                    } else {
+                        if (ga.background[y + 1][c] == 10) {
+                            gp.delay += (int) (300 / gp.velocity);
+                            ga.background[y + 1][c] = 0;
+                        }
+                        if (ga.background[y + 1][c] == 11) {
+                            gp.doubleIndex += 10;
+                            ga.background[y + 1][c] = 0;
+                        }
                     }
                 }
+                ga.block.moveDown();
             }
-            ga.block.moveDown();
         }
     }
     @Override
@@ -229,6 +243,9 @@ public class ItemGameAreaController extends GameAreaItem implements ItemMode {
                 if (shape[r][c] != 0) {
                     if(shape[r][c]==1){
                         ga.background[r + yPos][c + xPos] = color;
+                    }
+                    else if(shape[r][c]==9){
+                        ga.background[r+yPos][c+xPos]=0;
                     }
                     else{
                         ga.background[r+yPos][c+xPos] = shape[r][c];

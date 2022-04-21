@@ -18,6 +18,7 @@ public class ScorePage extends JFrame {
     private JLabel titleLabel;
 
 
+
     private int gameMode;
 
     private PageController pageController;
