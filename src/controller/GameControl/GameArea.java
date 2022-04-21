@@ -2,9 +2,7 @@ package controller.GameControl;
 
 
 
-import java.util.Random;
 import controller.block.Block;
-import controller.block.ItemBlockController;
 
 public class GameArea {
     protected int gridRows; //행의 수

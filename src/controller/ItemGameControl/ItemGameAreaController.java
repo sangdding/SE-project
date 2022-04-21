@@ -58,20 +58,6 @@ public class ItemGameAreaController extends GameAreaItem implements ItemMode {
     private boolean checkRight() {
         if (ga.block.getRightEdge() == ga.gridColumns) return false;
         int[][] shape = ga.block.getShape();
-        /*
-        int w = ga.block.getWidth(); //너비
-        int h = ga.block.getHeight(); //높이
-        for (int row = 0; row < h; row++) { //행은 높이까지
-            for (int col = w - 1; col >= 0; col--) {
-                if (shape[row][col] != 0) {
-                    int x = col + ga.block.getX() - 1;
-                    int y = row + ga.block.getY();
-                    if (y < 0) break;
-                    if (ga.background[y][x] != 0) return false;
-                    break;
-                }
-            }}
-            */
         int x = ga.block.getX();
         int y = ga.block.getY();
         if(ga.block.getRightEdge()==10){return false;}
@@ -193,7 +179,6 @@ public class ItemGameAreaController extends GameAreaItem implements ItemMode {
     @Override
     public int[][] rotateBlock(){
         if (ga.block == null) return ga.background;
-        //if (ga.block.getHeight()+ ga.block.getX() > gridColumns ){ ga.block.moveLeft();}
         int[][] nextShape=ga.block.getNextShape();
         ga.block.rotate();
         if(ga.block.getX()+ga.block.getWidth()-1>=10){

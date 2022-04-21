@@ -1,5 +1,4 @@
 package controller.ItemGameControl;
-import java.util.Random;
 import controller.block.ItemBlockController;
 public class GameAreaItem {
     protected int gridRows; //행의 수
