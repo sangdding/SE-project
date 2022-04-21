@@ -204,7 +204,7 @@ public class GamePage extends JFrame {
                             Effect = true;
                         }
                         lines += current_line;
-                        score += current_line * current_line;
+                        score += current_line * current_line*10;
                         score += (int) ((1250 - (int) (delay / velocity)) / 100) * current_line + lines * current_line; // delay에 의한 추가 점수
                         if (delay >= 100) {
                             delay -= (int) current_line * 20 / velocity;
