@@ -12,6 +12,8 @@ import java.util.HashMap;
 
 import model.setting.JsonSetting;
 
+import static java.awt.event.KeyEvent.getKeyText;
+
 
 public class KeySettingPage extends JFrame {
     private JPanel mainPanel;
@@ -41,8 +43,10 @@ public class KeySettingPage extends JFrame {
 
     private JLabel[] keyLabels = new JLabel[]{rotateButton, downButton, rightButton, leftButton, terminateButton,
                                                 pauseButton, resumeButton, dropButton};
-    private JLabel[] keyValues = new JLabel[]{valueForRotate, valueForDown, valueForRight, valueForLeft, valueForTerminate,
+    private JLabel[] keyValueLabels = new JLabel[]{valueForRotate, valueForDown, valueForRight, valueForLeft, valueForTerminate,
                                                 valueForPause,valueForResume,  valueForDrop};
+    private int[] keyValues=new int[8];
+
     private int buttonSelectorIndex = 0;
     private boolean isSetting = false;
 
@@ -97,7 +101,7 @@ public class KeySettingPage extends JFrame {
                 for(int i=0;i<keyLabels.length;i++)
                 {
                     keyMap.put(keyLabels[i].getText(),
-                            Integer.parseInt(keyValues[i].getText()));
+                            keyValues[i]);
                 }
                 jsonsettign.setKeyList(keyMap);
 
@@ -158,11 +162,11 @@ public class KeySettingPage extends JFrame {
                 else{
                     if(e.getKeyCode()==KeyEvent.VK_ENTER)
                     {
-                        for(int i=0;i<keyValues.length;i++)
+                        for(int i = 0; i< keyValueLabels.length; i++)
                         {
                             if(i==buttonSelectorIndex) continue;
 
-                            if (keyValues[i].getText().equals(keyValues[buttonSelectorIndex].getText()))
+                            if (keyValueLabels[i].getText().equals(keyValueLabels[buttonSelectorIndex].getText()))
                             {
                                 System.out.println("key Duplicated");
                                 return;
@@ -173,7 +177,10 @@ public class KeySettingPage extends JFrame {
                         isSetting = false;
                         keyLabels[buttonSelectorIndex].setBackground(Color.RED);
                     }
-                    else keyValues[buttonSelectorIndex].setText(Integer.toString(e.getKeyCode()));
+                    else {
+                        keyValues[buttonSelectorIndex] = e.getKeyCode();
+                        keyValueLabels[buttonSelectorIndex].setText(getKeyText(keyValues[buttonSelectorIndex]));
+                    }
                 }
             }
         });
@@ -184,9 +191,10 @@ public class KeySettingPage extends JFrame {
         JsonSetting jsonsetting=new JsonSetting();
         HashMap<String,Integer> keyMap=jsonsetting.getKeyList();
 
-        for(int i=0;i<keyValues.length;i++)
-            keyValues[i].setText(Integer.toString(keyMap.get(keyLabels[i].getText())));
+        for(int i = 0; i< keyValueLabels.length; i++) {
 
-
+            keyValues[i]=keyMap.get(keyLabels[i].getText());
+            keyValueLabels[i].setText(getKeyText(keyValues[i]));
+        }
     }
 }

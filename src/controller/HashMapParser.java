@@ -1,5 +1,6 @@
 package controller;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.*;
 
@@ -18,23 +19,36 @@ public class HashMapParser {
         return values;
     }
 
-    public  List<Map.Entry<String, Integer>> orederByAscent(HashMap<String,Integer> hashmap)
+    public  List<Map.Entry<String, int[]>> orederByAscent(HashMap<String,int[]> hashmap)
     {
 
-        List<Map.Entry<String, Integer>> list = new ArrayList<>(hashmap.entrySet());
-        list.sort(Map.Entry.comparingByValue());
+
+        List<Map.Entry<String, int[]>> list = new ArrayList<>(hashmap.entrySet());
+        list.sort(com());
 
 
 
         return list;
     }
 
-    public  List<Map.Entry<String, Integer>> orederByDescent(HashMap<String,Integer> hashmap)
+    public  List<Map.Entry<String, int[]>> orederByDescent(HashMap<String,int[]> hashmap)
     {
-        List<Map.Entry<String, Integer>> list =orederByAscent(hashmap);
+
+        List<Map.Entry<String, int[]>> list =orederByAscent(hashmap);
         Collections.reverse(list);
         return list;
     }
 
 
+
+    private Comparator<Map.Entry<String,int[]>> com()
+    {
+        return (Comparator<Map.Entry<String, int[]>> & Serializable)
+                (c1, c2) -> compareTo(c1,c2);
+    }
+    
+    private int compareTo(Map.Entry<String,int[]> o1, Map.Entry<String,int[]> o2)
+    {
+        return o1.getValue()[0]-o2.getValue()[0];
+    }
 }

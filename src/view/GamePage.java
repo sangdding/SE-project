@@ -2,11 +2,13 @@ package view;
 
 import controller.GameControl.GameAreaController;
 import controller.PageController;
+import controller.block.ItemBlockController;
 import controller.ItemGameControl.ItemGameAreaController;
 import model.Generator;
+import model.block.ItemBlock;
 import model.setting.JsonSetting;
+import model.setting.Setting;
 import model.block.NormalBlock;
-
 import javax.swing.*;
 import javax.swing.text.*;
 import java.awt.*;
@@ -15,11 +17,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
-
 import controller.HashMapParser;
-
 import java.util.Random;
-
 public class GamePage extends JFrame {
     private JPanel mainPanel;
     private javax.swing.JPanel gameBoardPanel;
@@ -46,7 +45,7 @@ public class GamePage extends JFrame {
     private boolean isStop;
     public Timer timer;
     private int isBlindMode;
-    private int score;
+    public int score;
     private int lineIndex;
     public boolean end;
     private JsonSetting setting = new JsonSetting();
@@ -62,8 +61,8 @@ public class GamePage extends JFrame {
             Color.CYAN, Color.RED, Color.BLUE, Color.GREEN, Color.MAGENTA, Color.ORANGE,
             Color.PINK, new Color(128, 0, 0), new Color(128, 128, 0), new Color(0, 0, 128),
             new Color(128, 0, 128), new Color(0, 139, 139), new Color(255, 105, 180)
-            , new Color(100, 100, 100)
-    }; // white for backgroind + 13 colors;
+            ,new Color(100,100,100)
+    }; // white for backgroind + 13 colors + one for flash animation
 
     private Color[] colorFOrBlindModeBlock = new Color[]{Color.WHITE,
             Color.ORANGE, new Color(135, 206, 235), new Color(60, 179, 113), Color.PINK, Color.BLUE,
@@ -195,7 +194,8 @@ public class GamePage extends JFrame {
                         pageController = new PageController();
                         pageController.setScore(score);
                         pageController.createGameEndPage();
-                    } else {
+                    }
+                    else {
                         gameAreaController.moveBlockToBackground();
                         gameAreaController.spawnBlock(gen.getArr()[next]);
                         int current_line = gameAreaController.clearLines2();
@@ -331,7 +331,8 @@ public class GamePage extends JFrame {
                         isStop = false;
                         timer.start();
                     }
-                } else if (pressedKey == keySettingMap.get("drop")) {
+                }
+                else if (pressedKey == keySettingMap.get("drop")) {
                     if (setting.getGameMode() == 0) {
                         if (gameAreaController.ga.block == null || Effect) {
                         } else {
@@ -354,22 +355,26 @@ public class GamePage extends JFrame {
                             }
                         }
                     }
-                } else if (pressedKey == keySettingMap.get("exit")) {
+                }
+                else if (pressedKey == keySettingMap.get("exit")) {
                     timer.stop();
                     dispose();
 
                     pageController = new PageController("Main");
 
-                } else if ((setting.getGameMode() == 0 && gameAreaController.ga.block == null) ||
+                }
+                else if ((setting.getGameMode() == 0 && gameAreaController.ga.block == null) ||
                         (setting.getGameMode() == 1 && itemGameAreaController.ga.block == null)) {
-                } else if (pressedKey == keySettingMap.get("left")) {
+                }
+                else if (pressedKey == keySettingMap.get("left")) {
                     if (setting.getGameMode() == 0) {
                         if (gameAreaController.ga.block == null) {
                         } else {
                             gameAreaController.moveBlockLeft();
                             drawGameBoard(gameAreaController.newBackground());
                         }
-                    } else {
+                    }
+                    else {
                         if (itemGameAreaController.ga.block.shape[0][0] == 9) {
                             if (chew) {
                             } else {
@@ -385,7 +390,8 @@ public class GamePage extends JFrame {
                         }
                     }
 
-                } else if (pressedKey == keySettingMap.get("rotate")) {
+                }
+                else if (pressedKey == keySettingMap.get("rotate")) {
                     if (setting.getGameMode() == 0) {
                         if (gameAreaController.ga.block == null) {
                         } else {
@@ -403,7 +409,8 @@ public class GamePage extends JFrame {
 
                         }
                     }
-                } else if (pressedKey == keySettingMap.get("right")) {
+                }
+                else if (pressedKey == keySettingMap.get("right")) {
                     if (setting.getGameMode() == 0) {
                         if (gameAreaController.ga.block == null) {
                         } else {
@@ -425,14 +432,16 @@ public class GamePage extends JFrame {
                             }
                         }
                     }
-                } else if (pressedKey == keySettingMap.get("down")) {
+                }
+                else if (pressedKey == keySettingMap.get("down")) {
                     if (setting.getGameMode() == 0) {
                         if (gameAreaController.ga.block == null) {
                         } else {
                             gameAreaController.moveBlockDown();
                             drawGameBoard(gameAreaController.newBackground());
                         }
-                    } else {
+                    }
+                    else {
                         if (itemGameAreaController.ga.block == null || chew) {
                         } else if (itemGameAreaController.ga.block.shape[0][0] == 9){
                             itemGameAreaController.moveBlockDown2();
@@ -443,8 +452,10 @@ public class GamePage extends JFrame {
                             drawGameBoard(itemGameAreaController.newBackground());
                         }
                     }
-                } else if (pressedKey == keySettingMap.get("pause")) {
+                }
+                else if (pressedKey == keySettingMap.get("pause")) {
                     if (!isStop) {
+                        System.out.println("Game Stoopped");
                         isStop = true;
                         timer.stop();
                     }
@@ -511,7 +522,8 @@ public class GamePage extends JFrame {
                     } else { // 색맹모드 그리기
                         drawTextWithColor(gameBoardPane, "X", colorFOrBlindModeBlock[background[i][j]]);
                     }
-                } else {
+                }
+                else {
                     if (gameMode == 0) { //일반모드 그리기
                         drawTextWithColor(gameBoardPane, String.valueOf(blockShape[background[i][j]]), colorForBlock[background[i][j]]);
                     } else { // 색맹모드 그리기
