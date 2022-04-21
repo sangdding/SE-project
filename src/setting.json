@@ -14,7 +14,7 @@
     "width": 500,
     "height": 800
   },
-  "gameMode": "normal",
+  "gameMode": "item",
   "defaultKey": {
     "resume": 82,
     "drop": 68,

@@ -62,7 +62,7 @@ public class GamePage extends JFrame {
             Color.PINK, new Color(128, 0, 0), new Color(128, 128, 0), new Color(0, 0, 128),
             new Color(128, 0, 128), new Color(0, 139, 139), new Color(255, 105, 180)
             ,new Color(100,100,100)
-    }; // white for backgroind + 13 colors;
+    }; // white for backgroind + 13 colors + one for flash animation
 
     private Color[] colorFOrBlindModeBlock = new Color[]{Color.WHITE,
             Color.ORANGE, new Color(135, 206, 235), new Color(60, 179, 113), Color.PINK, Color.BLUE,
