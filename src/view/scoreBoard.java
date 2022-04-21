@@ -6,8 +6,10 @@ import model.setting.Setting;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class scoreBoard extends JPanel{
 
@@ -25,15 +27,22 @@ public class scoreBoard extends JPanel{
         GridLayout gl= new GridLayout(numScoreLine,numLabelInTheLine);
         this.setLayout(gl);
 
-        HashMap<String, Integer> scoreInfo = jsonScore.getList(gamemode);
-        
-        //상명이가 만든 거 가져오기
-        HashMap<String,Integer> difficultyInfo = jsonScore.getDifficulty;
-        if(scoreInfo==null)
-        {
-            System.out.println("null");
-            return;
+        HashMap<String,Integer>scoreInfo = new HashMap<>();
+        HashMap<String,Integer>difficultyInfo = new HashMap<>();
+        HashMap<String, int[]> scoreAndDifficultyInfo = jsonScore.getList(gamemode);
+
+
+        Set<Map.Entry<String, int[]>> entrySet = scoreAndDifficultyInfo.entrySet();
+
+
+        for (Map.Entry<String, int[]> entry : entrySet) {
+
+            scoreInfo.put(entry.getKey(),entry.getValue()[0]);
+            difficultyInfo.put(entry.getKey(),entry.getValue()[1]);
         }
+        
+
+
 
         HashMapParser hashmapparser = new HashMapParser();
 
@@ -42,7 +51,6 @@ public class scoreBoard extends JPanel{
         java.util.List<Map.Entry<String,Integer>> orederedScoreInfo=hashmapparser.orederByDescent(scoreInfo);
 
         System.out.println(orederedScoreInfo + "  printed at ScorePage.Java");
-        System.out.println(orederedScoreInfo.get(0).getValue());
 
 
 
