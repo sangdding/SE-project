@@ -47,6 +47,7 @@ public class GamePage extends JFrame {
     private int isBlindMode;
     private int score;
     private int lineIndex;
+    public boolean end;
     private JsonSetting setting = new JsonSetting();
     private HashMap<String, Integer> keySettingMap;
     private int next;
