@@ -1,7 +1,7 @@
 package model.block;
 
 public interface Block {
-
+    //itemBlock 3개 인자
     int[][][] getBlockList(); // 회전 안한 기본 블록 모양을 가져온다.
 
     int[][] getBlockShape(int index, int rotateNum); // 특정 블록 모양이 rotateNum 만큼 회전 했을때 모양을 가져온다.

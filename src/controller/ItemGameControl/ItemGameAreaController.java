@@ -3,13 +3,21 @@ import controller.GameControl.GameArea;
 import controller.block.Block;
 import controller.block.ItemBlockController;
 import view.GamePage;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionListener;
+import java.util.Timer;
+import java.util.HashMap;
 public class ItemGameAreaController extends GameAreaItem implements ItemMode {
     public GameAreaItem ga;
     public GamePage gp;
+    public int i=0;
     public ItemGameAreaController(GamePage gp){
         this.ga=new GameAreaItem();
         this.gp=gp;
     }
+
     public boolean checkBottom() {
         if (ga.block.getBottomEdge() == ga.gridRows) {
             return false;
@@ -23,6 +31,7 @@ public class ItemGameAreaController extends GameAreaItem implements ItemMode {
                     int x = col + ga.block.getX();
                     int y = row + ga.block.getY() + 1;
                     if (y < 0) break;
+                    if(y>=20){return false;}
                     if (ga.background[y][x] != 0) return false;
                 }}
         }
@@ -86,6 +95,7 @@ public class ItemGameAreaController extends GameAreaItem implements ItemMode {
         }
         return true;
     }
+    @Override
     public void spawnBlock2(int bln, int random,boolean item){
         if(random==9){//불도저 만들기
             ga.block = new ItemBlockController(8,random,item);
@@ -102,7 +112,7 @@ public class ItemGameAreaController extends GameAreaItem implements ItemMode {
             }
         }
     }
-
+    @Override
     public boolean isBlockOuOofBounds() {
         if (ga.block.getY() < 0) { //맨 위 프레임을 건들여, 게임에서 진 상황
             ga.block = null;
@@ -110,7 +120,7 @@ public class ItemGameAreaController extends GameAreaItem implements ItemMode {
         }
         return false;
     }
-
+    @Override
     public void moveBlockDown() {
         if(ga.block==null){}
         if(ga.block.shape[0][0]==9){
@@ -134,6 +144,7 @@ public class ItemGameAreaController extends GameAreaItem implements ItemMode {
         if(!checkBottom()){}
         else{ga.block.moveDown();}
     }
+    @Override
     public void moveBlockDown2(){
         int y= ga.block.getY();
         int x= ga.block.getX();
@@ -157,18 +168,21 @@ public class ItemGameAreaController extends GameAreaItem implements ItemMode {
             ga.block.moveDown();
         }
     }
+    @Override
     public int[][] moveBlockRight() {
         if (ga.block == null) return ga.background;
         if (!checkRight()) return ga.background;
         ga.block.moveRight();
         return ga.background;
     }
+    @Override
     public int[][] moveBlockLeft() {
         if (ga.block == null) return ga.background;
         if (!checkLeft()) return ga.background;
         ga.block.moveLeft();
         return ga.background;
     }
+    @Override
     public boolean dropBlock() {
         if(ga.block == null){return false;}
         else{while (checkBottom()) {
@@ -176,6 +190,7 @@ public class ItemGameAreaController extends GameAreaItem implements ItemMode {
         }}
         return true;
     }
+    @Override
     public int[][] rotateBlock(){
         if (ga.block == null) return ga.background;
         //if (ga.block.getHeight()+ ga.block.getX() > gridColumns ){ ga.block.moveLeft();}
@@ -183,18 +198,25 @@ public class ItemGameAreaController extends GameAreaItem implements ItemMode {
         ga.block.rotate();
         if(ga.block.getX()+ga.block.getWidth()-1>=10){
             if(checkLeft())
-            {   while(ga.block.getX()+ga.block.getWidth()-1>=10)
-            {ga.block.moveLeft();}
+            {
+                while(ga.block.getX()+ga.block.getWidth()-1>=10)
+                {ga.block.moveLeft();}
             }
             else{
                 for(int i=0 ;i<3;i++){
                     ga.block.rotate();}
-            if(checkBottom()){for(int i=0 ;i<3;i++){
-                this.rotateBlock();}}
+            if(!checkBottom()){for(int i=0 ;i<3;i++){
+                ga.block.rotate();}}
+            }
+        }
+        if(!checkBottom()){
+            while(!checkBottom()){
+                ga.block.moveUp();
             }
         }
         return ga.background;
     }
+    @Override
     public void moveBlockToBackground(){
         int[][] shape = ga.block.getShape();
         int h = ga.block.getHeight();
@@ -217,6 +239,7 @@ public class ItemGameAreaController extends GameAreaItem implements ItemMode {
     }
 
     //행제거
+    @Override
     public int clearLines() {
         boolean lineFilled;
         boolean Line=false;
@@ -238,6 +261,7 @@ public class ItemGameAreaController extends GameAreaItem implements ItemMode {
                 if(ga.background[r][c]==11){Sco++;}
             }
             if(Line){lineFilled=true;}
+            if(ga.background[r][0]==13){lineFilled=true;}
             if(lineFilled){ //Line 아이템이 있거나 라인이 다 차있는 경우
                 Line=false;
                 linesCleared++;
@@ -253,6 +277,46 @@ public class ItemGameAreaController extends GameAreaItem implements ItemMode {
             }
         }
         return linesCleared;
+    }
+    @Override
+    public int clearLines2() {
+        boolean lineFilled;
+        boolean Line=false;
+        boolean Time=false;
+        int Sco=0;
+        boolean Sco2=false;
+        int linesCleared = 0;
+        for(int i=0; i<20;i++) {
+            for(int j=0; j<10; j++){
+                System.out.print(ga.background[i][j]);}
+            System.out.println();
+        }
+        for (int r = ga.gridRows - 1; r >= 0; r--) {
+            lineFilled = true;
+            for (int c = 0; c < ga.gridColumns; c++) {
+                if(ga.background[r][c]==0){lineFilled=false;}
+                if(ga.background[r][c]==8){Line=true;}
+                if(ga.background[r][c]==10){Time=true;;}
+                if(ga.background[r][c]==11){Sco++;}
+            }
+            if(Line){lineFilled=true;}
+            if(lineFilled){ //Line 아이템이 있거나 라인이 다 차있는 경우
+                Line=false;
+                linesCleared++;
+                clearLine2(r);
+                if(Time){gp.delay+=300*gp.velocity;}
+                if(Sco>0){for(int i=0; i<Sco;i++){gp.doubleIndex+=10;}}
+            }
+            else{
+                Time=false;Sco=0;
+            }
+        }
+        return linesCleared;
+    }
+    private void clearLine2(int r) {
+        for (int i = 0; i < ga.gridColumns; i++) {
+            ga.background[r][i] = 13;
+        }
     }
     //행제거
     private void clearLine(int r) {
@@ -272,6 +336,7 @@ public class ItemGameAreaController extends GameAreaItem implements ItemMode {
     public int[][] getBackground(){
         return ga.background;
     }
+    @Override
     public int[][] newBackground(){
         if(ga.block == null){return ga.background;}
         int[][] newBackground = new int[gridRows][gridColumns];

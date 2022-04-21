@@ -43,7 +43,7 @@ public class GamePage extends JFrame {
     public double delay; //아이템 변수
     public double velocity;
     private boolean isStop;
-    private Timer timer;
+    public Timer timer;
     private int isBlindMode;
     private int score;
     private int lineIndex;
@@ -55,11 +55,12 @@ public class GamePage extends JFrame {
     private NormalBlock BlockModel = new NormalBlock();
     private char borderChar = 'X';
     private SimpleAttributeSet styleSet;
-
+    private boolean Effect;
     private Color[] colorForBlock = new Color[]{Color.WHITE,
             Color.CYAN, Color.RED, Color.BLUE, Color.GREEN, Color.MAGENTA, Color.ORANGE,
             Color.PINK, new Color(128, 0, 0), new Color(128, 128, 0), new Color(0, 0, 128),
             new Color(128, 0, 128), new Color(0, 139, 139), new Color(255, 105, 180)
+            ,new Color(100,100,100)
     }; // white for backgroind + 13 colors;
 
     private Color[] colorFOrBlindModeBlock = new Color[]{Color.WHITE,
@@ -69,7 +70,7 @@ public class GamePage extends JFrame {
     }; // white for backgroind + 13 colors for blind block
 
     private char [] blockShape = new char [] {
-            'A', 'B', 'C', 'D','E','F','H','J','L','O','T','S','Q'
+            'A', 'B', 'C', 'D','E','F','H','J','L','O','T','S','Q','O'
     };
 
     private int gameMode;
@@ -89,9 +90,7 @@ public class GamePage extends JFrame {
             setTimer();
         } else {
             drawGameBoard(itemGameAreaController.getBackground());
-            System.out.println("draw");
             itemGameAreaController.spawnBlock2(gen.getArr()[0], 1, false);
-            System.out.println("sapwn");
             setTimer2();
         }
     }
@@ -176,6 +175,7 @@ public class GamePage extends JFrame {
         }
         this.delay = 1000 / velocity;
         this.lineIndex = 0;
+        this.Effect=false;
     }
 
 
@@ -186,40 +186,40 @@ public class GamePage extends JFrame {
                 requestFocus();
                 setFocusable(true);
                 System.out.println("timer activated in Game page");
+                if(Effect){gameAreaController.clearLines();Effect=false;System.out.println("Ehey");} //여기 바꿈
                 gameAreaController.moveBlockDown();
+                System.out.println("213123123");
                 drawGameBoard(gameAreaController.newBackground());
+                System.out.println("56969962035");
                 if (!gameAreaController.checkBottom()) {
                     if (gameAreaController.isBlockOuOofBounds()) {
                         //게임 종료시
                         System.out.print("END");
-
                         timer.stop();
                         dispose();
-
-
                         pageController = new PageController();
                         pageController.setScore(score);
                         pageController.createGameEndPage();
                     }
-
                     else {
                         gameAreaController.moveBlockToBackground();
                         gameAreaController.spawnBlock(gen.getArr()[next]);
-                        int current_line = gameAreaController.clearLines();
+                        int current_line = gameAreaController.clearLines2();
                         drawGameBoard(gameAreaController.newBackground());
+                        if(current_line>0){Effect=true;}
                         lines += current_line;
                         score += current_line * current_line;
-                        score += (int) ((1000 - (int) (delay / velocity)) / 100) * current_line + lines; // delay에 의한 추가 점수
+                        score += (int) ((1000 - (int) (delay / velocity)) / 100) * current_line + lines*current_line; // delay에 의한 추가 점수
                         if (delay >= 100) {
-                            timer.setDelay((int)(delay-(lines * 40 / velocity)));
-                            delay -= (int) lines * 40 / velocity;
+                            delay -= (int) current_line * 20 / velocity;
+                            timer.setDelay((int)delay);
                         }
                         next++;
                     }
                 }
 
                 //화면에 점수 출력
-                scoreLabel.setText(Integer.toString(score));
+                scoreLabel.setText(Integer.toString(score)+"delay:"+Integer.toString((int)delay));
 
                 //다음 블럭 그리기
                 drawNextBlock(getNextBlock());
@@ -240,6 +240,7 @@ public class GamePage extends JFrame {
                 System.out.println("timer activated in Game page");
                 if (itemGameAreaController.ga.block == null) {
                 } else if (itemGameAreaController.ga.block.shape[0][0] == 9) {
+                    if(Effect){itemGameAreaController.clearLines();Effect=false;}
                     itemGameAreaController.moveBlockDown2();//아이템 처리는 다 되고 올라갈 일이 없음.
                     drawGameBoard(itemGameAreaController.newBackground());
                     if (itemGameAreaController.ga.block == null) {
@@ -248,6 +249,7 @@ public class GamePage extends JFrame {
                         chew = false;
                     }
                 } else {
+                    if(Effect){itemGameAreaController.clearLines();Effect=false;}
                     itemGameAreaController.moveBlockDown();
                     drawGameBoard(itemGameAreaController.newBackground());
                     if (!itemGameAreaController.checkBottom()) {
@@ -256,7 +258,6 @@ public class GamePage extends JFrame {
                             //게임 종료
                             // (아이템전)
                             System.out.print("END");
-
                             timer.stop();
                             dispose();
 
@@ -267,10 +268,11 @@ public class GamePage extends JFrame {
 
                         else {
                             itemGameAreaController.moveBlockToBackground();
-                            int current_lines = itemGameAreaController.clearLines();
+                            int current_lines = itemGameAreaController.clearLines2();
+                            if(current_lines>0){Effect=true;}
                             lines += current_lines;
                             lineIndex += current_lines;
-                            int current_score = 2 * (current_lines * current_lines + (int) ((1000 - (int) (delay / velocity)) / 100) * current_lines + lines);
+                            int current_score = 2 * (current_lines * current_lines + (int) ((1000 - (int) (delay / velocity)) / 100) * current_lines + lines*current_lines);
                             //현재 화면 점수 -> 행이 한번에 많이 지워지면 가산점, delay가 적으면 가산점, 지금까지 누적으로 지운 라인이 많으면 가산점
                             if (doubleIndex > 0) {
                                 //점수2배이벤트
@@ -279,17 +281,19 @@ public class GamePage extends JFrame {
                             } else {
                                 score += current_score;
                             }
-                            if (lineIndex >= 10) {
+                            if (lineIndex>=10) {
                                 int c = r2.nextInt(5) + 8; // 0, 1, 2, 3, 4 중에 하나 생성되고, 거기에 8이 더해져서 8, 9, 10, 11, 12가 된다.
                                 itemGameAreaController.spawnBlock2(gen.getArr()[next], c, true);
                                 lineIndex -= 10;
                             } else {
                                 itemGameAreaController.spawnBlock2(gen.getArr()[next], 1, false);//노말아이템
                             }
+                            System.out.print("COLOR+"+itemGameAreaController.ga.block.getColor());
+                            System.out.print(BlockModel.getColor(gen.getArr()[next]));
                             drawGameBoard(itemGameAreaController.newBackground());
                             if (delay >= 100) {
-                                timer.setDelay((int)(delay-(lines * 40 / velocity)));
-                                delay -= (int) lines * 40 / velocity;
+                                delay -= (int) current_lines * 20 / velocity;
+                                timer.setDelay((int)delay);
                             }
                             next++;
                         }
@@ -298,7 +302,7 @@ public class GamePage extends JFrame {
                     //민재 형, 점수 계산 하는 코드 넣어 줘
 
                     //화면에 점수 출력
-                    scoreLabel.setText(Integer.toString(score));
+                    scoreLabel.setText(Integer.toString(score)+"Delay:  "+Integer.toString((int)delay)+"DoblueScore(Left):  "+Integer.toString(doubleIndex));
                     //다음 블럭 그리기
                     drawNextBlock(getNextBlock());
                 }
@@ -330,8 +334,9 @@ public class GamePage extends JFrame {
                 else if (pressedKey == keySettingMap.get("drop")) {
                     System.out.println("d");
                     if (setting.getGameMode() == 0) {
-                        if (gameAreaController.ga.block == null) {
+                        if (gameAreaController.ga.block == null || Effect) {
                         } else {
+
                             gameAreaController.dropBlock();
                             drawGameBoard(gameAreaController.newBackground());
                         }
@@ -508,7 +513,7 @@ public class GamePage extends JFrame {
 
     }
 
-    private void drawGameBoard(int[][] background) {
+    public void drawGameBoard(int[][] background) {
 
         //이전 화면 지우기
         gameBoardPane.setText("");
@@ -578,7 +583,6 @@ public class GamePage extends JFrame {
         StyledDocument doc = nextBlockPane.getStyledDocument();
 
 
-
         doc.setParagraphAttributes(0, doc.getLength(), styleSet, false);
         nextBlockPane.setStyledDocument(doc);
 
@@ -602,7 +606,9 @@ public class GamePage extends JFrame {
 
     int[][] getNextBlock() {
         int[][] now = BlockModel.normalBlock[gen.getArr()[next]];
-        int color = BlockModel.getColor(gen.getArr()[next]);
+        int color;
+        if(setting.getGameMode()==0){color=BlockModel.getColor(gen.getArr()[next]);}
+        else{color=BlockModel.getColor(gen.getArr()[next]);}
         for(int r=0; r<now.length;r++){
             for(int c=0; c<now[0].length;c++){
                 if(now[r][c]!=0){

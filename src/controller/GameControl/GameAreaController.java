@@ -10,6 +10,7 @@ public class GameAreaController extends GameArea implements gameFunction{
         this.ga=new GameArea();
         this.gp=gp;
     }
+
     public boolean checkBottom() {
         if (ga.block.getBottomEdge() == ga.gridRows) {
             return false;
@@ -23,6 +24,7 @@ public class GameAreaController extends GameArea implements gameFunction{
                     int x = col + ga.block.getX();
                     int y = row + ga.block.getY() + 1;
                     if (y < 0) break;
+                    if(y>=20){return false;}
                     if (ga.background[y][x] != 0) return false;
                 }}
             }
@@ -153,13 +155,22 @@ public class GameAreaController extends GameArea implements gameFunction{
         ga.block.rotate();
         if(ga.block.getX()+ga.block.getWidth()-1>=10){
             if(checkLeft())
-            {   while(ga.block.getX()+ga.block.getWidth()-1>=10)
-                {ga.block.moveLeft();}
+            {
+                while(ga.block.getX()+ga.block.getWidth()-1>=10)
+                {
+                    ga.block.moveLeft();
+                }
             }
             else{
                 for(int i=0 ;i<3;i++){
-                    ga.block.rotate();
-                }
+                    ga.block.rotate();}
+                if(!checkBottom()){for(int i=0 ;i<3;i++){
+                    ga.block.rotate();}}
+            }
+        }
+        if(!checkBottom()){
+            while(!checkBottom()){
+                ga.block.moveUp();
             }
         }
         return ga.background;
@@ -202,6 +213,7 @@ public class GameAreaController extends GameArea implements gameFunction{
                     lineFilled = false;
                 }
             }
+            if(ga.background[r][0]==13){lineFilled=true;}
             if (lineFilled) { //Line 아이템이 있거나 라인이 다 차있는 경우
                 linesCleared++;
                 clearLine(r);
@@ -213,14 +225,37 @@ public class GameAreaController extends GameArea implements gameFunction{
         return linesCleared;
     }
     //행제거
-    private void ShineLine(int r) {
-        for (int i = 0; i < ga.gridColumns; i++) {
-            ga.background[r][i] = 15;
-        }
-    }
     private void clearLine(int r) {
         for (int i = 0; i < ga.gridColumns; i++) {
             ga.background[r][i] = 0;
+        }
+    }
+    @Override
+    public int clearLines2() {
+        boolean lineFilled;
+        boolean Line=false;
+        boolean Time=false;
+        boolean Sco=false;
+        boolean fifth=false;
+        int linesCleared = 0;
+        for (int r = ga.gridRows - 1; r >= 0; r--) {
+            lineFilled = true;
+            for (int c = 0; c < ga.gridColumns; c++) {
+                if (ga.background[r][c] == 0) {
+                    lineFilled = false;
+                }
+            }
+            if (lineFilled) { //Line 아이템이 있거나 라인이 다 차있는 경우
+                linesCleared++;
+                clearLine2(r);
+                 //한줄만 지워지는거 제외
+            }
+        }
+        return linesCleared;
+    }
+    private void clearLine2(int r) {
+        for (int i = 0; i < ga.gridColumns; i++) {
+            ga.background[r][i] = 13;
         }
     }
     //나머지 행들 끌어오기
@@ -234,6 +269,7 @@ public class GameAreaController extends GameArea implements gameFunction{
     public int[][] getBackground(){
         return ga.background;
     }
+    @Override
     public int[][] newBackground(){
         int[][] newBackground = new int[gridRows][gridColumns];
         for(int i=0; i<20; i++){
