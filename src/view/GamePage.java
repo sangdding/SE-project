@@ -559,7 +559,8 @@ public class GamePage extends JFrame {
         for (int i = 0; i < nextBlock.length; i++) {
 
             for (int j = 0; j < nextBlock[i].length; j++) {
-                drawTextWithColor(nextBlockPane, "X", colorForBlock[background[i][j]]);
+                if(gameMode==0) drawTextWithColor(nextBlockPane, "X", colorForBlock[background[i][j]]); //일반 모드
+                else drawTextWithColor(nextBlockPane, "X", colorFOrBlindModeBlock[background[i][j]]); //색맹 모드
             }
 
             drawTextWithColor(nextBlockPane, "\n", Color.BLACK);
