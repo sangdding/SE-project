@@ -37,6 +37,8 @@ public class scoreBoard extends JPanel{
 
         for (Map.Entry<String, int[]> entry : entrySet) {
 
+
+
             scoreInfo.put(entry.getKey(),entry.getValue()[0]);
             difficultyInfo.put(entry.getKey(),entry.getValue()[1]);
         }
