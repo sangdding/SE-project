@@ -6,10 +6,8 @@ import model.setting.Setting;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 public class scoreBoard extends JPanel{
 
@@ -27,18 +25,8 @@ public class scoreBoard extends JPanel{
         GridLayout gl= new GridLayout(numScoreLine,numLabelInTheLine);
         this.setLayout(gl);
 
-        HashMap<String,Integer>scoreInfo = new HashMap<>();
-        HashMap<String,Integer>difficultyInfo = new HashMap<>();
-        HashMap<String, Integer> scoreAndDifficultyInfo = jsonScore.getList(gamemode);
-
-        System.out.println(scoreAndDifficultyInfo);
-
-
-
-
-
-
-
+        HashMap<String,Integer>scoreInfo = jsonScore.getScorelist(gamemode);
+        HashMap<String,Integer>difficultyInfo = jsonScore.getDifficultyList(gamemode);
 
 
         HashMapParser hashmapparser = new HashMapParser();
@@ -60,13 +48,13 @@ public class scoreBoard extends JPanel{
 
             //align 맞추기
             labels[numLabelInTheLine*i]=new JLabel(Integer.toString(i+1)+"위 : ");
-            labels[numLabelInTheLine*i+1]=new JLabel(Integer.toString(orederedScoreInfo.get(i).getValue()));
-            labels[numLabelInTheLine*i+2]=new JLabel(orederedScoreInfo.get(i).getKey());
+            labels[numLabelInTheLine*i+1]=new JLabel(Integer.toString(orederedScoreInfo.get(i).getValue())); // 점수
+            labels[numLabelInTheLine*i+2]=new JLabel(orederedScoreInfo.get(i).getKey());//이름
 
-            int diff=difficultyInfo.get(orederedScoreInfo.get(i).getKey());
+            int diff=difficultyInfo.get(orederedScoreInfo.get(i).getKey()); //난이도
 
-            if (diff==0) labels[numLabelInTheLine*i+3]=new JLabel("Easy"); // easy
-            else if (diff==1) labels[numLabelInTheLine*i+3]=new JLabel("Normal"); // easy
+            if (diff==0) labels[numLabelInTheLine*i+3]=new JLabel("Normal"); // easy
+            else if (diff==1) labels[numLabelInTheLine*i+3]=new JLabel("Easy"); // easy
             else if (diff==2) labels[numLabelInTheLine*i+3]=new JLabel("Hard"); // easy
 
             this.add(labels[numLabelInTheLine*i]);
