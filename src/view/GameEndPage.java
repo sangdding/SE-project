@@ -26,6 +26,9 @@ public class GameEndPage extends JFrame {
     private PageController pageController;
 
 
+    private static final int numScoreLine = 10;
+    private static final int numLabelInTheLine = 4;
+
     private Setting setting;
 
     private int score;
@@ -135,7 +138,7 @@ public class GameEndPage extends JFrame {
                 {
                     JsonScore jsonscore=new JsonScore();
 
-                    int retSave=jsonscore.save(nameTextField.getText(),score,setting.getGameMode());
+                    int retSave=jsonscore.save(nameTextField.getText(),score,setting.getGameMode(),setting.getDifficulty());
                     if(retSave==1){
                         System.out.println("Duplicated Name");
                         return;
@@ -151,11 +154,12 @@ public class GameEndPage extends JFrame {
 
                     //하이라이트
                     System.out.println(scoreBoardPanel.getComponents().length);
-                    for(int i=0;i<10 && 3*i<scoreBoardPanel.getComponents().length;i++)
+                    for(int i=0;i<numScoreLine && 4*i<scoreBoardPanel.getComponents().length;i++)
                     {
-                        Component c1 = scoreBoardPanel.getComponent(3*i);
-                        Component c2 = scoreBoardPanel.getComponent(3*i+1);
-                        Component c3 = scoreBoardPanel.getComponent(3*i+2);
+                        Component c1 = scoreBoardPanel.getComponent(4*i);
+                        Component c2 = scoreBoardPanel.getComponent(4*i+1);
+                        Component c3 = scoreBoardPanel.getComponent(4*i+2);
+                        Component c4 = scoreBoardPanel.getComponent(4*i+3);
                         if(c3 instanceof JLabel)
                         {
                             JLabel jl3=(JLabel) c3;
@@ -163,6 +167,7 @@ public class GameEndPage extends JFrame {
                             {
                                 JLabel jl1=(JLabel) c1;
                                 JLabel jl2=(JLabel) c2;
+                                JLabel jl4=(JLabel) c4;
 
                                 jl1.setOpaque(true);
                                 jl1.setForeground(Color.RED);
@@ -172,6 +177,9 @@ public class GameEndPage extends JFrame {
 
                                 jl3.setOpaque(true);
                                 jl3.setForeground(Color.RED);
+
+                                jl4.setOpaque(true);
+                                jl4.setForeground(Color.RED);
                             }
                         }
                     }
