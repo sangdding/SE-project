@@ -10,9 +10,9 @@ public interface Score {
      * 2 : 저장 성공
      * -1 : 입출력 에러
      */
-    int save(String name, int score, int mode);
+    int save(String name, int score, int mode, int difficulty);
 
-    HashMap<String, Integer> getList(int mode); // 점수 정보 불러오기
+    HashMap<String, int[]> getList(int mode); // 점수 정보 불러오기
 
     /**
      * 파일을 완전히 삭제하면 나중에 새 파일을 만들고 읽어올 때 에러 발생
