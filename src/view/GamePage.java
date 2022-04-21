@@ -120,7 +120,8 @@ public class GamePage extends JFrame {
         //설정 읽어오기
 
         //점수 label 설정
-        scoreLabel.setText("0");
+        if (gameMode==0) scoreLabel.setText(Integer.toString(score) + "delay:" + Integer.toString((int) delay));//일반전
+        else scoreLabel.setText(Integer.toString(score) + "   Delay:  " + Integer.toString((int) delay) + "   DoblueScore(Left):  " + Integer.toString(doubleIndex)); // 아이템전
 
         //난이도별 생성기 세팅
         this.gen = new Generator(setting.getDifficulty());
@@ -301,7 +302,7 @@ public class GamePage extends JFrame {
                     //민재 형, 점수 계산 하는 코드 넣어 줘
 
                     //화면에 점수 출력
-                    scoreLabel.setText(Integer.toString(score) + "Delay:  " + Integer.toString((int) delay) + "DoblueScore(Left):  " + Integer.toString(doubleIndex));
+                    scoreLabel.setText(Integer.toString(score) + "   Delay:  " + Integer.toString((int) delay) + "   DoblueScore(Left):  " + Integer.toString(doubleIndex));
                     //다음 블럭 그리기
                     drawNextBlock(getNextBlock());
                 }
@@ -552,7 +553,8 @@ public class GamePage extends JFrame {
         for (int i = 0; i < nextBlock.length; i++) {
 
             for (int j = 0; j < nextBlock[i].length; j++) {
-                drawTextWithColor(nextBlockPane, "X", colorForBlock[background[i][j]]);
+                if(gameMode==0) drawTextWithColor(nextBlockPane, "X", colorForBlock[background[i][j]]); //일반 모드
+                else drawTextWithColor(nextBlockPane, "X", colorFOrBlindModeBlock[background[i][j]]); //색맹 모드
             }
 
             drawTextWithColor(nextBlockPane, "\n", Color.BLACK);
