@@ -40,9 +40,10 @@ public class JsonScore implements Score {
     }
 
     @Override
-    public int save(String name, int score, int mode) {
+    public int save(String name, int score, int mode, int difficulty) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         JSONObject tempObj;
+        int[] info = {score, difficulty};
         if (mode == 0) {
             tempObj = normalScoreInfo;
         } else {
@@ -53,7 +54,7 @@ public class JsonScore implements Score {
                 return 1;
             } else {
                 FileWriter fw = new FileWriter("src/score.json");
-                tempObj.put(name, score); // json 파일에 점수 저장
+                tempObj.put(name, info); // json 파일에 점수 저장
                 if (mode == 0) {
                     scoreInfo.replace("normal", tempObj);
                 } else {
@@ -70,8 +71,8 @@ public class JsonScore implements Score {
     }
 
     @Override
-    public HashMap<String, Integer> getList(int mode) {
-        HashMap<String, Integer> returnScoreInfo = null;
+    public HashMap<String, int[]> getList(int mode) {
+        HashMap<String, int[]> returnScoreInfo = null;
         JSONObject tempObj;
         objectMapper = new ObjectMapper();
         if (mode == 0) {
@@ -80,7 +81,7 @@ public class JsonScore implements Score {
             tempObj = objectMapper.convertValue(scoreInfo.get("item"), JSONObject.class);
         }
         try {
-            returnScoreInfo = objectMapper.readValue(tempObj.toJSONString(), new TypeReference<Map<String, Integer>>() {
+            returnScoreInfo = objectMapper.readValue(tempObj.toJSONString(), new TypeReference<Map<String, int[]>>() {
             });
         } catch (JsonMappingException e) {
             System.out.println("JsonMapping 에러");
