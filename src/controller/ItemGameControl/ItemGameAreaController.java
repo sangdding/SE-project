@@ -1,13 +1,13 @@
-package controller.GameControl;
+package controller.ItemGameControl;
+import controller.GameControl.GameArea;
 import controller.block.Block;
 import controller.block.ItemBlockController;
-import model.block.ItemBlock;
 import view.GamePage;
-public class GameAreaController extends GameArea implements gameFunction{
-    public GameArea ga;
+public class ItemGameAreaController extends GameAreaItem implements ItemMode {
+    public GameAreaItem ga;
     public GamePage gp;
-    public GameAreaController(GamePage gp){
-        this.ga=new GameArea();
+    public ItemGameAreaController(GamePage gp){
+        this.ga=new GameAreaItem();
         this.gp=gp;
     }
     public boolean checkBottom() {
@@ -25,7 +25,7 @@ public class GameAreaController extends GameArea implements gameFunction{
                     if (y < 0) break;
                     if (ga.background[y][x] != 0) return false;
                 }}
-            }
+        }
         return true;
     }
     private boolean checkLeft() {
@@ -86,12 +86,23 @@ public class GameAreaController extends GameArea implements gameFunction{
         }
         return true;
     }
-    @Override
-    public void spawnBlock(int bln) { //블럭생성
-        ga.block = new Block(bln);
-        ga.block.spawn(gridColumns);
+    public void spawnBlock2(int bln, int random,boolean item){
+        if(random==9){//불도저 만들기
+            ga.block = new ItemBlockController(8,random,item);
+            ga.block.doser(gridColumns);
+        }
+        else {
+            if(random==12){
+                ga.block = new ItemBlockController(7,12,item);
+                ga.block.spawn(gridColumns);
+            }
+            else {
+                ga.block = new ItemBlockController(bln, random, item);
+                ga.block.spawn(gridColumns);
+            }
+        }
     }
-    @Override
+
     public boolean isBlockOuOofBounds() {
         if (ga.block.getY() < 0) { //맨 위 프레임을 건들여, 게임에서 진 상황
             ga.block = null;
@@ -99,7 +110,7 @@ public class GameAreaController extends GameArea implements gameFunction{
         }
         return false;
     }
-    @Override
+
     public void moveBlockDown() {
         if(ga.block==null){}
         if(ga.block.shape[0][0]==9){
@@ -118,26 +129,46 @@ public class GameAreaController extends GameArea implements gameFunction{
                 else{
                     ga.block=null;
                 }
-        }
+            }
         }
         if(!checkBottom()){}
         else{ga.block.moveDown();}
     }
-    @Override
+    public void moveBlockDown2(){
+        int y= ga.block.getY();
+        int x= ga.block.getX();
+        if(y==19){ga.block=null;}
+        else {
+            for (int c = x; c < x + 4; c++) {
+                if(ga.background[y+1][c]!=0){gp.chew=true;}
+                if (ga.background[y + 1][c] <= 7) {
+                    ga.background[y + 1][c] = 0;
+                } else {
+                    if (ga.background[y + 1][c] == 10) {
+                        gp.delay += (int)(300/gp.velocity);
+                        ga.background[y + 1][c] = 0;
+                    }
+                    if (ga.background[y + 1][c] == 11) {
+                        gp.doubleIndex+=10;
+                        ga.background[y + 1][c] = 0;
+                    }
+                }
+            }
+            ga.block.moveDown();
+        }
+    }
     public int[][] moveBlockRight() {
         if (ga.block == null) return ga.background;
         if (!checkRight()) return ga.background;
         ga.block.moveRight();
         return ga.background;
     }
-    @Override
     public int[][] moveBlockLeft() {
         if (ga.block == null) return ga.background;
         if (!checkLeft()) return ga.background;
         ga.block.moveLeft();
         return ga.background;
     }
-    @Override
     public boolean dropBlock() {
         if(ga.block == null){return false;}
         else{while (checkBottom()) {
@@ -145,7 +176,6 @@ public class GameAreaController extends GameArea implements gameFunction{
         }}
         return true;
     }
-    @Override
     public int[][] rotateBlock(){
         if (ga.block == null) return ga.background;
         //if (ga.block.getHeight()+ ga.block.getX() > gridColumns ){ ga.block.moveLeft();}
@@ -154,17 +184,17 @@ public class GameAreaController extends GameArea implements gameFunction{
         if(ga.block.getX()+ga.block.getWidth()-1>=10){
             if(checkLeft())
             {   while(ga.block.getX()+ga.block.getWidth()-1>=10)
-                {ga.block.moveLeft();}
+            {ga.block.moveLeft();}
             }
             else{
                 for(int i=0 ;i<3;i++){
-                    ga.block.rotate();
-                }
+                    ga.block.rotate();}
+            if(checkBottom()){for(int i=0 ;i<3;i++){
+                this.rotateBlock();}}
             }
         }
         return ga.background;
     }
-    @Override
     public void moveBlockToBackground(){
         int[][] shape = ga.block.getShape();
         int h = ga.block.getHeight();
@@ -186,38 +216,45 @@ public class GameAreaController extends GameArea implements gameFunction{
         }
     }
 
-    @Override
     //행제거
     public int clearLines() {
         boolean lineFilled;
         boolean Line=false;
         boolean Time=false;
-        boolean Sco=false;
-        boolean fifth=false;
+        int Sco=0;
+        boolean Sco2=false;
         int linesCleared = 0;
+        for(int i=0; i<20;i++) {
+            for(int j=0; j<10; j++){
+            System.out.print(ga.background[i][j]);}
+            System.out.println();
+        }
         for (int r = ga.gridRows - 1; r >= 0; r--) {
             lineFilled = true;
             for (int c = 0; c < ga.gridColumns; c++) {
-                if (ga.background[r][c] == 0) {
-                    lineFilled = false;
-                }
+                if(ga.background[r][c]==0){lineFilled=false;}
+                if(ga.background[r][c]==8){Line=true;}
+                if(ga.background[r][c]==10){Time=true;;}
+                if(ga.background[r][c]==11){Sco++;}
             }
-            if (lineFilled) { //Line 아이템이 있거나 라인이 다 차있는 경우
+            if(Line){lineFilled=true;}
+            if(lineFilled){ //Line 아이템이 있거나 라인이 다 차있는 경우
+                Line=false;
                 linesCleared++;
                 clearLine(r);
                 shiftDown(r);
                 clearLine(0);
                 r++; //한줄만 지워지는거 제외
+                if(Time){gp.delay+=300*gp.velocity;}
+                if(Sco>0){for(int i=0; i<Sco;i++){gp.doubleIndex+=10;}}
+            }
+            else{
+                Time=false;Sco=0;
             }
         }
         return linesCleared;
     }
     //행제거
-    private void ShineLine(int r) {
-        for (int i = 0; i < ga.gridColumns; i++) {
-            ga.background[r][i] = 15;
-        }
-    }
     private void clearLine(int r) {
         for (int i = 0; i < ga.gridColumns; i++) {
             ga.background[r][i] = 0;
@@ -231,10 +268,12 @@ public class GameAreaController extends GameArea implements gameFunction{
             }
         }
     }
+
     public int[][] getBackground(){
         return ga.background;
     }
     public int[][] newBackground(){
+        if(ga.block == null){return ga.background;}
         int[][] newBackground = new int[gridRows][gridColumns];
         for(int i=0; i<20; i++){
             for(int j=0; j<10; j++){
@@ -253,17 +292,23 @@ public class GameAreaController extends GameArea implements gameFunction{
                         if(ga.block.getShape()[r-y][c-x]==1){
                             newBackground[r][c]=ga.block.getColor();
                         }
+                        else if(ga.block.getShape()[r-y][c-x]>1){
+                            newBackground[r][c]=ga.block.getShape()[r-y][c-x];
+                        }
                     }
                 }
                 else{
                     if(ga.block.getShape()[r-y][c-x]==1){
                         newBackground[r][c]=ga.block.getColor();
                     }
+                    else if(ga.block.getShape()[r-y][c-x]>1){
+                        newBackground[r][c]=ga.block.getShape()[r-y][c-x];
+                    }
                 }
 
             }
         }
-      return newBackground;
+        return newBackground;
     }
     public int getY(){
         return ga.block.getY();

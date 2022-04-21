@@ -12,7 +12,7 @@
   "difficulty": "hard",
   "display": {
     "width": 1000,
-    "height": 1500
+    "height": 1000
   },
   "gameMode": "normal",
   "defaultKey": {
@@ -25,5 +25,5 @@
     "down": 40,
     "pause": 80
   },
-  "displayMode": "blind"
+  "displayMode": "normal"
 }

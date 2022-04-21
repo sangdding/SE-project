@@ -2,12 +2,10 @@ package model.block;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class BlockTest {
 
     Block block1 = new NormalBlock();
-    Block block2 = new ItemBlock();
+    Block block2 = new ItemBlock(4, true);
 
     @Test
     void 블럭_모양_출력_테스트() {
@@ -41,6 +39,11 @@ class BlockTest {
             }
             System.out.println("==========================");
         }
+    }
+
+    @Test
+    void 블럭_리스트_가져오기() {
+
     }
 
 }
