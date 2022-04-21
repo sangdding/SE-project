@@ -75,5 +75,20 @@ class SettingTest {
         setting.setDisplayMode(0);
         System.out.println(setting.getDisplayMode());
         Assertions.assertEquals(0, setting.getDisplayMode());
+
+
+        setting.setDisplayMode(1);
+        System.out.println(setting.getDisplayMode());
+        Assertions.assertEquals(1, setting.getDisplayMode());
+    }
+
+    @Test
+    void 게임모드_설정하기() {
+        setting.setGameMode(0);
+        Assertions.assertEquals(0, setting.getGameMode());
+
+
+        setting.setGameMode(1);
+        Assertions.assertEquals(1, setting.getGameMode());
     }
 }
