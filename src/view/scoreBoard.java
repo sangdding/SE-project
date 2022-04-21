@@ -29,20 +29,15 @@ public class scoreBoard extends JPanel{
 
         HashMap<String,Integer>scoreInfo = new HashMap<>();
         HashMap<String,Integer>difficultyInfo = new HashMap<>();
-        HashMap<String, int[]> scoreAndDifficultyInfo = jsonScore.getList(gamemode);
+        HashMap<String, Integer> scoreAndDifficultyInfo = jsonScore.getList(gamemode);
 
-
-        Set<Map.Entry<String, int[]>> entrySet = scoreAndDifficultyInfo.entrySet();
-
-
-        for (Map.Entry<String, int[]> entry : entrySet) {
+        System.out.println(scoreAndDifficultyInfo);
 
 
 
-            scoreInfo.put(entry.getKey(),entry.getValue()[0]);
-            difficultyInfo.put(entry.getKey(),entry.getValue()[1]);
-        }
-        
+
+
+
 
 
 
