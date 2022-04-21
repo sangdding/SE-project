@@ -49,7 +49,6 @@ public class JsonScore implements Score {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         JSONObject tempObj1;
         JSONObject tempObj2;
-        int[] info = {score, difficulty};
         if (mode == 0) {
             tempObj1 = normalScoreInfo;
             tempObj2 = normalDifficultyInfo;
@@ -82,22 +81,17 @@ public class JsonScore implements Score {
     }
 
     @Override
-    public HashMap<String, Integer> getList(int mode) {
+    public HashMap<String, Integer> getScoreList(int mode) {
         HashMap<String, Integer> returnScoreInfo = null;
-        JSONObject tempObj1;
-        JSONObject tempObj2;
+        JSONObject tempObj;
         objectMapper = new ObjectMapper();
         if (mode == 0) {
-            tempObj1 = objectMapper.convertValue(scoreInfo.get("normal"), JSONObject.class);
-            tempObj2 = objectMapper.convertValue(scoreInfo.get("normalDifficulty"), JSONObject.class);
+            tempObj = objectMapper.convertValue(scoreInfo.get("normal"), JSONObject.class);
         } else {
-            tempObj1 = objectMapper.convertValue(scoreInfo.get("item"), JSONObject.class);
-            tempObj2 = objectMapper.convertValue(scoreInfo.get("itemDifficulty"), JSONObject.class);
+            tempObj = objectMapper.convertValue(scoreInfo.get("item"), JSONObject.class);
         }
         try {
-            returnScoreInfo = objectMapper.readValue(tempObj1.toJSONString(), new TypeReference<Map<String, Integer>>() {
-            });
-            returnScoreInfo = objectMapper.readValue(tempObj2.toJSONString(), new TypeReference<Map<String, Integer>>() {
+            returnScoreInfo = objectMapper.readValue(tempObj.toJSONString(), new TypeReference<Map<String, Integer>>() {
             });
         } catch (JsonMappingException e) {
             System.out.println("JsonMapping 에러");
@@ -107,6 +101,29 @@ public class JsonScore implements Score {
             System.out.println("입출력 에러");
         }
         return returnScoreInfo;
+    }
+
+    @Override
+    public HashMap<String, Integer> getDifficultyList(int mode) {
+        HashMap<String, Integer> returnDifficultyInfo = null;
+        JSONObject tempObj;
+        objectMapper = new ObjectMapper();
+        if (mode == 0) {
+            tempObj = objectMapper.convertValue(scoreInfo.get("normalDifficulty"), JSONObject.class);
+        } else {
+            tempObj = objectMapper.convertValue(scoreInfo.get("itemDifficulty"), JSONObject.class);
+        }
+        try {
+            returnDifficultyInfo = objectMapper.readValue(tempObj.toJSONString(), new TypeReference<Map<String, Integer>>() {
+            });
+        } catch (JsonMappingException e) {
+            System.out.println("JsonMapping 에러");
+        } catch (JsonParseException e) {
+            System.out.println("Json 파싱 에러");
+        } catch (IOException e) {
+            System.out.println("입출력 에러");
+        }
+        return returnDifficultyInfo;
     }
 
     @Override
