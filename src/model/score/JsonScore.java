@@ -73,12 +73,12 @@ public class JsonScore implements Score {
     public HashMap<String, Integer> getList(int mode) {
         HashMap<String, Integer> returnScoreInfo = null;
         JSONObject tempObj;
-        if (mode == 0) {
-            tempObj = (JSONObject) scoreInfo.get("normal");
-        } else {
-            tempObj = (JSONObject) scoreInfo.get("item");
-        }
         objectMapper = new ObjectMapper();
+        if (mode == 0) {
+            tempObj = objectMapper.convertValue(scoreInfo.get("normal"), JSONObject.class);
+        } else {
+            tempObj = objectMapper.convertValue(scoreInfo.get("item"), JSONObject.class);
+        }
         try {
             returnScoreInfo = objectMapper.readValue(tempObj.toJSONString(), new TypeReference<Map<String, Integer>>() {
             });
@@ -96,7 +96,7 @@ public class JsonScore implements Score {
     public void resetList(int mode) {
         HashMap<String, Integer> resetScore = new HashMap<>();
         resetScore.put("admin", -1);
-        JSONObject tempObj = (JSONObject) resetScore;
+        JSONObject tempObj = new JSONObject(resetScore);
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try {
             FileWriter fw = new FileWriter("src/score.json");
