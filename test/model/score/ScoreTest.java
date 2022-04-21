@@ -27,7 +27,7 @@ public class ScoreTest {
     @Test
     @DisplayName("스코어 리스트 가져오기")
     void getList() {
-        score.getList(1);
+        System.out.println(score.getList(1));
     }
 
     @Test

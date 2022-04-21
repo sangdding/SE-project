@@ -54,7 +54,7 @@ public class JsonScore implements Score {
             tempObj2 = normalDifficultyInfo;
         } else {
             tempObj1 = itemScoreInfo;
-            tempObj2 = itemDifficultyInfo
+            tempObj2 = itemDifficultyInfo;
         }
         try {
             if (tempObj1.containsKey(name)) {

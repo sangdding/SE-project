@@ -67,6 +67,7 @@ class GameAreaControllerTest extends GameArea {
     @DisplayName("블록 좌우 하단 체크")
     void checkSide() throws NoSuchFieldException, IllegalAccessException {
         gameAreaController.spawnBlock(0);
+        gameAreaController.ga.block.rotate();
         Field x = gameAreaController.ga.block.getClass().getDeclaredField("x");
         Field y = gameAreaController.ga.block.getClass().getDeclaredField("y");
         x.setAccessible(true);
@@ -74,11 +75,12 @@ class GameAreaControllerTest extends GameArea {
         x.setInt(gameAreaController.ga.block, 4);
         y.setInt(gameAreaController.ga.block, 0);
         int i;
-        for (i = 0; i < background.length; i++) {
+        for (i = 0; i < gameAreaController.ga.background.length; i++) {
             if (!gameAreaController.checkBottom()) {
                 assertEquals(19, i);
+                gameAreaController.moveBlockToBackground();
             }
-            gameAreaController.moveBlockToBackground();
+            gameAreaController.ga.block.moveDown();
         }
         assertTrue(forTest.equals(gameAreaController.moveBlockRight()));
         assertTrue(forTest.equals(gameAreaController.moveBlockLeft()));
