@@ -12,6 +12,7 @@ import org.json.simple.parser.ParseException;
 
 import java.io.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class JsonScore implements Score {
@@ -81,7 +82,7 @@ public class JsonScore implements Score {
             tempObj = objectMapper.convertValue(scoreInfo.get("item"), JSONObject.class);
         }
         try {
-            returnScoreInfo = objectMapper.readValue(tempObj.toJSONString(), new TypeReference<Map<String, int[]>>() {
+            returnScoreInfo = objectMapper.readValue(tempObj.toJSONString(), new TypeReference<Map<String, Object>>() {
             });
         } catch (JsonMappingException e) {
             System.out.println("JsonMapping 에러");

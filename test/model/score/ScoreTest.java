@@ -25,6 +25,12 @@ public class ScoreTest {
     }
 
     @Test
+    @DisplayName("스코어 리스트 가져오기")
+    void getList() {
+        score.getList(1);
+    }
+
+    @Test
     @DisplayName("스코어보드 리셋")
     void resetScoreBoard() {
         score.resetList(0);
