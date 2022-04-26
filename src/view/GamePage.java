@@ -511,14 +511,14 @@ public class GamePage extends JFrame {
             for (int j = 0; j < 10; j++) {
                 //일반 블럭 그리기
                 if (background[i][j] < 8) {
-                    if (gameMode == 0) { //일반모드 그리기
+                    if (isBlindMode == 0) { //일반모드 그리기
                         drawTextWithColor(gameBoardPane, "X", colorForBlock[background[i][j]]);
                     } else { // 색맹모드 그리기
                         drawTextWithColor(gameBoardPane, "X", colorFOrBlindModeBlock[background[i][j]]);
                     }
                 }
                 else {
-                    if (gameMode == 0) { //일반모드 그리기
+                    if (isBlindMode == 0) { //일반모드 그리기
                         drawTextWithColor(gameBoardPane, String.valueOf(blockShape[background[i][j]]), colorForBlock[background[i][j]]);
                     } else { // 색맹모드 그리기
                         drawTextWithColor(gameBoardPane, String.valueOf(blockShape[background[i][j]]), colorFOrBlindModeBlock[background[i][j]]);
@@ -553,7 +553,7 @@ public class GamePage extends JFrame {
         for (int i = 0; i < nextBlock.length; i++) {
 
             for (int j = 0; j < nextBlock[i].length; j++) {
-                if(gameMode==0) drawTextWithColor(nextBlockPane, "X", colorForBlock[background[i][j]]); //일반 모드
+                if(isBlindMode==0) drawTextWithColor(nextBlockPane, "X", colorForBlock[background[i][j]]); //일반 모드
                 else drawTextWithColor(nextBlockPane, "X", colorFOrBlindModeBlock[background[i][j]]); //색맹 모드
             }
 
