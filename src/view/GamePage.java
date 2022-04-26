@@ -20,13 +20,20 @@ import java.util.HashMap;
 import controller.HashMapParser;
 import java.util.Random;
 public class GamePage extends JFrame {
+
+    private static final int BlindDisplayMode=1;
+    private static final int NoBlindMode=0;
+
+    private static final int ItemMode=1;
+    private static final int NoItemMode=0;
+
+    private static final int NormalDifficulty=0;
+    private static final int EasyDifficulty=1;
+    private static final int HardDifficulty=1;
+
+
     private JPanel mainPanel;
     private javax.swing.JPanel gameBoardPanel;
-    private Random r = new Random();
-    private Random r2 = new Random();
-    private Generator gen;
-    private GameAreaController gameAreaController;
-    private ItemGameAreaController itemGameAreaController;
     private JButton mainButton;
     private JButton stopButton;
     private JPanel buttonPanel;
@@ -36,27 +43,26 @@ public class GamePage extends JFrame {
     private JPanel scorePanel;
     private JButton exitButton;
     private JLabel scoreLabel;
+
+    private Generator gen;
+    private GameAreaController gameAreaController;
+    private ItemGameAreaController itemGameAreaController;
     private PageController pageController;
-    public boolean doubleScore; //아이템 변수
-    public int doubleIndex;
-    public boolean fifth; //아이템 변수
-    public double delay; //아이템 변수
-    public double velocity;
-    private boolean isStop;
-    public Timer timer;
-    private int isBlindMode;
-    public int score;
-    private int lineIndex;
-    public boolean end;
+
+
     private JsonSetting setting = new JsonSetting();
     private HashMap<String, Integer> keySettingMap;
-    private int next;
-    public int lines;
-    public boolean chew;
-    private NormalBlock BlockModel = new NormalBlock();
+
+
+
+
     private char borderChar = 'X';
     private SimpleAttributeSet styleSet;
     private boolean Effect;
+
+
+
+
     private Color[] colorForBlock = new Color[]{Color.WHITE,
             Color.CYAN, Color.RED, Color.BLUE, Color.GREEN, Color.MAGENTA, Color.ORANGE,
             Color.PINK, new Color(128, 0, 0), new Color(128, 128, 0), new Color(0, 0, 128),
@@ -74,7 +80,25 @@ public class GamePage extends JFrame {
             'A', 'B', 'C', 'D', 'E', 'F', 'H', 'J', 'L', 'O', 'T', 'S', 'Q', 'O'
     };
 
-    private int gameMode;
+
+
+
+    public boolean doubleScore; //아이템 변수
+    public int doubleIndex;
+    public boolean fifth; //아이템 변수
+    public double delay; //아이템 변수
+    public double velocity;
+    private boolean isStop;
+    public Timer timer;
+    public int score;
+    private int lineIndex;
+    public boolean end;
+    private int next;
+    public int lines;
+    public boolean chew;
+    private NormalBlock BlockModel = new NormalBlock();
+    private Random r = new Random();
+    private Random r2 = new Random();
 
 
     public GamePage() {
@@ -85,7 +109,7 @@ public class GamePage extends JFrame {
         setKeyEventController();
         //버튼 마우스 입력 처리 설정
         setButtonClickController();
-        if (setting.getGameMode() == 0) {
+        if (setting.getGameMode() == NoItemMode) {
             drawGameBoard(gameAreaController.getBackground());
             gameAreaController.spawnBlock(gen.getArr()[0]);
             setTimer();
@@ -98,7 +122,7 @@ public class GamePage extends JFrame {
 
     private void initialize() {
 
-        gameMode = setting.getGameMode();
+
 
         //스타일
         styleSet = new SimpleAttributeSet();
@@ -120,7 +144,7 @@ public class GamePage extends JFrame {
         //설정 읽어오기
 
         //점수 label 설정
-        if (gameMode==0) scoreLabel.setText(Integer.toString(score) + "delay:" + Integer.toString((int) delay));//일반전
+        if (setting.getGameMode()==NoItemMode) scoreLabel.setText(Integer.toString(score) + "delay:" + Integer.toString((int) delay));//일반전
         else scoreLabel.setText(Integer.toString(score) + "   Delay:  " + Integer.toString((int) delay) + "   DoblueScore(Left):  " + Integer.toString(doubleIndex)); // 아이템전
 
         //난이도별 생성기 세팅
@@ -131,8 +155,7 @@ public class GamePage extends JFrame {
         this.setSize(settingMap.get("width"), settingMap.get("height"));
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // x표 눌럿을 때 프로그램 종료되게 만듦
-        //색맹모드 체크
-        isBlindMode = setting.getDisplayMode();
+
 
         //설정한 키 값 불러오기
         HashMapParser hashmapparser = new HashMapParser();
@@ -328,7 +351,7 @@ public class GamePage extends JFrame {
                     }
                 }
                 else if (pressedKey == keySettingMap.get("drop")) {
-                    if (setting.getGameMode() == 0) {
+                    if (setting.getGameMode() == NoItemMode) {
                         if (gameAreaController.ga.block == null || Effect) {
                         } else {
 
@@ -358,11 +381,11 @@ public class GamePage extends JFrame {
                     pageController = new PageController("Main");
 
                 }
-                else if ((setting.getGameMode() == 0 && gameAreaController.ga.block == null) ||
-                        (setting.getGameMode() == 1 && itemGameAreaController.ga.block == null)) {
+                else if ((setting.getGameMode() == NoItemMode && gameAreaController.ga.block == null) ||
+                        (setting.getGameMode() == ItemMode && itemGameAreaController.ga.block == null)) {
                 }
                 else if (pressedKey == keySettingMap.get("left")) {
-                    if (setting.getGameMode() == 0) {
+                    if (setting.getGameMode() == NoItemMode) {
                         if (gameAreaController.ga.block == null) {
                         } else {
                             gameAreaController.moveBlockLeft();
@@ -387,7 +410,7 @@ public class GamePage extends JFrame {
 
                 }
                 else if (pressedKey == keySettingMap.get("rotate")) {
-                    if (setting.getGameMode() == 0) {
+                    if (setting.getGameMode() == NoItemMode) {
                         if (gameAreaController.ga.block == null) {
                         } else {
                             gameAreaController.rotateBlock();
@@ -406,7 +429,7 @@ public class GamePage extends JFrame {
                     }
                 }
                 else if (pressedKey == keySettingMap.get("right")) {
-                    if (setting.getGameMode() == 0) {
+                    if (setting.getGameMode() == NoItemMode) {
                         if (gameAreaController.ga.block == null) {
                         } else {
                             gameAreaController.moveBlockRight();
@@ -429,7 +452,7 @@ public class GamePage extends JFrame {
                     }
                 }
                 else if (pressedKey == keySettingMap.get("down")) {
-                    if (setting.getGameMode() == 0) {
+                    if (setting.getGameMode() == NoItemMode) {
                         if (gameAreaController.ga.block == null) {
                         } else {
                             gameAreaController.moveBlockDown();
@@ -511,14 +534,14 @@ public class GamePage extends JFrame {
             for (int j = 0; j < 10; j++) {
                 //일반 블럭 그리기
                 if (background[i][j] < 8) {
-                    if (isBlindMode == 0) { //일반모드 그리기
+                    if (setting.getDisplayMode() == NoBlindMode) { //일반모드 그리기
                         drawTextWithColor(gameBoardPane, "X", colorForBlock[background[i][j]]);
                     } else { // 색맹모드 그리기
                         drawTextWithColor(gameBoardPane, "X", colorFOrBlindModeBlock[background[i][j]]);
                     }
                 }
                 else {
-                    if (isBlindMode == 0) { //일반모드 그리기
+                    if (setting.getDisplayMode() == NoBlindMode) { //일반모드 그리기
                         drawTextWithColor(gameBoardPane, String.valueOf(blockShape[background[i][j]]), colorForBlock[background[i][j]]);
                     } else { // 색맹모드 그리기
                         drawTextWithColor(gameBoardPane, String.valueOf(blockShape[background[i][j]]), colorFOrBlindModeBlock[background[i][j]]);
@@ -553,7 +576,7 @@ public class GamePage extends JFrame {
         for (int i = 0; i < nextBlock.length; i++) {
 
             for (int j = 0; j < nextBlock[i].length; j++) {
-                if(isBlindMode==0) drawTextWithColor(nextBlockPane, "X", colorForBlock[background[i][j]]); //일반 모드
+                if(setting.getDisplayMode()==NoBlindMode) drawTextWithColor(nextBlockPane, "X", colorForBlock[background[i][j]]); //일반 모드
                 else drawTextWithColor(nextBlockPane, "X", colorFOrBlindModeBlock[background[i][j]]); //색맹 모드
             }
 
@@ -587,11 +610,9 @@ public class GamePage extends JFrame {
     int[][] getNextBlock() {
         int[][] now = BlockModel.normalBlock[gen.getArr()[next]];
         int color;
-        if (setting.getGameMode() == 0) {
-            color = BlockModel.getColor(gen.getArr()[next]);
-        } else {
-            color = BlockModel.getColor(gen.getArr()[next]);
-        }
+
+        color = BlockModel.getColor(gen.getArr()[next]);
+
         for (int r = 0; r < now.length; r++) {
             for (int c = 0; c < now[0].length; c++) {
                 if (now[r][c] != 0) {
