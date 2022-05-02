@@ -1,14 +1,7 @@
 package controller.ItemGameControl;
-import controller.GameControl.GameArea;
-import controller.block.Block;
 import controller.block.ItemBlockController;
 import view.GamePage;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionListener;
-import java.util.Timer;
-import java.util.HashMap;
+
 public class ItemGameAreaController extends GameAreaItem implements ItemMode {
     public GameAreaItem ga;
     public GamePage gp;
