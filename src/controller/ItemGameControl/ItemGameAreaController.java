@@ -11,6 +11,7 @@ public class ItemGameAreaController extends GameAreaItem implements ItemMode {
         this.gp=gp;
     }
 
+    // 커밋
     public boolean checkBottom() {
         if (ga.block == null) {
             return false;
