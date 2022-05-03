@@ -96,6 +96,8 @@ public class GamePage extends JFrame {
     private int next;
     public int lines;
     public boolean chew;
+
+
     private NormalBlock BlockModel = new NormalBlock();
     private Random r = new Random();
     private Random r2 = new Random();
@@ -200,6 +202,7 @@ public class GamePage extends JFrame {
     private void setTimer() {
         timer = new Timer((int) delay, new ActionListener() {
 
+
             public void actionPerformed(ActionEvent e) {
                 requestFocus();
                 setFocusable(true);
@@ -209,7 +212,9 @@ public class GamePage extends JFrame {
                 } //여기 바꿈
                 gameAreaController.moveBlockDown();
                 drawGameBoard(gameAreaController.newBackground());
-                if (!gameAreaController.checkBottom()) {
+
+                //블럭이 바닥에 닿았는가 확인
+                if (!gameAreaController.checkBottom()) { 
                     if (gameAreaController.isBlockOuOofBounds()) {
                         //게임 종료시
                         timer.stop();
@@ -221,7 +226,11 @@ public class GamePage extends JFrame {
                     else {
                         gameAreaController.moveBlockToBackground();
                         gameAreaController.spawnBlock(gen.getArr()[next]);
+
+                        //이게 view에서 필요한가?
                         int current_line = gameAreaController.clearLines2();
+
+
                         drawGameBoard(gameAreaController.newBackground());
                         if (current_line > 0) {
                             Effect = true;
@@ -606,6 +615,10 @@ public class GamePage extends JFrame {
         tp.replaceSelection(msg);
 
     }
+
+
+
+
 
     int[][] getNextBlock() {
         int[][] now = BlockModel.normalBlock[gen.getArr()[next]];
