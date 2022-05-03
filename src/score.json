@@ -1,6 +1,7 @@
 {
   "normal": {
     "aaa": 3000,
+    "dddzz": 219,
     "ddd": 3000,
     "admin": -1,
     "zzz": 3000,
@@ -12,6 +13,7 @@
   },
   "normalDifficulty": {
     "aaa": 0,
+    "dddzz": 2,
     "ddd": 2,
     "zzz": 1,
     "AAAA": 1

@@ -1,4 +1,4 @@
-package controller.ItemGameControl;
+/*package controller.ItemGameControl;
 
 import controller.GameControl.GameAreaController;
 import org.junit.jupiter.api.Assertions;
@@ -126,4 +126,4 @@ class ItemGameAreaControllerTest {
         y.setInt(gameAreaController.ga.block, -1);
         assertTrue(gameAreaController.isBlockOuOofBounds());
     }
-}
+}*/
