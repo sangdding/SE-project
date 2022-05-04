@@ -11,7 +11,7 @@
   },
   "difficulty": "easy",
   "display": {
-    "width": 500,
+    "width": 800,
     "height": 800
   },
   "gameMode": "item",
@@ -25,5 +25,5 @@
     "down": 40,
     "pause": 80
   },
-  "displayMode": "normal"
+  "displayMode": "blind"
 }

@@ -86,6 +86,7 @@ public class GamePage extends JFrame {
         //버튼 마우스 입력 처리 설정
         setButtonClickController();
         if (setting.getGameMode() == 0) {
+
             drawGameBoard(gameAreaController.getBackground());
             gameAreaController.spawnBlock(gen.getArr()[0]);
             setTimer();
@@ -283,7 +284,7 @@ public class GamePage extends JFrame {
                             } else {
                                 score += current_score;
                             }
-                            if (lineIndex>=10) {
+                            if (true) {
                                 int c = r2.nextInt(5) + 8; // 0, 1, 2, 3, 4 중에 하나 생성되고, 거기에 8이 더해져서 8, 9, 10, 11, 12가 된다.
                                 itemGameAreaController.spawnBlock2(gen.getArr()[next], c, true);
                                 lineIndex -= 10;
