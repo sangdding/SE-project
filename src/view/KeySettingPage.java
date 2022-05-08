@@ -49,6 +49,7 @@ public class KeySettingPage extends JFrame {
 
     private int buttonSelectorIndex = 0;
     private boolean isSetting = false;
+    private JsonSetting jsonsetting=new JsonSetting("player1");
 
     public KeySettingPage() {
         initialize();
@@ -95,7 +96,7 @@ public class KeySettingPage extends JFrame {
             public void actionPerformed(ActionEvent e) {
 
                 //json 파일에 세팅 저장
-                JsonSetting jsonsettign = new JsonSetting();
+                JsonSetting jsonsettign = new JsonSetting("player1");
                 HashMap<String,Integer> keyMap=new HashMap<>();
 
                 for(int i=0;i<keyLabels.length;i++)
@@ -114,7 +115,6 @@ public class KeySettingPage extends JFrame {
         resetButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JsonSetting jsonsetting=new JsonSetting();
                 jsonsetting.setDefaultKeySet();
                 //화면 초기화
                 displaySettingValues();
@@ -188,7 +188,7 @@ public class KeySettingPage extends JFrame {
     }
     private void displaySettingValues()
     {
-        JsonSetting jsonsetting=new JsonSetting();
+
         HashMap<String,Integer> keyMap=jsonsetting.getKeyList();
 
         for(int i = 0; i< keyValueLabels.length; i++) {

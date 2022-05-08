@@ -47,7 +47,7 @@ public class GamePage extends JFrame {
     private boolean isStop;
 
 
-    private JsonSetting setting = new JsonSetting();
+    private JsonSetting setting = new JsonSetting("player1");
     private HashMap<String, Integer> keySettingMap;
 
 

@@ -45,7 +45,7 @@ public class GameEndPage extends JFrame {
     private void initialize() {
 
 
-        setting= new JsonSetting();
+        setting= new JsonSetting("player1");
 
         //프레임 설정
         BorderLayout bl = new BorderLayout();

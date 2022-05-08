@@ -26,7 +26,7 @@ public class MainPage extends JFrame{
     private JButton gameStartVersusNormalModeButton;
 
 
-    private Setting setting = new JsonSetting();
+    private Setting setting = new JsonSetting("player1");
     private PageController pageController;
 
     private JButton[] buttons=new JButton[]{gameStartNormalModeButton, gameStartItemModeButton,gameStartVersusNormalModeButton,  settingButton, scoreBoardNormalButton, scoreBoardItemButton, exitButton };

@@ -9,7 +9,7 @@ import model.setting.Setting;
 import java.util.Random;
 
 public class temp {
-    private Setting setting = new JsonSetting();
+    private Setting setting = new JsonSetting("player1");
     private Random r = new Random();
     private Random r2 = new Random();
     private Generator gen;
