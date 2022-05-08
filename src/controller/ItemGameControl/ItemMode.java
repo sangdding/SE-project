@@ -1,7 +1,9 @@
 package controller.ItemGameControl;
 
+import controller.block.ItemBlockController;
+
 public interface ItemMode {
-    public void spawnBlock2(int bln, int random,boolean item); //item == true 라면 random 8-12의 값을 가지며 랜덤 아이템 생성
+    public void spawnBlock2(int bln, int random, boolean item); //item == true 라면 random 8-12의 값을 가지며 랜덤 아이템 생성
                                                                 //bln 은 아이템을 넣을 블럭의 번호, random==9라면 무게추 생성
     public boolean isBlockOuOofBounds();// 게임 종료 조건
     public void moveBlockDown();// 포커스 된 블럭을 아래로 내림

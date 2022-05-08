@@ -1,6 +1,7 @@
 package view;
 
 import controller.ItemGameControl.ItemGameAreaController;
+import controller.block.ItemBlockController;
 import model.Generator;
 import model.block.NormalBlock;
 import model.setting.JsonSetting;
@@ -63,8 +64,9 @@ public class temp {
         this.delay = 1000 / velocity;
         this.lineIndex = 0;
         this.Effect = false;
-
-        itemGameAreaController.spawnBlock2(gen.getArr()[0], 1, false);
+        itemGameAreaController.spawnBlock(gen.getArr()[0],1,false);
+        itemGameAreaController.spawnBlock2(gen.getArr()[1],1,false);
+        this.next=2;
     }
 
     public int[][] getBackground()
@@ -125,16 +127,13 @@ public class temp {
     }
 
     public int[][] getNextBlock() {
-        int[][] now = BlockModel.normalBlock[gen.getArr()[next]];
-        int color;
-        if (setting.getGameMode() == 0) {
-            color = BlockModel.getColor(gen.getArr()[next]);
-        } else {
-            color = BlockModel.getColor(gen.getArr()[next]);
-        }
+        ItemBlockController nextBlock = itemGameAreaController.getNextBlock();
+        int[][] now = nextBlock.getShape();
+        int color= nextBlock.getColor();
+
         for (int r = 0; r < now.length; r++) {
             for (int c = 0; c < now[0].length; c++) {
-                if (now[r][c] != 0) {
+                if (now[r][c] > 0 && now[r][c]<=7) {
                     now[r][c] = color;
                 }
             }
@@ -144,11 +143,12 @@ public class temp {
 
     public void func1()
     {
-        itemGameAreaController.moveBlockToBackground();
-        int current_lines = itemGameAreaController.clearLines2();
+        itemGameAreaController.moveBlockToBackground(); //블럭 뒤로 보내고
+        int current_lines = itemGameAreaController.clearLines2(); //색을 바꿈
         if (current_lines > 0) {
-            Effect = true;
+            Effect = true; //이펙트를 줘야하는것을 알림
         }
+        //점수
         lines += current_lines;
         lineIndex += current_lines;
         int current_score = 2 * (current_lines * current_lines + (int) ((1250 - (int) (delay / velocity)) / 100) * current_lines + lines * current_lines);
@@ -160,11 +160,16 @@ public class temp {
         } else {
             score += current_score;
         }
+        //점수
+
+        //블럭 생성.
         if (lineIndex>=10) {
             int c = r2.nextInt(5) + 8; // 0, 1, 2, 3, 4 중에 하나 생성되고, 거기에 8이 더해져서 8, 9, 10, 11, 12가 된다.
-            itemGameAreaController.spawnBlock2(gen.getArr()[next], c, true);
             lineIndex -= 10;
+            itemGameAreaController.switchBlock(); //원래의 다음블럭을 현재 블럭으로 받아서 생성
+            itemGameAreaController.spawnBlock2(gen.getArr()[next], c, true); //새로운 다음 블럭의 정보 생성
         } else {
+            itemGameAreaController.switchBlock();
             itemGameAreaController.spawnBlock2(gen.getArr()[next], 1, false);//노말아이템
         }
 

@@ -11,7 +11,6 @@ public class ItemBlockController {
     private int x, y;
     private int currentRotation = 0;
     private ItemBlock inf;
-
     public ItemBlockController(int bln, int random, boolean item) {
         this.bln = bln;
         ItemBlock ca = new ItemBlock(random, item);
@@ -19,7 +18,6 @@ public class ItemBlockController {
         this.shape = inf.getBlockShape(bln, currentRotation);
         this.color = inf.getColor(bln);
     }
-
     public void spawn(int gridWidth) {
         Random r = new Random();
         currentRotation = r.nextInt(4);
