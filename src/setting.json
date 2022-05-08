@@ -1,29 +1,55 @@
 {
   "customKey": {
-    "resume": 82,
-    "drop": 68,
-    "exit": 27,
-    "rotate": 38,
-    "left": 37,
-    "right": 39,
-    "down": 40,
-    "pause": 80
+    "player1": {
+      "resume": 82,
+      "drop": 68,
+      "exit": 27,
+      "rotate": 38,
+      "left": 37,
+      "right": 39,
+      "down": 40,
+      "pause": 80
+    },
+    "player2": {
+      "resume": 82,
+      "drop": 68,
+      "exit": 27,
+      "rotate": 38,
+      "left": 37,
+      "right": 39,
+      "down": 40,
+      "pause": 80
+    }
+
   },
-  "difficulty": "hard",
+  "difficulty": "easy",
   "display": {
-    "width": 1000,
-    "height": 1500
+    "width": 800,
+    "height": 800
   },
-  "gameMode": "normal",
+  "gameMode": "item",
   "defaultKey": {
-    "resume": 82,
-    "drop": 68,
-    "exit": 27,
-    "rotate": 38,
-    "left": 37,
-    "right": 39,
-    "down": 40,
-    "pause": 80
+    "player1": {
+      "resume": 82,
+      "drop": 68,
+      "exit": 27,
+      "rotate": 38,
+      "left": 37,
+      "right": 39,
+      "down": 40,
+      "pause": 80
+    },
+    "player2": {
+      "resume": 82,
+      "drop": 46,
+      "exit": 27,
+      "rotate": 47,
+      "left": 37,
+      "right": 39,
+      "down": 40,
+      "pause": 80
+    }
+
   },
   "displayMode": "blind"
 }

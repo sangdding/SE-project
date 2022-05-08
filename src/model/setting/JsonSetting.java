@@ -22,9 +22,11 @@ public class JsonSetting implements Setting {
     private JSONObject gameMode;
     private JSONObject displayMode;
     private ObjectMapper objectMapper;
+    private String player;
 
-    public JsonSetting() {
+    public JsonSetting(String player) {
         JSONParser parser = new JSONParser();
+        this.player = player;
         objectMapper = new ObjectMapper();
         try {
             Reader readerSetting = new FileReader("src/setting.json");
@@ -37,8 +39,8 @@ public class JsonSetting implements Setting {
             System.out.println("파싱 에러");
         }
 
-        defaultKeyset = (JSONObject) settingData.get("defaultKey");
-        customKeyset = (JSONObject) settingData.get("customKey");
+        defaultKeyset = (JSONObject) ((JSONObject) settingData.get("defaultKey")).get(player);
+        customKeyset = (JSONObject) ((JSONObject) settingData.get("customKey")).get(player);
         displaySet = (JSONObject) settingData.get("display");
 
     }
@@ -62,7 +64,7 @@ public class JsonSetting implements Setting {
             for(String key : changeKey.keySet()) {
                 customKeyset.replace(key, changeKey.get(key)); // json 파일에 키 정보 저장 후
             }
-            settingData.replace("customKey", customKeyset);
+            ((JSONObject) settingData.get("customKey")).replace(player, customKeyset);
             gson.toJson(settingData, fw); // 로컬에 저장
             fw.flush();
             fw.close();
@@ -88,7 +90,7 @@ public class JsonSetting implements Setting {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try {
             FileWriter fw = new FileWriter("src/setting.json");
-            settingData.replace("customKey", defaultKeyset);
+            ((JSONObject) settingData.get("customKey")).replace(player, defaultKeyset);
             gson.toJson(settingData, fw); // 로컬에 저장
             fw.flush();
             fw.close();
