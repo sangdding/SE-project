@@ -20,14 +20,13 @@
       "down": 40,
       "pause": 80
     }
-
   },
   "difficulty": "easy",
   "display": {
     "width": 800,
     "height": 800
   },
-  "gameMode": "item",
+  "gameMode": "normal",
   "defaultKey": {
     "player1": {
       "resume": 82,
@@ -49,7 +48,6 @@
       "down": 40,
       "pause": 80
     }
-
   },
   "displayMode": "blind"
 }
