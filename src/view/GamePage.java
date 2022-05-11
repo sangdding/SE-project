@@ -76,13 +76,11 @@ public class GamePage extends JFrame {
     public GamePage() {
         //초기화
         initialize();
-
         //키보드 이벤트 처리 설정
         setKeyEventController();
         //버튼 마우스 입력 처리 설정
         setButtonClickController();
         drawGameBoard(tempClass.getBackground());
-
         if(setting.getGameMode()==BlindMode)
         {
             setTimer2();
@@ -202,27 +200,24 @@ public class GamePage extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 requestFocus();
                 setFocusable(true);
-
-
-                if (tempClass.itemGameAreaController.ga.block == null) {
+                if (tempClass.itemGameAreaController.ga.block == null) { //끝난경우
                 }
-
-                else if (tempClass.itemGameAreaController.ga.block.shape[0][0] == 9) {
+                else if (tempClass.itemGameAreaController.ga.block.shape[0][0] == 9) { //무게추 아이템인 경우
                     tempClass.func2();
                     drawGameBoard(tempClass.itemGameAreaController.newBackground());
                 }
 
                 else {
-                    tempClass.clearLinesInTempClass();
-                    tempClass.itemGameAreaController.moveBlockDown();
+                    tempClass.clearLinesInTempClass(); //줄을 지우고
+                    tempClass.itemGameAreaController.moveBlockDown(); //블럭 1칸 떨어뜨림
 
 
 
-                    drawGameBoard(tempClass.itemGameAreaController.newBackground());
+                    drawGameBoard(tempClass.itemGameAreaController.newBackground()); //그림
 
 
 
-                    if (!tempClass.itemGameAreaController.checkBottom()) {
+                    if (!tempClass.itemGameAreaController.checkBottom()) { //블럭이 닿았으면
                         if (tempClass.itemGameAreaController.isBlockOuOofBounds()) {
                             //게임 종료
                             // (아이템전)
@@ -237,7 +232,7 @@ public class GamePage extends JFrame {
 
 
                         else {
-                            tempClass.func1();
+                            tempClass.func1(); //색을 바꾸고
                             timer.setDelay((int) tempClass.getDelay());
                             drawGameBoard(tempClass.itemGameAreaController.newBackground());
                         }

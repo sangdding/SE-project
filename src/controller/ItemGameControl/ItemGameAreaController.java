@@ -7,9 +7,13 @@ public class ItemGameAreaController extends GameAreaItem implements ItemMode {
     public GameAreaItem ga;
     public temp tp;
     public int i=0;
+    public ItemBlockController nextBlock;
+    public int nextRandom;
     public ItemGameAreaController(temp tp){
         this.ga=new GameAreaItem();
         this.tp=tp;
+        this.nextBlock=null;
+        this.nextRandom=1;
     }
 
     // 커밋
@@ -84,19 +88,39 @@ public class ItemGameAreaController extends GameAreaItem implements ItemMode {
         }
         return true;
     }
+    public void spawnBlock(int bln, int random, boolean item){
+        ga.block = new ItemBlockController(bln,random,item);
+        ga.block.spawn(gridColumns);
+    }
     @Override
     public void spawnBlock2(int bln, int random,boolean item){
         if(random==9){//불도저 만들기
-            ga.block = new ItemBlockController(8,random,item);
-            ga.block.doser(gridColumns);
+            this.nextBlock = new ItemBlockController(8,random,item);
+            this.nextRandom=random;
         }
         else {
             if(random==12){
-                ga.block = new ItemBlockController(7,12,item);
+                this.nextBlock = new ItemBlockController(7,12,item);
+                this.nextRandom=random;
+            }
+            else {
+                this.nextBlock = new ItemBlockController(bln, random, item);
+                this.nextRandom=random;
+            }
+        }
+    }
+    public void switchBlock(){
+        if(nextRandom==9){//불도저 만들기
+            ga.block = nextBlock;
+            ga.block.doser(gridColumns);
+        }
+        else {
+            if(nextRandom==12){
+                ga.block = nextBlock;
                 ga.block.spawn(gridColumns);
             }
             else {
-                ga.block = new ItemBlockController(bln, random, item);
+                ga.block = nextBlock;
                 ga.block.spawn(gridColumns);
             }
         }
@@ -164,6 +188,9 @@ public class ItemGameAreaController extends GameAreaItem implements ItemMode {
                 tp.score++;
             }
         }
+    }
+    public ItemBlockController getNextBlock(){
+        return this.nextBlock;
     }
     @Override
     public int[][] moveBlockRight() {
