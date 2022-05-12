@@ -81,7 +81,7 @@ public class GamePage extends JFrame {
         //버튼 마우스 입력 처리 설정
         setButtonClickController();
         drawGameBoard(tempClass.getBackground());
-        if(setting.getGameMode()==BlindMode)
+        if(setting.getGameMode()==ItemMode)
         {
             setTimer2();
         }
@@ -107,6 +107,7 @@ public class GamePage extends JFrame {
         nextBlockPane.setMargin(new Insets(300, 0, 0, 0));
 
         gameBoardPane.setEditable(true);
+
         this.add(mainPanel);
 
         //설정 읽어오기
