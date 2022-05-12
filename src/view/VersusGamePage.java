@@ -36,6 +36,9 @@ public class VersusGamePage extends JFrame{
     private JButton mainButton;
     private JButton exitButton;
 
+    private JTextPane gameBoardPaneArray[] = {gameBoardPane1,gameBoardPane2};
+    private JTextPane nextBlockPaneArray[] = {nextBlockPane1,nextBlockPane2};
+
     private PageController pageController;
 
     private final int ItemMode=1;
@@ -420,47 +423,48 @@ public class VersusGamePage extends JFrame{
 
     }
 
+
     public void drawGameBoard(int[][] background, int index) {
 
         //이전 화면 지우기
-        gameBoardPane.setText("");
+        gameBoardPaneArray[index-1].setText("");
         //여기서부턴 화면에 그리기
 
 
-        drawTextWithColor(gameBoardPane, "XXXXXXXXXXXX\n", Color.BLACK);
+        drawTextWithColor(gameBoardPaneArray[index-1], "XXXXXXXXXXXX\n", Color.BLACK);
 
 
         for (int i = 0; i < 20; i++) {
-            drawTextWithColor(gameBoardPane, "X", Color.BLACK);
+            drawTextWithColor(gameBoardPaneArray[index-1], "X", Color.BLACK);
 
             for (int j = 0; j < 10; j++) {
                 //일반 블럭 그리기
                 if (background[i][j] < 8) {
-                    if (setting.getDisplayMode() ==NotBlindMode ) { //일반모드 그리기
-                        drawTextWithColor(gameBoardPane, "X", colorForBlock[background[i][j]]);
+                    if (settingForPlayer1.getDisplayMode() ==NotBlindMode ) { //일반모드 그리기
+                        drawTextWithColor(gameBoardPaneArray[index-1], "X", colorForBlock[background[i][j]]);
                     } else { // 색맹모드 그리기
-                        drawTextWithColor(gameBoardPane, "X", colorFOrBlindModeBlock[background[i][j]]);
+                        drawTextWithColor(gameBoardPaneArray[index-1], "X", colorFOrBlindModeBlock[background[i][j]]);
                     }
                 }
                 else {
-                    if (setting.getDisplayMode() == NotBlindMode) { //일반모드 그리기
-                        drawTextWithColor(gameBoardPane, String.valueOf(blockShape[background[i][j]]), colorForBlock[background[i][j]]);
+                    if (settingForPlayer1.getDisplayMode() == NotBlindMode) { //일반모드 그리기
+                        drawTextWithColor(gameBoardPaneArray[index-1], String.valueOf(blockShape[background[i][j]]), colorForBlock[background[i][j]]);
                     } else { // 색맹모드 그리기
-                        drawTextWithColor(gameBoardPane, String.valueOf(blockShape[background[i][j]]), colorFOrBlindModeBlock[background[i][j]]);
+                        drawTextWithColor(gameBoardPaneArray[index-1], String.valueOf(blockShape[background[i][j]]), colorFOrBlindModeBlock[background[i][j]]);
                     }
                 }
 
             }
-            drawTextWithColor(gameBoardPane, "X\n", Color.BLACK);
+            drawTextWithColor(gameBoardPaneArray[index-1], "X\n", Color.BLACK);
         }
 
 
-        drawTextWithColor(gameBoardPane, "XXXXXXXXXXXX", Color.BLACK);
+        drawTextWithColor(gameBoardPaneArray[index-1], "XXXXXXXXXXXX", Color.BLACK);
 
         //이거 없어도 보드는 그려진다. 뭔가 스타일 관련 코드인 듯
-        StyledDocument doc = gameBoardPane.getStyledDocument();
+        StyledDocument doc = gameBoardPaneArray[index-1].getStyledDocument();
         doc.setParagraphAttributes(0, doc.getLength(), styleSet, false);
-        gameBoardPane.setStyledDocument(doc);
+        gameBoardPaneArray[index-1].setStyledDocument(doc);
 
     }
 
@@ -478,18 +482,18 @@ public class VersusGamePage extends JFrame{
         for (int i = 0; i < nextBlock.length; i++) {
 
             for (int j = 0; j < nextBlock[i].length; j++) {
-                if(setting.getDisplayMode()==NotBlindMode) drawTextWithColor(nextBlockPane, "X", colorForBlock[background[i][j]]); //일반 모드
-                else drawTextWithColor(nextBlockPane, "XX", colorFOrBlindModeBlock[background[i][j]]); //색맹 모드
+                if(settingForPlayer1.getDisplayMode()==NotBlindMode) drawTextWithColor(nextBlockPaneArray[index-1], "X", colorForBlock[background[i][j]]); //일반 모드
+                else drawTextWithColor(nextBlockPaneArray[index-1], "XX", colorFOrBlindModeBlock[background[i][j]]); //색맹 모드
             }
 
-            drawTextWithColor(nextBlockPane, "\n", Color.BLACK);
+            drawTextWithColor(nextBlockPaneArray[index-1], "\n", Color.BLACK);
         }
         //이거 없어도 보드는 그려진다. 뭔가 스타일 관련 코드인 듯
-        StyledDocument doc = nextBlockPane.getStyledDocument();
+        StyledDocument doc = nextBlockPaneArray[index-1].getStyledDocument();
 
 
         doc.setParagraphAttributes(0, doc.getLength(), styleSet, false);
-        nextBlockPane.setStyledDocument(doc);
+        nextBlockPaneArray[index-1].setStyledDocument(doc);
 
     }
 
