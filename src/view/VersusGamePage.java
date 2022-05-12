@@ -9,6 +9,8 @@ import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.HashMap;
 
 public class VersusGamePage extends JFrame{
@@ -382,6 +384,279 @@ public class VersusGamePage extends JFrame{
         StyleConstants.setBold(styleSet, false);
         StyleConstants.setAlignment(styleSet, StyleConstants.ALIGN_CENTER);
     }
+
+
+    private void setKeyEventController() {
+        addKeyListener(new KeyAdapter() { //키 이벤트
+            @Override
+            public void keyPressed(KeyEvent e) { //키 눌렀을때
+                // TODO Auto-generated method stub
+                //원래 switch case문인데, case에 constant 값만 들어갈 수 있어서 if로 교체
+                int pressedKey = e.getKeyCode();
+
+                if (pressedKey == keySettingMapForPlayer1.get("resume")) {
+                    if (isStop) {
+                        isStop = false;
+                        timerForPlyer1.start();
+                        timerForPlyer2.start();
+                    }
+                }
+                else if (pressedKey == keySettingMapForPlayer1.get("exit")) {
+                    timerForPlyer1.stop();
+                    timerForPlyer2.stop();
+                    dispose();
+
+                    pageController = new PageController("Main");
+
+                }
+                else if (pressedKey == keySettingMapForPlayer1.get("pause")) {
+                    if (!isStop) {
+                        isStop = true;
+                        timerForPlyer1.stop();
+                        timerForPlyer2.stop();
+                    }
+                }
+
+
+                //player1 key setting
+                else if (pressedKey == keySettingMapForPlayer1.get("drop")) {
+                    if (settingForPlayer1.getGameMode() == 0) {
+                        if (tempClassForPlayer1.itemGameAreaController.ga.block == null || tempClassForPlayer1.getEffect()) {
+                        } else {
+
+                            tempClassForPlayer1.itemGameAreaController.dropBlock();
+                            drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
+                        }
+                    } else {
+                        if (tempClassForPlayer1.itemGameAreaController.ga.block.shape[0][0] == 9) {
+                            if (tempClassForPlayer1.getChew()) {
+                            } else {
+                                tempClassForPlayer1.itemGameAreaController.dropBlock();
+                                drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
+                            }
+                        } else {
+                            if (tempClassForPlayer1.itemGameAreaController.ga.block == null) {
+                            } else {
+                                tempClassForPlayer1.itemGameAreaController.dropBlock();
+                                drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
+                            }
+                        }
+                    }
+                }
+
+                else if ((settingForPlayer1.getGameMode() == 0 && tempClassForPlayer1.itemGameAreaController.ga.block == null) ||
+                        (settingForPlayer1.getGameMode() == 1 && tempClassForPlayer1.itemGameAreaController.ga.block == null)) {
+                }
+                else if (pressedKey == keySettingMapForPlayer1.get("left")) {
+                    if (settingForPlayer1.getGameMode() == 0) {
+                        if (tempClassForPlayer1.itemGameAreaController.ga.block == null) {
+                        } else {
+                            tempClassForPlayer1.itemGameAreaController.moveBlockLeft();
+                            drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
+                        }
+                    }
+                    else {
+                        if (tempClassForPlayer1.itemGameAreaController.ga.block.shape[0][0] == 9) {
+                            if (tempClassForPlayer1.getChew()) {
+                            } else {
+                                tempClassForPlayer1.itemGameAreaController.moveBlockLeft();
+                                drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
+                            }
+                        } else {
+                            if (tempClassForPlayer1.itemGameAreaController.ga.block == null) {
+                            } else {
+                                tempClassForPlayer1.itemGameAreaController.moveBlockLeft();
+                                drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
+                            }
+                        }
+                    }
+
+                }
+                else if (pressedKey == keySettingMapForPlayer1.get("rotate")) {
+                    if (settingForPlayer1.getGameMode() == 0) {
+                        if (tempClassForPlayer1.itemGameAreaController.ga.block == null) {
+                        } else {
+                            tempClassForPlayer1.itemGameAreaController.rotateBlock();
+                            drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
+                        }
+                    } else {
+                        if (tempClassForPlayer1.itemGameAreaController.ga.block.shape[0][0] == 9) {
+                        } else {
+                            if (tempClassForPlayer1.itemGameAreaController.ga.block == null) {
+                            } else {
+                                tempClassForPlayer1.itemGameAreaController.rotateBlock();
+                                drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
+                            }
+
+                        }
+                    }
+                }
+                else if (pressedKey == keySettingMapForPlayer1.get("right")) {
+                    if (settingForPlayer1.getGameMode() == 0) {
+                        if (tempClassForPlayer1.itemGameAreaController.ga.block == null) {
+                        } else {
+                            tempClassForPlayer1.itemGameAreaController.moveBlockRight();
+                            drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
+                        }
+                    } else {
+                        if (tempClassForPlayer1.itemGameAreaController.ga.block.shape[0][0] == 9) {
+                            if (tempClassForPlayer1.getChew()) {
+                            } else {
+                                tempClassForPlayer1.itemGameAreaController.moveBlockRight();
+                                drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
+                            }
+                        } else {
+                            if (tempClassForPlayer1.itemGameAreaController.ga.block == null) {
+                            } else {
+                                tempClassForPlayer1.itemGameAreaController.moveBlockRight();
+                                drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
+                            }
+                        }
+                    }
+                }
+                else if (pressedKey == keySettingMapForPlayer1.get("down")) {
+                    if (settingForPlayer1.getGameMode() == 0) {
+                        if (tempClassForPlayer1.itemGameAreaController.ga.block == null) {
+                        } else {
+                            tempClassForPlayer1.itemGameAreaController.moveBlockDown();
+                            drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
+                        }
+                    }
+                    else {
+                        if (tempClassForPlayer1.itemGameAreaController.ga.block == null || tempClassForPlayer1.getChew()) {
+                        } else if (tempClassForPlayer1.itemGameAreaController.ga.block.shape[0][0] == 9){
+                            tempClassForPlayer1.itemGameAreaController.moveBlockDown2();
+                            drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
+                        }
+                        else{
+                            tempClassForPlayer1.itemGameAreaController.moveBlockDown();
+                            drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
+                        }
+                    }
+                }
+
+
+                //player2 key setting
+                else if (pressedKey == keySettingMapForPlayer2.get("drop")) {
+                    if (settingForPlayer2.getGameMode() == 0) {
+                        if (tempClassForPlayer2.itemGameAreaController.ga.block == null || tempClassForPlayer2.getEffect()) {
+                        } else {
+
+                            tempClassForPlayer2.itemGameAreaController.dropBlock();
+                            drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
+                        }
+                    } else {
+                        if (tempClassForPlayer2.itemGameAreaController.ga.block.shape[0][0] == 9) {
+                            if (tempClassForPlayer2.getChew()) {
+                            } else {
+                                tempClassForPlayer2.itemGameAreaController.dropBlock();
+                                drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
+                            }
+                        } else {
+                            if (tempClassForPlayer2.itemGameAreaController.ga.block == null) {
+                            } else {
+                                tempClassForPlayer2.itemGameAreaController.dropBlock();
+                                drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
+                            }
+                        }
+                    }
+                }
+
+                else if ((settingForPlayer2.getGameMode() == 0 && tempClassForPlayer2.itemGameAreaController.ga.block == null) ||
+                        (settingForPlayer2.getGameMode() == 1 && tempClassForPlayer2.itemGameAreaController.ga.block == null)) {
+                }
+                else if (pressedKey == keySettingMapForPlayer2.get("left")) {
+                    if (settingForPlayer2.getGameMode() == 0) {
+                        if (tempClassForPlayer2.itemGameAreaController.ga.block == null) {
+                        } else {
+                            tempClassForPlayer2.itemGameAreaController.moveBlockLeft();
+                            drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
+                        }
+                    }
+                    else {
+                        if (tempClassForPlayer2.itemGameAreaController.ga.block.shape[0][0] == 9) {
+                            if (tempClassForPlayer2.getChew()) {
+                            } else {
+                                tempClassForPlayer2.itemGameAreaController.moveBlockLeft();
+                                drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
+                            }
+                        } else {
+                            if (tempClassForPlayer2.itemGameAreaController.ga.block == null) {
+                            } else {
+                                tempClassForPlayer2.itemGameAreaController.moveBlockLeft();
+                                drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
+                            }
+                        }
+                    }
+
+                }
+                else if (pressedKey == keySettingMapForPlayer2.get("rotate")) {
+                    if (settingForPlayer2.getGameMode() == 0) {
+                        if (tempClassForPlayer2.itemGameAreaController.ga.block == null) {
+                        } else {
+                            tempClassForPlayer2.itemGameAreaController.rotateBlock();
+                            drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
+                        }
+                    } else {
+                        if (tempClassForPlayer2.itemGameAreaController.ga.block.shape[0][0] == 9) {
+                        } else {
+                            if (tempClassForPlayer2.itemGameAreaController.ga.block == null) {
+                            } else {
+                                tempClassForPlayer2.itemGameAreaController.rotateBlock();
+                                drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
+                            }
+
+                        }
+                    }
+                }
+                else if (pressedKey == keySettingMapForPlayer2.get("right")) {
+                    if (settingForPlayer2.getGameMode() == 0) {
+                        if (tempClassForPlayer2.itemGameAreaController.ga.block == null) {
+                        } else {
+                            tempClassForPlayer2.itemGameAreaController.moveBlockRight();
+                            drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
+                        }
+                    } else {
+                        if (tempClassForPlayer2.itemGameAreaController.ga.block.shape[0][0] == 9) {
+                            if (tempClassForPlayer2.getChew()) {
+                            } else {
+                                tempClassForPlayer2.itemGameAreaController.moveBlockRight();
+                                drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
+                            }
+                        } else {
+                            if (tempClassForPlayer2.itemGameAreaController.ga.block == null) {
+                            } else {
+                                tempClassForPlayer2.itemGameAreaController.moveBlockRight();
+                                drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
+                            }
+                        }
+                    }
+                }
+                else if (pressedKey == keySettingMapForPlayer2.get("down")) {
+                    if (settingForPlayer2.getGameMode() == 0) {
+                        if (tempClassForPlayer2.itemGameAreaController.ga.block == null) {
+                        } else {
+                            tempClassForPlayer2.itemGameAreaController.moveBlockDown();
+                            drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
+                        }
+                    }
+                    else {
+                        if (tempClassForPlayer2.itemGameAreaController.ga.block == null || tempClassForPlayer2.getChew()) {
+                        } else if (tempClassForPlayer2.itemGameAreaController.ga.block.shape[0][0] == 9){
+                            tempClassForPlayer2.itemGameAreaController.moveBlockDown2();
+                            drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
+                        }
+                        else{
+                            tempClassForPlayer2.itemGameAreaController.moveBlockDown();
+                            drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
+                        }
+                    }
+                }
+
+            }
+        });
+    }
+
 
     private void setButtonClickController() {
         mainButton.addActionListener(new ActionListener() {
