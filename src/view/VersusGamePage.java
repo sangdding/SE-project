@@ -747,7 +747,7 @@ public class VersusGamePage extends JFrame{
     private void drawNextBlock(int[][] background, int index) {
 
         //이전 화면 지우기
-        nextBlockPane1.setText("");
+        nextBlockPaneArray[index-1].setText("");
 
 
         //여기서부턴 화면에 그리기
@@ -758,7 +758,7 @@ public class VersusGamePage extends JFrame{
 
             for (int j = 0; j < nextBlock[i].length; j++) {
                 if(settingForPlayer1.getDisplayMode()==NotBlindMode) drawTextWithColor(nextBlockPaneArray[index-1], "X", colorForBlock[background[i][j]]); //일반 모드
-                else drawTextWithColor(nextBlockPaneArray[index-1], "XX", colorFOrBlindModeBlock[background[i][j]]); //색맹 모드
+                else drawTextWithColor(nextBlockPaneArray[index-1], "X", colorFOrBlindModeBlock[background[i][j]]); //색맹 모드
             }
 
             drawTextWithColor(nextBlockPaneArray[index-1], "\n", Color.BLACK);

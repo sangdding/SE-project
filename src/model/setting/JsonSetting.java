@@ -166,7 +166,10 @@ public class JsonSetting implements Setting {
             return 0;
         } else if (settingData.get("gameMode").equals("item")) {
             return 1;
-        } else {
+        }else if (settingData.get("gameMode").equals("timer")) {
+            return 2;
+        }
+        else {
             return -1;
         }
     }
@@ -180,7 +183,10 @@ public class JsonSetting implements Setting {
                 settingData.replace("gameMode", "normal");
             } else if(gameModeValue == 1) {
                 settingData.replace("gameMode", "item");
+            }else if(gameModeValue == 2) {
+                settingData.replace("gameMode", "timer");
             }
+
             gson.toJson(settingData, fw); // 로컬에 저장
             fw.flush();
             fw.close();
