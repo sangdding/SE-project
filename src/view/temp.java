@@ -110,6 +110,7 @@ public class temp {
     public void clearLinesWhenBlockIsBottomButNotEnd()
     {
         itemGameAreaController.moveBlockToBackground();
+        itemGameAreaController.switchBlock();
         itemGameAreaController.spawnBlock2(gen.getArr()[next],1,false);
         int current_line = itemGameAreaController.clearLines2();
 
@@ -128,9 +129,17 @@ public class temp {
 
     public int[][] getNextBlock() {
         ItemBlockController nextBlock = itemGameAreaController.getNextBlock();
-        int[][] now = nextBlock.getShape();
+        int[][] now = new int[nextBlock.getShape().length][nextBlock.getShape()[0].length];
+        now = nextBlock.getShape();
+        for(int i=0; i<now.length;i++){
+            for(int j=0; j<now[0].length;j++){
+                System.out.print(now[i][j]);
+                System.out.print(',');
+            }
+            System.out.println();
+        }
+        System.out.println("-------------");
         int color= nextBlock.getColor();
-
         for (int r = 0; r < now.length; r++) {
             for (int c = 0; c < now[0].length; c++) {
                 if (now[r][c] > 0 && now[r][c]<=7) {
@@ -138,6 +147,14 @@ public class temp {
                 }
             }
         }
+        for(int i=0; i<now.length;i++){
+            for(int j=0; j<now[0].length;j++){
+                System.out.print(now[i][j]);
+                System.out.print(',');
+            }
+            System.out.println();
+        }
+        System.out.println("*************");
         return now;
     }
 
@@ -163,11 +180,12 @@ public class temp {
         //점수
 
         //블럭 생성.
-        if (lineIndex>=10) {
+        if (true) {
             int c = r2.nextInt(5) + 8; // 0, 1, 2, 3, 4 중에 하나 생성되고, 거기에 8이 더해져서 8, 9, 10, 11, 12가 된다.
             lineIndex -= 10;
             itemGameAreaController.switchBlock(); //원래의 다음블럭을 현재 블럭으로 받아서 생성
             itemGameAreaController.spawnBlock2(gen.getArr()[next], c, true); //새로운 다음 블럭의 정보 생성
+
         } else {
             itemGameAreaController.switchBlock();
             itemGameAreaController.spawnBlock2(gen.getArr()[next], 1, false);//노말아이템
@@ -193,7 +211,8 @@ public class temp {
 
         if (end) {
             itemGameAreaController.moveBlockToBackground();
-            itemGameAreaController.spawnBlock2(gen.getArr()[next], 1, false);
+            itemGameAreaController.switchBlock(); //원래의 다음블럭을 현재 블럭으로 받아서 생성
+            itemGameAreaController.spawnBlock2(gen.getArr()[next], 1, false); //새로운 다음 블럭의 정보 생성
             next++;
             chew = false;
             end=false;
