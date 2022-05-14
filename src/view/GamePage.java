@@ -207,7 +207,6 @@ public class GamePage extends JFrame {
                     tempClass.func2();
                     drawGameBoard(tempClass.itemGameAreaController.newBackground());
                 }
-
                 else {
                     tempClass.clearLinesInTempClass(); //줄을 지우고
                     tempClass.itemGameAreaController.moveBlockDown(); //블럭 1칸 떨어뜨림
@@ -500,8 +499,7 @@ public class GamePage extends JFrame {
         int nextBlock[][] = background;
 
         for (int i = 0; i < nextBlock.length; i++) {
-
-            for (int j = 0; j < nextBlock[i].length; j++) {
+            for (int j = 0; j < nextBlock[0].length; j++) {
                 if(setting.getDisplayMode()==NotBlindMode) drawTextWithColor(nextBlockPane, "X", colorForBlock[background[i][j]]); //일반 모드
                 else drawTextWithColor(nextBlockPane, "X", colorFOrBlindModeBlock[background[i][j]]); //색맹 모드
             }
