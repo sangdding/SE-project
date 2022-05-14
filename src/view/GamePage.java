@@ -67,7 +67,7 @@ public class GamePage extends JFrame {
     }; // white for backgroind + 13 colors for blind block
 
     private char[] blockShape = new char[]{
-            'A', 'B', 'C', 'D', 'E', 'F', 'H', 'J', 'L', 'O', 'T', 'S', 'Q', 'O'
+            'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'L', 'O', 'T', 'S', 'Q', 'O'
     };
 
     private int gameMode;
@@ -500,8 +500,8 @@ public class GamePage extends JFrame {
 
         for (int i = 0; i < nextBlock.length; i++) {
             for (int j = 0; j < nextBlock[0].length; j++) {
-                if(setting.getDisplayMode()==NotBlindMode) drawTextWithColor(nextBlockPane, "X", colorForBlock[background[i][j]]); //일반 모드
-                else drawTextWithColor(nextBlockPane, "X", colorFOrBlindModeBlock[background[i][j]]); //색맹 모드
+                if(setting.getDisplayMode()==NotBlindMode) drawTextWithColor(nextBlockPane, String.valueOf(blockShape[background[i][j]]), colorForBlock[background[i][j]]); //일반 모드
+                else drawTextWithColor(nextBlockPane, String.valueOf(blockShape[background[i][j]]), colorFOrBlindModeBlock[background[i][j]]); //색맹 모드
             }
 
             drawTextWithColor(nextBlockPane, "\n", Color.BLACK);
