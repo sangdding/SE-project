@@ -480,6 +480,8 @@ public class ItemGameAreaController extends GameAreaItem implements ItemMode {
                     }
                 }
             }
+            if(ga.block.getY()!=-ga.block.getHeight()+1){}
+            else{ga.block.moveUp();}
             for(int c=0;c<10;c++){
                 ga.background[r-1][c]=ga.background[r][c];
             }
