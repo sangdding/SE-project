@@ -1,22 +1,14 @@
 {
   "normal": {
-    "aaa": 3000,
-    "ddd": 3000,
-    "admin": -1,
-    "zzz": 3000,
-    "AAAA": 23423
+    "admin": -1
   },
   "item": {
-    "admin": -1,
-    "AAAA": 23423
+    "admin": -1
   },
   "normalDifficulty": {
-    "aaa": 0,
-    "ddd": 2,
-    "zzz": 1,
-    "AAAA": 1
+    "admin": -1
   },
   "itemDifficulty": {
-    "AAAA": 1
+    "admin": -1
   }
 }

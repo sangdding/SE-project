@@ -7,7 +7,7 @@ public class ItemBlock implements Block {
                     {{0, 1, 1}, {1, 1, 0}}, {{0, 1, 0}, {1, 1, 1}}, {{1, 1, 0}, {0, 1, 1}},{{1}},{{9,9,9,9}}};
 
     private int[][][][] rotateBlock = new int[9][4][][];
-
+    private int index;
     private int[] color = {1, 2, 3, 4, 5, 6, 7, 7, 7, 7, 7, 7};
 
     public ItemBlock(int random,boolean item) {
@@ -16,10 +16,10 @@ public class ItemBlock implements Block {
         for(int i=0; i<7; i++){
             int wid= this.normalBlock[i][0].length;
             int hei = this.normalBlock[i].length;
-            int index = r2.nextInt(wid*hei);
+            this.index = r2.nextInt(wid*hei);
             if(random!=9) {
                 while(this.normalBlock[i][(int)(index/wid)][index%wid]==0){
-                    index=r2.nextInt(wid*hei);
+                    this.index=r2.nextInt(wid*hei);
                     System.out.print(index);
                     }
                 this.normalBlock[i][(int)(index/wid)][index%wid]=random;
@@ -56,4 +56,6 @@ public class ItemBlock implements Block {
     public int getColor(int index) {
         return color[index];
     }
+
+    public int getIndex(){return index;}
 }

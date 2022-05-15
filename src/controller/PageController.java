@@ -10,6 +10,7 @@ public class PageController {
     private ScorePage scorePage;
     private GameEndPage gameEndPage;
     private KeySettingPage keySettingPage;
+    private VersusGamePage versusGamePage;
 
 
     private int score=0;
@@ -36,6 +37,9 @@ public class PageController {
         }
         else if (pageName.equals("Game End")){
             gameEndPage=new GameEndPage(score);
+        }
+        else if (pageName.equals("Game Start - Versus - NormalMode") || pageName.equals("Game Start - Versus - ItemMode")||pageName.equals("Game Start - Versus - TimerMode")) {
+            versusGamePage = new VersusGamePage();
         }
     }
 

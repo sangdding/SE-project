@@ -23,12 +23,13 @@ public class MainPage extends JFrame{
     private JButton exitButton;
     private JButton gameStartItemModeButton;
     private JButton scoreBoardItemButton;
+    private JButton gameStartVersusModeButton;
 
 
-    private Setting setting = new JsonSetting();
+    private Setting setting = new JsonSetting("player1");
     private PageController pageController;
 
-    private JButton[] buttons=new JButton[]{gameStartNormalModeButton, gameStartItemModeButton, settingButton, scoreBoardNormalButton, scoreBoardItemButton, exitButton };
+    private JButton[] buttons=new JButton[]{gameStartNormalModeButton, gameStartItemModeButton, gameStartVersusModeButton,  settingButton, scoreBoardNormalButton, scoreBoardItemButton, exitButton };
     private int buttonSelectorIndex =0;
 
 
@@ -83,6 +84,37 @@ public class MainPage extends JFrame{
                 // TODO Auto-generated method stub
                 switch (e.getKeyCode()) {//키 코드로 스위치
 
+                    case KeyEvent.VK_RIGHT:
+                        if(buttonSelectorIndex!=2) break;
+                        if(buttons[buttonSelectorIndex].getText().equals("Game Start - Versus - NormalMode"))
+                        {
+                            buttons[buttonSelectorIndex].setText("Game Start - Versus - ItemMode");
+                        }
+                        else if(buttons[buttonSelectorIndex].getText().equals("Game Start - Versus - ItemMode"))
+                        {
+                            buttons[buttonSelectorIndex].setText("Game Start - Versus - TimerMode");
+                        }
+                        else if(buttons[buttonSelectorIndex].getText().equals("Game Start - Versus - TimerMode"))
+                        {
+                            buttons[buttonSelectorIndex].setText("Game Start - Versus - NormalMode");
+                        }
+                        break;
+
+                    case KeyEvent.VK_LEFT:
+                        if(buttonSelectorIndex!=2) break;
+                        if(buttons[buttonSelectorIndex].getText().equals("Game Start - Versus - NormalMode"))
+                        {
+                            buttons[buttonSelectorIndex].setText("Game Start - Versus - TimerMode");
+                        }
+                        else if(buttons[buttonSelectorIndex].getText().equals("Game Start - Versus - ItemMode"))
+                        {
+                            buttons[buttonSelectorIndex].setText("Game Start - Versus - NormalMode");
+                        }
+                        else if(buttons[buttonSelectorIndex].getText().equals("Game Start - Versus - TimerMode"))
+                        {
+                            buttons[buttonSelectorIndex].setText("Game Start - Versus - ItemMode");
+                        }
+                        break;
                     case KeyEvent.VK_DOWN: //방향키(아래) 눌렀을때
                         if (buttonSelectorIndex +1<buttons.length)
                         {
@@ -99,7 +131,21 @@ public class MainPage extends JFrame{
                         break;
                     case KeyEvent.VK_ENTER:
                         setVisible(false);
-                        pageController = new PageController(buttons[buttonSelectorIndex].getText());
+                        String gameButtonText=buttons[buttonSelectorIndex].getText();
+
+                        if(gameButtonText.equals("Game Start - Normal Mode") || gameButtonText.equals("Game Start - Versus - NormalMode"))
+                        {
+                            setting.setGameMode(0);
+                        }
+                        else if (gameButtonText.equals("Game Start - Item Mode")|| gameButtonText.equals("Game Start - Versus - ItemMode"))
+                        {
+                            setting.setGameMode(1);
+                        }
+                        else if (gameButtonText.equals("Game Start - Versus - TimerMode"))
+                        {
+                            setting.setGameMode(2);
+                        }
+                        pageController = new PageController(gameButtonText);
                         break;
 
                     default:
@@ -126,6 +172,27 @@ public class MainPage extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
                 setting.setGameMode(1);
+                pageController = new PageController(e.getActionCommand());
+            }
+        });
+
+        gameStartVersusModeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setVisible(false);
+                String ButtonString = gameStartVersusModeButton.getText();
+                if(ButtonString.equals("Game Start - Versus - NormalMode")) {
+                    setting.setGameMode(0);
+                }
+
+                else if (ButtonString.equals("Game Start - Versus - ItemMode"))
+                {
+                    setting.setGameMode(1);
+                }
+                else if (ButtonString.equals("Game Start - Versus - TimerMode"))
+                {
+                    setting.setGameMode(2);
+                }
                 pageController = new PageController(e.getActionCommand());
             }
         });
@@ -161,5 +228,6 @@ public class MainPage extends JFrame{
                 System.exit(0);
             }
         });
+
     }
 }

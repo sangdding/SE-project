@@ -36,6 +36,7 @@ public interface Setting {
      * @return
      * 0 : normal
      * 1 : item
+     * 2 : timer
      * -1 : error
      */
     int getGameMode();
@@ -44,6 +45,7 @@ public interface Setting {
     /**
     * 0 : normal mode
      * 1 : item mode
+     * 2 : timer mode
     * */
     void setGameMode(int gameMode);
 

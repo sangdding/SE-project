@@ -16,7 +16,7 @@ public class scoreBoard extends JPanel{
     private static final int numLabelInTheLine = 4;
     private JLabel[] labels=new JLabel[numLabelInTheLine*numScoreLine];
 
-    private Setting setting = new JsonSetting();
+    private Setting setting = new JsonSetting("player1");
 
     private JsonScore jsonScore=new JsonScore();
 
