@@ -109,12 +109,7 @@ public class temp {
 
     public void clearLinesWhenBlockIsBottomButNotEnd()
     {
-        int[][] rowsTosend =itemGameAreaController.rowsToSend();
-        if(rowsTosend==null){}
-        else{
-            itemGameAreaController.receive(new int[][]{{1,2,3,1,1,1,1,0,0,0}});
-        }
-        itemGameAreaController.receive(new int[][]{{1,2,3,1,1,1,1,0,0,0},{1,2,3,1,1,1,1,0,0,0}});
+
         itemGameAreaController.moveBlockToBackground();
         itemGameAreaController.switchBlock();
         itemGameAreaController.spawnBlock2(gen.getArr()[next],1,false);
