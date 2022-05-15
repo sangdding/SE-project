@@ -20,6 +20,7 @@ public class temp {
     public boolean fifth; //아이템 변수
     public double delay; //아이템 변수
     public double velocity;
+
     private boolean Effect;
 
 
@@ -109,12 +110,7 @@ public class temp {
 
     public void clearLinesWhenBlockIsBottomButNotEnd()
     {
-        int[][] rowsTosend =itemGameAreaController.rowsToSend();
-        if(rowsTosend==null){}
-        else{
-            itemGameAreaController.receive(new int[][]{{1,2,3,1,1,1,1,0,0,0}});
-        }
-        itemGameAreaController.receive(new int[][]{{1,2,3,1,1,1,1,0,0,0},{1,2,3,1,1,1,1,0,0,0}});
+
         itemGameAreaController.moveBlockToBackground();
         itemGameAreaController.switchBlock();
         itemGameAreaController.spawnBlock2(gen.getArr()[next],1,false);
@@ -207,4 +203,5 @@ public class temp {
             chew = false;
             end=false;
         }}
+
 }

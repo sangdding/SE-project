@@ -455,7 +455,7 @@ public class ItemGameAreaController extends GameAreaItem implements ItemMode {
             if(array[i]==1){
                 for(int j=0; j<10;j++){
                     if(newBackground[i][j]!=20){
-                        toSend[sum][j]=19;
+                        toSend[sum][j]=2;
                     }
                     else{
                         toSend[sum][j]=0;
@@ -472,20 +472,24 @@ public class ItemGameAreaController extends GameAreaItem implements ItemMode {
         }
     }
     public boolean receive(int[][] arr){
-        for(int r=1; r<20-arr.length;r++){
-            for(int c=0;c<10;c++) {
-                if (r < arr.length) {
-                    if (ga.background[r][c] != 0) {
-                        return false;
+        for(int k=0; k<arr.length;k++) {
+            for (int r = 1; r < 20; r++) {
+                for (int c = 0; c < 10; c++) {
+                    if (r < arr.length) {
+                        if (ga.background[r][c] != 0) {
+                            return false;
+                        }
                     }
                 }
+                if (ga.block.getY() != -ga.block.getHeight() + 1) {
+                } else {
+                    ga.block.moveUp();
+                }
+                for (int c = 0; c < 10; c++) {
+                    ga.background[r - 1][c] = ga.background[r][c];
+                }
+                //여기서 올릴 때 확인을 해야함..
             }
-            if(ga.block.getY()!=-ga.block.getHeight()+1){}
-            else{ga.block.moveUp();}
-            for(int c=0;c<10;c++){
-                ga.background[r-1][c]=ga.background[r][c];
-            }
-            //여기서 올릴 때 확인을 해야함..
         }
         int i=0;int r=19;
         while(true){
