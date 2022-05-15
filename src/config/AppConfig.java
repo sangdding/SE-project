@@ -12,6 +12,6 @@ public class AppConfig {
     }
 
     public Setting setting() {
-        return new JsonSetting();
+        return new JsonSetting("player1");
     }
 }

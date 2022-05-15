@@ -47,7 +47,7 @@ public class GamePage extends JFrame {
     private boolean isStop;
 
 
-    private JsonSetting setting = new JsonSetting();
+    private JsonSetting setting = new JsonSetting("player1");
     private HashMap<String, Integer> keySettingMap;
 
 
@@ -81,7 +81,7 @@ public class GamePage extends JFrame {
         //버튼 마우스 입력 처리 설정
         setButtonClickController();
         drawGameBoard(tempClass.getBackground());
-        if(setting.getGameMode()==BlindMode)
+        if(setting.getGameMode()==ItemMode)
         {
             setTimer2();
         }
@@ -107,6 +107,7 @@ public class GamePage extends JFrame {
         nextBlockPane.setMargin(new Insets(300, 0, 0, 0));
 
         gameBoardPane.setEditable(true);
+
         this.add(mainPanel);
 
         //설정 읽어오기
@@ -500,7 +501,7 @@ public class GamePage extends JFrame {
         for (int i = 0; i < nextBlock.length; i++) {
             for (int j = 0; j < nextBlock[0].length; j++) {
                 if(setting.getDisplayMode()==NotBlindMode) drawTextWithColor(nextBlockPane, "X", colorForBlock[background[i][j]]); //일반 모드
-                else drawTextWithColor(nextBlockPane, "XX", colorFOrBlindModeBlock[background[i][j]]); //색맹 모드
+                else drawTextWithColor(nextBlockPane, "X", colorFOrBlindModeBlock[background[i][j]]); //색맹 모드
             }
 
             drawTextWithColor(nextBlockPane, "\n", Color.BLACK);
