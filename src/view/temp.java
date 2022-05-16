@@ -20,6 +20,7 @@ public class temp {
     public boolean fifth; //아이템 변수
     public double delay; //아이템 변수
     public double velocity;
+
     private boolean Effect;
 
 
@@ -202,4 +203,5 @@ public class temp {
             chew = false;
             end=false;
         }}
+
 }
