@@ -18,7 +18,6 @@ class PageControllerTest {
         pageController = new PageController("Key Setting");
         pageController = new PageController("Game Start - Normal Mode");
         pageController = new PageController("Game End");
-        pageController.setScore(20);
         assertTrue(true);
     }
 }

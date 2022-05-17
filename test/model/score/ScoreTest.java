@@ -20,7 +20,7 @@ public class ScoreTest {
     @Test
     @DisplayName("노말 스코어 저장")
     void normalModeSave() {
-        score.save("AAAA", 12991, 0, 1);
+        score.save(name, scoreVal, 0, 1);
         Assertions.assertEquals(score.getScorelist(0).get(name), scoreVal);
     }
 
