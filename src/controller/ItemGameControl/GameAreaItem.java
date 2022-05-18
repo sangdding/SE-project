@@ -9,6 +9,7 @@ public class GameAreaItem {
         gridColumns = 10;
         gridRows = 20;
         background = new int[gridRows][gridColumns];
+
     }
     public int[][] getBackground(){
         return background;

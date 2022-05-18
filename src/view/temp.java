@@ -20,6 +20,7 @@ public class temp {
     public boolean fifth; //아이템 변수
     public double delay; //아이템 변수
     public double velocity;
+
     private boolean Effect;
 
 
@@ -109,7 +110,9 @@ public class temp {
 
     public void clearLinesWhenBlockIsBottomButNotEnd()
     {
+
         itemGameAreaController.moveBlockToBackground();
+        itemGameAreaController.switchBlock();
         itemGameAreaController.spawnBlock2(gen.getArr()[next],1,false);
         int current_line = itemGameAreaController.clearLines2();
 
@@ -128,9 +131,9 @@ public class temp {
 
     public int[][] getNextBlock() {
         ItemBlockController nextBlock = itemGameAreaController.getNextBlock();
-        int[][] now = nextBlock.getShape();
-        int color= nextBlock.getColor();
+        int[][] now = now = nextBlock.getShape();
 
+        int color= nextBlock.getColor();
         for (int r = 0; r < now.length; r++) {
             for (int c = 0; c < now[0].length; c++) {
                 if (now[r][c] > 0 && now[r][c]<=7) {
@@ -168,6 +171,7 @@ public class temp {
             lineIndex -= 10;
             itemGameAreaController.switchBlock(); //원래의 다음블럭을 현재 블럭으로 받아서 생성
             itemGameAreaController.spawnBlock2(gen.getArr()[next], c, true); //새로운 다음 블럭의 정보 생성
+
         } else {
             itemGameAreaController.switchBlock();
             itemGameAreaController.spawnBlock2(gen.getArr()[next], 1, false);//노말아이템
@@ -193,9 +197,11 @@ public class temp {
 
         if (end) {
             itemGameAreaController.moveBlockToBackground();
-            itemGameAreaController.spawnBlock2(gen.getArr()[next], 1, false);
+            itemGameAreaController.switchBlock(); //원래의 다음블럭을 현재 블럭으로 받아서 생성
+            itemGameAreaController.spawnBlock2(gen.getArr()[next], 1, false); //새로운 다음 블럭의 정보 생성
             next++;
             chew = false;
             end=false;
         }}
+
 }

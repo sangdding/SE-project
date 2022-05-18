@@ -395,7 +395,111 @@ public class ItemGameAreaController extends GameAreaItem implements ItemMode {
         }
         return newBackground;
     }
-    public int getY(){
-        return ga.block.getY();
+    public int[][] rowsToSend(){
+        if(ga.block == null){return null;}
+        int[][] newBackground = new int[gridRows][gridColumns];
+        for(int i=0; i<20; i++){
+            for(int j=0; j<10; j++){
+                newBackground[i][j]=ga.getBackground()[i][j];
+            }
+        }
+        int x=ga.block.getX();
+        int y=ga.block.getY();
+        for(int r=y; r<y+ga.block.getHeight() ; r++){
+            for(int c=x; c<x+ga.block.getWidth(); c++){
+                if(y<0){
+                    if(r<0){
+                        break;
+                    }
+                    else{
+                        if(ga.block.getShape()[r-y][c-x]==1){
+                            newBackground[r][c]=20;
+                        }
+                        else if(ga.block.getShape()[r-y][c-x]>1){
+                            newBackground[r][c]=20;
+                        }
+                    }
+                }
+                else{
+                    if(ga.block.getShape()[r-y][c-x]==1){
+                        newBackground[r][c]=20;
+                    }
+                    else if(ga.block.getShape()[r-y][c-x]>1){
+                        newBackground[r][c]=20;
+                    }
+                }
+            }
+        }
+        int[] array = new int[20];
+        for(int i=0;i<array.length;i++){
+            array[i]=0;
+        }
+        for(int r=19;r>=0;r--){
+            boolean lineFilled=true;
+            for(int c=0; c<10;c++){
+                if(newBackground[r][c]==0){
+                    lineFilled=false;
+                }
+            }
+            if(lineFilled){array[r]=1;}
+        }
+        int sum=0;
+        for(int i=0;i<20;i++){
+            if(array[i]==1){
+                sum++;
+            }
+        }
+        int[][] toSend = new int[sum][10];
+        sum=0;
+        for(int i=array.length-1;i>=0;i--){
+            if(array[i]==1){
+                for(int j=0; j<10;j++){
+                    if(newBackground[i][j]!=20){
+                        toSend[sum][j]=2;
+                    }
+                    else{
+                        toSend[sum][j]=0;
+                    }
+                }
+                sum++;
+            }
+        }
+        if(sum>1){
+            return toSend;
+        }
+        else{
+            return null;
+        }
     }
+    public boolean receive(int[][] arr){
+        for(int k=0; k<arr.length;k++) {
+            for (int r = 1; r < 20; r++) {
+                for (int c = 0; c < 10; c++) {
+                    if (r < arr.length) {
+                        if (ga.background[r][c] != 0) {
+                            return false;
+                        }
+                    }
+                }
+                if (ga.block.getY() != -ga.block.getHeight() + 1) {
+                } else {
+                    ga.block.moveUp();
+                }
+                for (int c = 0; c < 10; c++) {
+                    ga.background[r - 1][c] = ga.background[r][c];
+                }
+                //여기서 올릴 때 확인을 해야함..
+            }
+        }
+        int i=0;int r=19;
+        while(true){
+            for(int c=0; c<10; c++){
+                ga.background[r][c]=arr[i][c];
+            }
+            if(i==arr.length-1){break;}
+            else{i++;r--;}
+        }
+        return true;
+    }
+
 }

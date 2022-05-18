@@ -50,7 +50,8 @@ public class VersusGamePage extends JFrame{
     private final int TimerMode=2;
     private final int BlindMode=1;
     private final int NotBlindMode=0;
-
+    public int receive;
+    public int[][] toSend;
 
     private temp tempClassForPlayer1;
     private temp tempClassForPlayer2;
@@ -81,7 +82,7 @@ public class VersusGamePage extends JFrame{
     }; // white for backgroind + 13 colors for blind block
 
     private char[] blockShape = new char[]{
-            'A', 'B', 'C', 'D', 'E', 'F', 'H', 'J', 'L', 'O', 'T', 'S', 'Q', 'O'
+            'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'L', 'O', 'T', 'S', 'Q', 'O'
     };
 
 
@@ -182,6 +183,7 @@ public class VersusGamePage extends JFrame{
 
         //화면 가운데에 생성
         this.setLocationRelativeTo(null);
+        this.receive=0;
 
     }
 
@@ -198,6 +200,12 @@ public class VersusGamePage extends JFrame{
 
 
                 tempClassForPlayer1.clearLinesInTempClass();
+                //블럭 다운 하기 전에 받을 게 있는 지 확인.
+                if(receive==1){
+                    tempClassForPlayer1.itemGameAreaController.receive(toSend);
+                    receive=0;
+                    toSend=null;
+                }
                 //여기 바꿈
                 tempClassForPlayer1.itemGameAreaController.moveBlockDown();
 
@@ -217,6 +225,14 @@ public class VersusGamePage extends JFrame{
                         pageController.createGameEndPage();
                     }
                     else {
+                        int[][] rowsToSend = tempClassForPlayer1.itemGameAreaController.rowsToSend();
+                        if(rowsToSend!=null){
+
+                            toSend=rowsToSend;
+                            receive=2;
+                            rowsToSend=null;
+                        }
+
                         tempClassForPlayer1.clearLinesWhenBlockIsBottomButNotEnd();
                         timerForPlyer1.setDelay((int) tempClassForPlayer1.getDelay());
                         drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
@@ -245,6 +261,12 @@ public class VersusGamePage extends JFrame{
 
 
                 tempClassForPlayer2.clearLinesInTempClass();
+                if(receive==2){
+                    Debug(toSend);
+                    tempClassForPlayer2.itemGameAreaController.receive(toSend);
+                    receive=0;
+                    toSend=null;
+                }
                 //여기 바꿈
                 tempClassForPlayer2.itemGameAreaController.moveBlockDown();
 
@@ -264,6 +286,12 @@ public class VersusGamePage extends JFrame{
                         pageController.createGameEndPage();
                     }
                     else {
+                        int[][] rowsToSend = tempClassForPlayer2.itemGameAreaController.rowsToSend();
+                        if(rowsToSend!=null){
+                            toSend=rowsToSend;
+                            receive=1;
+                            rowsToSend=null;
+                        }
                         tempClassForPlayer2.clearLinesWhenBlockIsBottomButNotEnd();
                         timerForPlyer2.setDelay((int) tempClassForPlayer2.getDelay());
                         drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
@@ -302,6 +330,11 @@ public class VersusGamePage extends JFrame{
 
                 else {
                     tempClassForPlayer1.clearLinesInTempClass(); //줄을 지우고
+                    if(receive==1){
+                        tempClassForPlayer1.itemGameAreaController.receive(toSend);
+                        receive=0;
+                        toSend=null;
+                    }
                     tempClassForPlayer1.itemGameAreaController.moveBlockDown(); //블럭 1칸 떨어뜨림
 
 
@@ -325,6 +358,13 @@ public class VersusGamePage extends JFrame{
 
 
                         else {
+                            int[][] rowsToSend = tempClassForPlayer1.itemGameAreaController.rowsToSend();
+                            if(rowsToSend!=null){
+
+                                toSend=rowsToSend;
+                                receive=2;
+                                rowsToSend=null;
+                            }
                             tempClassForPlayer1.func1(); //색을 바꾸고
                             timerForPlyer1.setDelay((int) tempClassForPlayer1.getDelay());
                             drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
@@ -354,7 +394,14 @@ public class VersusGamePage extends JFrame{
                 }
 
                 else {
+
                     tempClassForPlayer2.clearLinesInTempClass(); //줄을 지우고
+                    if(receive==2){
+                        Debug(toSend);
+                        tempClassForPlayer2.itemGameAreaController.receive(toSend);
+                        receive=0;
+                        toSend=null;
+                    }
                     tempClassForPlayer2.itemGameAreaController.moveBlockDown(); //블럭 1칸 떨어뜨림
 
 
@@ -378,6 +425,12 @@ public class VersusGamePage extends JFrame{
 
 
                         else {
+                            int[][] rowsToSend = tempClassForPlayer2.itemGameAreaController.rowsToSend();
+                            if(rowsToSend!=null){
+                                toSend=rowsToSend;
+                                receive=1;
+                                rowsToSend=null;
+                            }
                             tempClassForPlayer2.func1(); //색을 바꾸고
                             timerForPlyer2.setDelay((int) tempClassForPlayer2.getDelay());
                             drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
@@ -421,6 +474,11 @@ public class VersusGamePage extends JFrame{
 
                 tempClassForPlayer1.clearLinesInTempClass();
                 //여기 바꿈
+                if(receive==1){
+                    tempClassForPlayer1.itemGameAreaController.receive(toSend);
+                    receive=0;
+                    toSend=null;
+                }
                 tempClassForPlayer1.itemGameAreaController.moveBlockDown();
 
 
@@ -439,6 +497,13 @@ public class VersusGamePage extends JFrame{
                         pageController.createGameEndPage();
                     }
                     else {
+                        int[][] rowsToSend = tempClassForPlayer1.itemGameAreaController.rowsToSend();
+                        if(rowsToSend!=null){
+
+                            toSend=rowsToSend;
+                            receive=2;
+                            rowsToSend=null;
+                        }
                         tempClassForPlayer1.clearLinesWhenBlockIsBottomButNotEnd();
                         timerForPlyer1.setDelay((int) tempClassForPlayer1.getDelay());
                         drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
@@ -467,6 +532,12 @@ public class VersusGamePage extends JFrame{
 
 
                 tempClassForPlayer2.clearLinesInTempClass();
+                if(receive==2){
+                    Debug(toSend);
+                    tempClassForPlayer2.itemGameAreaController.receive(toSend);
+                    receive=0;
+                    toSend=null;
+                }
                 //여기 바꿈
                 tempClassForPlayer2.itemGameAreaController.moveBlockDown();
 
@@ -486,6 +557,12 @@ public class VersusGamePage extends JFrame{
                         pageController.createGameEndPage();
                     }
                     else {
+                        int[][] rowsToSend = tempClassForPlayer2.itemGameAreaController.rowsToSend();
+                        if(rowsToSend!=null){
+                            toSend=rowsToSend;
+                            receive=1;
+                            rowsToSend=null;
+                        }
                         tempClassForPlayer2.clearLinesWhenBlockIsBottomButNotEnd();
                         timerForPlyer2.setDelay((int) tempClassForPlayer2.getDelay());
                         drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
@@ -915,8 +992,8 @@ public class VersusGamePage extends JFrame{
         for (int i = 0; i < nextBlock.length; i++) {
 
             for (int j = 0; j < nextBlock[i].length; j++) {
-                if(settingForPlayer1.getDisplayMode()==NotBlindMode) drawTextWithColor(nextBlockPaneArray[index-1], "X", colorForBlock[background[i][j]]); //일반 모드
-                else drawTextWithColor(nextBlockPaneArray[index-1], "X", colorFOrBlindModeBlock[background[i][j]]); //색맹 모드
+                if(settingForPlayer1.getDisplayMode()==NotBlindMode) drawTextWithColor(nextBlockPaneArray[index-1], String.valueOf(blockShape[background[i][j]]), colorForBlock[background[i][j]]); //일반 모드
+                else drawTextWithColor(nextBlockPaneArray[index-1], String.valueOf(blockShape[background[i][j]]), colorFOrBlindModeBlock[background[i][j]]); //색맹 모드
             }
 
             drawTextWithColor(nextBlockPaneArray[index-1], "\n", Color.BLACK);
@@ -944,5 +1021,17 @@ public class VersusGamePage extends JFrame{
         tp.setCharacterAttributes(aset, false);
         tp.replaceSelection(msg);
 
+    }
+    private void Debug(int[][] rowsToSend) {
+        if (rowsToSend == null) {
+            System.out.println("null");
+        } else {
+            for (int i = 0; i < rowsToSend.length; i++) {
+                for (int j = 0; j < 10; j++) {
+                    System.out.print(rowsToSend[i][j]);
+                }
+                System.out.println();
+            }
+        }
     }
 }
