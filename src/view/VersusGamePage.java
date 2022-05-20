@@ -218,10 +218,13 @@ public class VersusGamePage extends JFrame{
                     if (tempClassForPlayer1.itemGameAreaController.isBlockOuOofBounds()) {
                         //게임 종료시
                         timerForPlyer1.stop();
+                        timerForPlyer2.stop();
+
                         dispose();
                         pageController = new PageController();
-                        pageController.setScore(tempClassForPlayer1.getScore());
-                        pageController.createGameEndPage();
+                        // player 1이 졌다.
+                        pageController.setWinner(2);
+                        pageController.createVersusGameEndPage();
                     }
                     else {
                         int[][] rowsToSend = tempClassForPlayer1.itemGameAreaController.rowsToSend();
@@ -278,11 +281,13 @@ public class VersusGamePage extends JFrame{
                 if (!tempClassForPlayer2.itemGameAreaController.checkBottom()) {
                     if (tempClassForPlayer2.itemGameAreaController.isBlockOuOofBounds()) {
                         //게임 종료시
+                        timerForPlyer1.stop();
                         timerForPlyer2.stop();
                         dispose();
                         pageController = new PageController();
-                        pageController.setScore(tempClassForPlayer2.getScore());
-                        pageController.createGameEndPage();
+                        //플레이어2가 졌다
+                        pageController.setWinner(1);
+                        pageController.createVersusGameEndPage();
                     }
                     else {
                         int[][] rowsToSend = tempClassForPlayer2.itemGameAreaController.rowsToSend();
@@ -347,11 +352,13 @@ public class VersusGamePage extends JFrame{
                             //게임 종료
                             // (아이템전)
                             timerForPlyer1.stop();
+                            timerForPlyer2.stop();
                             dispose();
 
+                            //player1이 졌다
                             pageController = new PageController();
-                            pageController.setScore(tempClassForPlayer1.getScore());
-                            pageController.createGameEndPage();
+                            pageController.setWinner(2);
+                            pageController.createVersusGameEndPage();
                         }
 
 
@@ -413,12 +420,14 @@ public class VersusGamePage extends JFrame{
                         if (tempClassForPlayer2.itemGameAreaController.isBlockOuOofBounds()) {
                             //게임 종료
                             // (아이템전)
+                            timerForPlyer1.stop();
                             timerForPlyer2.stop();
                             dispose();
 
                             pageController = new PageController();
-                            pageController.setScore(tempClassForPlayer2.getScore());
-                            pageController.createGameEndPage();
+                            //player2가 졌다
+                            pageController.setWinner(1);
+                            pageController.createVersusGameEndPage();
                         }
 
 
@@ -467,7 +476,13 @@ public class VersusGamePage extends JFrame{
                 //제한시간이 0이하면 게임 종료
                 if(limitTime<0)
                 {
-                    
+                    timerForPlyer1.stop();
+                    timerForPlyer2.stop();
+                    dispose();
+                    pageController = new PageController();
+                    //player1이 졌다.
+                    pageController.setWinner(tempClassForPlayer1.getScore()>= tempClassForPlayer2.getScore()?1:2);
+                    pageController.createVersusGameEndPage();
                 }
 
 
@@ -490,10 +505,12 @@ public class VersusGamePage extends JFrame{
                     if (tempClassForPlayer1.itemGameAreaController.isBlockOuOofBounds()) {
                         //게임 종료시
                         timerForPlyer1.stop();
+                        timerForPlyer2.stop();
                         dispose();
                         pageController = new PageController();
-                        pageController.setScore(tempClassForPlayer1.getScore());
-                        pageController.createGameEndPage();
+                        //player1이 졌다.
+                        pageController.setWinner(2);
+                        pageController.createVersusGameEndPage();
                     }
                     else {
                         int[][] rowsToSend = tempClassForPlayer1.itemGameAreaController.rowsToSend();
@@ -549,11 +566,13 @@ public class VersusGamePage extends JFrame{
                 if (!tempClassForPlayer2.itemGameAreaController.checkBottom()) {
                     if (tempClassForPlayer2.itemGameAreaController.isBlockOuOofBounds()) {
                         //게임 종료시
+                        timerForPlyer1.stop();
                         timerForPlyer2.stop();
                         dispose();
                         pageController = new PageController();
-                        pageController.setScore(tempClassForPlayer2.getScore());
-                        pageController.createGameEndPage();
+                        //player2가 졌다
+                        pageController.setWinner(1);
+                        pageController.createVersusGameEndPage();
                     }
                     else {
                         int[][] rowsToSend = tempClassForPlayer2.itemGameAreaController.rowsToSend();

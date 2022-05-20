@@ -11,9 +11,11 @@ public class PageController {
     private GameEndPage gameEndPage;
     private KeySettingPage keySettingPage;
     private VersusGamePage versusGamePage;
+    private VersusGameEndPage versusGameEndPage;
 
 
     private int score=0;
+    private int winner=0;
 
     public PageController()
     {}
@@ -50,5 +52,13 @@ public class PageController {
     public void createGameEndPage()
     {
         gameEndPage=new GameEndPage(score);
+    }
+    public void setWinner(int winner)
+    {
+        this.winner=winner;
+    }
+    public void createVersusGameEndPage()
+    {
+        versusGameEndPage=new VersusGameEndPage(winner);
     }
 }
