@@ -26,7 +26,7 @@
     "width": 800,
     "height": 800
   },
-  "gameMode": "normal",
+  "gameMode": "item",
   "defaultKey": {
     "player1": {
       "resume": 82,

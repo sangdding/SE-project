@@ -50,9 +50,12 @@ public class VersusGamePage extends JFrame{
     private final int TimerMode=2;
     private final int BlindMode=1;
     private final int NotBlindMode=0;
-    public int receive;
-    public int[][] toSend;
-
+    public boolean receive1;
+    public int[][] toSend1;
+    public int received1;
+    public boolean receive2;
+    public int[][] toSend2;
+    public int received2;
     private temp tempClassForPlayer1;
     private temp tempClassForPlayer2;
 
@@ -183,7 +186,8 @@ public class VersusGamePage extends JFrame{
 
         //화면 가운데에 생성
         this.setLocationRelativeTo(null);
-        this.receive=0;
+        this.receive1=false;
+        this.receive2=false;
 
     }
 
@@ -201,11 +205,6 @@ public class VersusGamePage extends JFrame{
 
                 tempClassForPlayer1.clearLinesInTempClass();
                 //블럭 다운 하기 전에 받을 게 있는 지 확인.
-                if(receive==1){
-                    tempClassForPlayer1.itemGameAreaController.receive(toSend);
-                    receive=0;
-                    toSend=null;
-                }
                 //여기 바꿈
                 tempClassForPlayer1.itemGameAreaController.moveBlockDown();
 
@@ -227,13 +226,35 @@ public class VersusGamePage extends JFrame{
                     else {
                         int[][] rowsToSend = tempClassForPlayer1.itemGameAreaController.rowsToSend();
                         if(rowsToSend!=null){
-
-                            toSend=rowsToSend;
-                            receive=2;
+                            toSend2=rowsToSend;
+                            receive2=true;
                             rowsToSend=null;
                         }
-
                         tempClassForPlayer1.clearLinesWhenBlockIsBottomButNotEnd();
+                        if(receive1){
+                            if(received1>10){
+                                receive1=false;
+                                toSend1=null;
+                            }
+                            else if(received1+toSend1.length>10){
+                                int a = 10-received1;
+                                int[][] k= new int[a][10];
+                                for(int i=0; i<a;i++){
+                                    k[i]=toSend1[i];
+                                }
+                                tempClassForPlayer1.itemGameAreaController.receive(k);
+                                receive1=false;
+                                toSend1=null;
+                                received1=11;
+                            }
+                            else {
+                                tempClassForPlayer1.itemGameAreaController.receive(toSend1);
+                                receive1 = false;
+                                received1+= toSend1.length;
+                                toSend1 = null;
+                            }
+                        }
+
                         timerForPlyer1.setDelay((int) tempClassForPlayer1.getDelay());
                         drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
                     }
@@ -261,12 +282,7 @@ public class VersusGamePage extends JFrame{
 
 
                 tempClassForPlayer2.clearLinesInTempClass();
-                if(receive==2){
-                    Debug(toSend);
-                    tempClassForPlayer2.itemGameAreaController.receive(toSend);
-                    receive=0;
-                    toSend=null;
-                }
+
                 //여기 바꿈
                 tempClassForPlayer2.itemGameAreaController.moveBlockDown();
 
@@ -288,11 +304,34 @@ public class VersusGamePage extends JFrame{
                     else {
                         int[][] rowsToSend = tempClassForPlayer2.itemGameAreaController.rowsToSend();
                         if(rowsToSend!=null){
-                            toSend=rowsToSend;
-                            receive=1;
+                            toSend1=rowsToSend;
+                            receive1=true;
                             rowsToSend=null;
                         }
                         tempClassForPlayer2.clearLinesWhenBlockIsBottomButNotEnd();
+                        if(receive2){
+                            if(received2>10){
+                                receive2=false;
+                                toSend2=null;
+                            }
+                            else if(received2+toSend2.length>10){
+                                int a = 10-received2;
+                                int[][] k= new int[a][10];
+                                for(int i=0; i<a;i++){
+                                    k[i]=toSend2[i];
+                                }
+                                tempClassForPlayer2.itemGameAreaController.receive(k);
+                                receive2=false;
+                                toSend2=null;
+                                received2=11;
+                            }
+                            else {
+                                tempClassForPlayer2.itemGameAreaController.receive(toSend2);
+                                receive2 = false;
+                                received2+= toSend2.length;
+                                toSend2 = null;
+                            }
+                        }
                         timerForPlyer2.setDelay((int) tempClassForPlayer2.getDelay());
                         drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
                     }
@@ -330,11 +369,7 @@ public class VersusGamePage extends JFrame{
 
                 else {
                     tempClassForPlayer1.clearLinesInTempClass(); //줄을 지우고
-                    if(receive==1){
-                        tempClassForPlayer1.itemGameAreaController.receive(toSend);
-                        receive=0;
-                        toSend=null;
-                    }
+
                     tempClassForPlayer1.itemGameAreaController.moveBlockDown(); //블럭 1칸 떨어뜨림
 
 
@@ -360,12 +395,35 @@ public class VersusGamePage extends JFrame{
                         else {
                             int[][] rowsToSend = tempClassForPlayer1.itemGameAreaController.rowsToSend();
                             if(rowsToSend!=null){
-
-                                toSend=rowsToSend;
-                                receive=2;
+                                toSend2=rowsToSend;
+                                receive2=true;
                                 rowsToSend=null;
                             }
                             tempClassForPlayer1.func1(); //색을 바꾸고
+                            if(receive1){
+                                if(received1>10){
+                                    receive1=false;
+                                    toSend1=null;
+                                }
+                                else if(received1+toSend1.length>10){
+                                    int a = 10-received1;
+                                    int[][] k= new int[a][10];
+                                    for(int i=0; i<a;i++){
+                                        k[i]=toSend1[i];
+                                    }
+                                    tempClassForPlayer1.itemGameAreaController.receive(k);
+                                    receive1=false;
+                                    toSend1=null;
+                                    received1=11;
+                                }
+                                else {
+                                    tempClassForPlayer1.itemGameAreaController.receive(toSend1);
+                                    receive1 = false;
+                                    received1+= toSend1.length;
+                                    toSend1 = null;
+                                }
+                            }
+
                             timerForPlyer1.setDelay((int) tempClassForPlayer1.getDelay());
                             drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
                         }
@@ -392,16 +450,9 @@ public class VersusGamePage extends JFrame{
                     tempClassForPlayer2.func2();
                     drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
                 }
-
                 else {
 
                     tempClassForPlayer2.clearLinesInTempClass(); //줄을 지우고
-                    if(receive==2){
-                        Debug(toSend);
-                        tempClassForPlayer2.itemGameAreaController.receive(toSend);
-                        receive=0;
-                        toSend=null;
-                    }
                     tempClassForPlayer2.itemGameAreaController.moveBlockDown(); //블럭 1칸 떨어뜨림
 
 
@@ -427,11 +478,35 @@ public class VersusGamePage extends JFrame{
                         else {
                             int[][] rowsToSend = tempClassForPlayer2.itemGameAreaController.rowsToSend();
                             if(rowsToSend!=null){
-                                toSend=rowsToSend;
-                                receive=1;
+                                toSend1=rowsToSend;
+                                receive1=true;
                                 rowsToSend=null;
                             }
                             tempClassForPlayer2.func1(); //색을 바꾸고
+                            if(receive2){
+                                if(received2>10){
+                                    receive2=false;
+                                    toSend2=null;
+                                }
+                                else if(received2+toSend2.length>10){
+                                    int a = 10-received2;
+                                    int[][] k= new int[a][10];
+                                    for(int i=0; i<a;i++){
+                                        k[i]=toSend2[i];
+                                    }
+                                    tempClassForPlayer2.itemGameAreaController.receive(k);
+                                    receive2=false;
+                                    toSend2=null;
+                                    received2=11;
+                                }
+                                else {
+                                    tempClassForPlayer2.itemGameAreaController.receive(toSend2);
+                                    receive2 = false;
+                                    received2+= toSend2.length;
+                                    toSend2 = null;
+                                }
+                            }
+
                             timerForPlyer2.setDelay((int) tempClassForPlayer2.getDelay());
                             drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
                         }
@@ -474,11 +549,7 @@ public class VersusGamePage extends JFrame{
 
                 tempClassForPlayer1.clearLinesInTempClass();
                 //여기 바꿈
-                if(receive==1){
-                    tempClassForPlayer1.itemGameAreaController.receive(toSend);
-                    receive=0;
-                    toSend=null;
-                }
+
                 tempClassForPlayer1.itemGameAreaController.moveBlockDown();
 
 
@@ -499,12 +570,35 @@ public class VersusGamePage extends JFrame{
                     else {
                         int[][] rowsToSend = tempClassForPlayer1.itemGameAreaController.rowsToSend();
                         if(rowsToSend!=null){
-
-                            toSend=rowsToSend;
-                            receive=2;
+                            toSend2=rowsToSend;
+                            receive2=true;
                             rowsToSend=null;
                         }
                         tempClassForPlayer1.clearLinesWhenBlockIsBottomButNotEnd();
+                        if(receive1){
+                            if(received1>10){
+                                receive1=false;
+                                toSend1=null;
+                            }
+                            else if(received1+toSend1.length>10){
+                                int a = 10-received1;
+                                int[][] k= new int[a][10];
+                                for(int i=0; i<a;i++){
+                                    k[i]=toSend1[i];
+                                }
+                                tempClassForPlayer1.itemGameAreaController.receive(k);
+                                receive1=false;
+                                toSend1=null;
+                                received1=11;
+                            }
+                            else {
+                                tempClassForPlayer1.itemGameAreaController.receive(toSend1);
+                                receive1 = false;
+                                received1+= toSend1.length;
+                                toSend1 = null;
+                            }
+                        }
+
                         timerForPlyer1.setDelay((int) tempClassForPlayer1.getDelay());
                         drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
                     }
@@ -532,13 +626,7 @@ public class VersusGamePage extends JFrame{
 
 
                 tempClassForPlayer2.clearLinesInTempClass();
-                if(receive==2){
-                    Debug(toSend);
-                    tempClassForPlayer2.itemGameAreaController.receive(toSend);
-                    receive=0;
-                    toSend=null;
-                }
-                //여기 바꿈
+
                 tempClassForPlayer2.itemGameAreaController.moveBlockDown();
 
 
@@ -559,11 +647,34 @@ public class VersusGamePage extends JFrame{
                     else {
                         int[][] rowsToSend = tempClassForPlayer2.itemGameAreaController.rowsToSend();
                         if(rowsToSend!=null){
-                            toSend=rowsToSend;
-                            receive=1;
+                            toSend1=rowsToSend;
+                            receive1=true;
                             rowsToSend=null;
                         }
                         tempClassForPlayer2.clearLinesWhenBlockIsBottomButNotEnd();
+                        if(receive2){
+                            if(received2>10){
+                                receive2=false;
+                                toSend2=null;
+                            }
+                            else if(received2+toSend2.length>10){
+                                int a = 10-received2;
+                                int[][] k= new int[a][10];
+                                for(int i=0; i<a;i++){
+                                    k[i]=toSend2[i];
+                                }
+                                tempClassForPlayer2.itemGameAreaController.receive(k);
+                                receive2=false;
+                                toSend2=null;
+                                received2=11;
+                            }
+                            else {
+                                tempClassForPlayer2.itemGameAreaController.receive(toSend2);
+                                receive2 = false;
+                                received2+= toSend2.length;
+                                toSend2 = null;
+                            }
+                        }
                         timerForPlyer2.setDelay((int) tempClassForPlayer2.getDelay());
                         drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
                     }
