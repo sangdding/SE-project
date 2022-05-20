@@ -4,10 +4,7 @@ import controller.PageController;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.util.HashMap;
 
 import model.setting.JsonSetting;
@@ -53,6 +50,8 @@ public class KeySettingPage extends JFrame {
     private JsonSetting jsonsetting=new JsonSetting("player1");
 
     private int selectedPlayer=1;
+
+    private KeySettingPageKeyListener keySettingPageKeyListener;
 
     public KeySettingPage() {
         initialize();
@@ -130,79 +129,8 @@ public class KeySettingPage extends JFrame {
     }
 
     private void setKeyEventController() {
-        addKeyListener(new KeyAdapter() { //키 이벤트
-            @Override
-            public void keyPressed(KeyEvent e) { //키 눌렀을때
-                System.out.println(e.getKeyCode());
-                // TODO Auto-generated method stub
-                if (isSetting == false) {
-                    switch (e.getKeyCode()) {//키 코드로 스위치
-                        case KeyEvent.VK_C:{ //c 누르고 체인지
-                            if(selectedPlayer==1) {
-                                jsonsetting = new JsonSetting("player2");
-                                selectedPlayer=2;
-                                selectPlayerLabel.setText("2P (Press C to Change 1P)");
-                                displaySettingValues();
-                            }
-
-                            else if(selectedPlayer==2)
-                            {
-                                jsonsetting = new JsonSetting("player1");
-                                selectedPlayer=1;
-                                selectPlayerLabel.setText("1P (Press C to Change 2P)");
-                                displaySettingValues();
-                            }
-                            break;
-                        }
-
-                        case KeyEvent.VK_DOWN: //방향키(아래) 눌렀을때
-                            if (buttonSelectorIndex + 1 < keyLabels.length) {
-                                keyLabels[buttonSelectorIndex].setBackground(null);
-                                keyLabels[++buttonSelectorIndex].setBackground(Color.RED);
-                            }
-                            break;
-                        case KeyEvent.VK_UP: //방향키(위)눌렀을때
-                            if (buttonSelectorIndex > 0) {
-                                keyLabels[buttonSelectorIndex].setBackground(null);
-                                keyLabels[--buttonSelectorIndex].setBackground(Color.RED);
-                            }
-                            break;
-                        case KeyEvent.VK_ENTER:
-
-                            isSetting = true;
-                            keyLabels[buttonSelectorIndex].setBackground(Color.GREEN);
-
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                else{
-                    //키 변경 모드
-                    if(e.getKeyCode()==KeyEvent.VK_ENTER)
-                    {
-                        for(int i = 0; i< keyValueLabels.length; i++)
-                        {
-                            if(i==buttonSelectorIndex) continue;
-
-                            if (keyValueLabels[i].getText().equals(keyValueLabels[buttonSelectorIndex].getText()))
-                            {
-                                System.out.println("key Duplicated");
-                                return;
-                            }
-                        }
-
-                        //여기 수정
-                        isSetting = false;
-                        keyLabels[buttonSelectorIndex].setBackground(Color.RED);
-                    }
-                    else {
-                        keyValues[buttonSelectorIndex] = e.getKeyCode();
-                        keyValueLabels[buttonSelectorIndex].setText(getKeyText(keyValues[buttonSelectorIndex]));
-                    }
-                }
-            }
-        });
+        keySettingPageKeyListener=new KeySettingPageKeyListener();
+        addKeyListener(keySettingPageKeyListener);
 
     }
     private void displaySettingValues()
@@ -216,4 +144,89 @@ public class KeySettingPage extends JFrame {
             keyValueLabels[i].setText(getKeyText(keyValues[i]));
         }
     }
+
+    public class KeySettingPageKeyListener implements KeyListener{
+        @Override
+        public void keyTyped(KeyEvent e) {
+
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+
+
+        }
+        @Override
+        public void keyPressed(KeyEvent e) { //키 눌렀을때
+            System.out.println(e.getKeyCode());
+            // TODO Auto-generated method stub
+            if (isSetting == false) {
+                switch (e.getKeyCode()) {//키 코드로 스위치
+                    case KeyEvent.VK_C:{ //c 누르고 체인지
+                        if(selectedPlayer==1) {
+                            jsonsetting = new JsonSetting("player2");
+                            selectedPlayer=2;
+                            selectPlayerLabel.setText("2P (Press C to Change 1P)");
+                            displaySettingValues();
+                        }
+
+                        else if(selectedPlayer==2)
+                        {
+                            jsonsetting = new JsonSetting("player1");
+                            selectedPlayer=1;
+                            selectPlayerLabel.setText("1P (Press C to Change 2P)");
+                            displaySettingValues();
+                        }
+                        break;
+                    }
+
+                    case KeyEvent.VK_DOWN: //방향키(아래) 눌렀을때
+                        if (buttonSelectorIndex + 1 < keyLabels.length) {
+                            keyLabels[buttonSelectorIndex].setBackground(null);
+                            keyLabels[++buttonSelectorIndex].setBackground(Color.RED);
+                        }
+                        break;
+                    case KeyEvent.VK_UP: //방향키(위)눌렀을때
+                        if (buttonSelectorIndex > 0) {
+                            keyLabels[buttonSelectorIndex].setBackground(null);
+                            keyLabels[--buttonSelectorIndex].setBackground(Color.RED);
+                        }
+                        break;
+                    case KeyEvent.VK_ENTER:
+
+                        isSetting = true;
+                        keyLabels[buttonSelectorIndex].setBackground(Color.GREEN);
+
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else{
+                //키 변경 모드
+                if(e.getKeyCode()==KeyEvent.VK_ENTER)
+                {
+                    for(int i = 0; i< keyValueLabels.length; i++)
+                    {
+                        if(i==buttonSelectorIndex) continue;
+
+                        if (keyValueLabels[i].getText().equals(keyValueLabels[buttonSelectorIndex].getText()))
+                        {
+                            System.out.println("key Duplicated");
+                            return;
+                        }
+                    }
+
+                    //여기 수정
+                    isSetting = false;
+                    keyLabels[buttonSelectorIndex].setBackground(Color.RED);
+                }
+                else {
+                    keyValues[buttonSelectorIndex] = e.getKeyCode();
+                    keyValueLabels[buttonSelectorIndex].setText(getKeyText(keyValues[buttonSelectorIndex]));
+                }
+            }
+        }
+    }
+
 }
