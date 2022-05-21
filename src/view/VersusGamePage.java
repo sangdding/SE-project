@@ -39,6 +39,7 @@ public class VersusGamePage extends JFrame{
 
     private JTextPane gameBoardPaneArray[] = {gameBoardPane1,gameBoardPane2};
     private JTextPane nextBlockPaneArray[] = {nextBlockPane1,nextBlockPane2};
+    private JTextPane passedBlockPaneArray[]={passedBlockPane1,passedBlockPane2};
 
     private PageController pageController;
 
@@ -47,12 +48,17 @@ public class VersusGamePage extends JFrame{
     private final int TimerMode=2;
     private final int BlindMode=1;
     private final int NotBlindMode=0;
+
+
     public boolean receive1;
-    public int[][] toSend1;
+    public int[][] toSend1={};
     public int received1;
+
     public boolean receive2;
-    public int[][] toSend2;
+    public int[][] toSend2={};
     public int received2;
+
+
     private temp tempClassForPlayer1;
     private temp tempClassForPlayer2;
 
@@ -129,6 +135,9 @@ public class VersusGamePage extends JFrame{
         //초기 게임 화면 그리기
         gameBoardPane2.setMargin(new Insets(150, 0, 0, 0));
         nextBlockPane2.setMargin(new Insets(300, 0, 0, 0));
+
+        passedBlockPane1.setMargin(new Insets(150, 0, 0, 0));
+        passedBlockPane2.setMargin(new Insets(150, 0, 0, 0));
 
         gameBoardPane1.setEditable(true);
         gameBoardPane2.setEditable(true);
@@ -253,7 +262,7 @@ public class VersusGamePage extends JFrame{
                                 tempClassForPlayer1.itemGameAreaController.receive(toSend1);
                                 receive1 = false;
                                 received1+= toSend1.length;
-                                toSend1 = null;
+                                toSend1= null;
                             }
                         }
 
@@ -268,7 +277,7 @@ public class VersusGamePage extends JFrame{
 
                 //다음 블럭 그리기
                 drawNextBlock(tempClassForPlayer1.getNextBlock(),1);
-
+                drawPassedBlock(toSend1,1);
             }
 
         });
@@ -333,7 +342,7 @@ public class VersusGamePage extends JFrame{
                                 tempClassForPlayer2.itemGameAreaController.receive(toSend2);
                                 receive2 = false;
                                 received2+= toSend2.length;
-                                toSend2 = null;
+                                toSend2=null;
                             }
                         }
                         timerForPlyer2.setDelay((int) tempClassForPlayer2.getDelay());
@@ -347,6 +356,7 @@ public class VersusGamePage extends JFrame{
 
                 //다음 블럭 그리기
                 drawNextBlock(tempClassForPlayer2.getNextBlock(),2);
+                drawPassedBlock(toSend2,2);
 
             }
 
@@ -426,7 +436,7 @@ public class VersusGamePage extends JFrame{
                                     tempClassForPlayer1.itemGameAreaController.receive(toSend1);
                                     receive1 = false;
                                     received1+= toSend1.length;
-                                    toSend1 = null;
+                                    toSend1= null;
                                 }
                             }
 
@@ -441,6 +451,7 @@ public class VersusGamePage extends JFrame{
                     scoreLabel1.setText(Integer.toString(tempClassForPlayer1.getScore()) + "   Delay:  " + Integer.toString((int) tempClassForPlayer1.getDelay()) + "   DoblueScore(Left):  " + Integer.toString(tempClassForPlayer1.getDoubleIndex()));
                     //다음 블럭 그리기
                     drawNextBlock(tempClassForPlayer1.getNextBlock(),1);
+                    drawPassedBlock(toSend1,1);
                 }
             }
 
@@ -511,7 +522,7 @@ public class VersusGamePage extends JFrame{
                                     tempClassForPlayer2.itemGameAreaController.receive(toSend2);
                                     receive2 = false;
                                     received2+= toSend2.length;
-                                    toSend2 = null;
+                                    toSend2=null;
                                 }
                             }
 
@@ -526,6 +537,7 @@ public class VersusGamePage extends JFrame{
                     scoreLabel2.setText(Integer.toString(tempClassForPlayer2.getScore()) + "   Delay:  " + Integer.toString((int) tempClassForPlayer2.getDelay()) + "   DoblueScore(Left):  " + Integer.toString(tempClassForPlayer2.getDoubleIndex()));
                     //다음 블럭 그리기
                     drawNextBlock(tempClassForPlayer2.getNextBlock(),2);
+                    drawPassedBlock(toSend2,2);
                 }
             }
 
@@ -611,7 +623,7 @@ public class VersusGamePage extends JFrame{
                                 tempClassForPlayer1.itemGameAreaController.receive(toSend1);
                                 receive1 = false;
                                 received1+= toSend1.length;
-                                toSend1 = null;
+                                toSend1= null;
                             }
                         }
 
@@ -626,7 +638,7 @@ public class VersusGamePage extends JFrame{
 
                 //다음 블럭 그리기
                 drawNextBlock(tempClassForPlayer1.getNextBlock(),1);
-
+                drawPassedBlock(toSend1,1);
             }
 
         });
@@ -690,7 +702,7 @@ public class VersusGamePage extends JFrame{
                                 tempClassForPlayer2.itemGameAreaController.receive(toSend2);
                                 receive2 = false;
                                 received2+= toSend2.length;
-                                toSend2 = null;
+                                toSend2=null;
                             }
                         }
                         timerForPlyer2.setDelay((int) tempClassForPlayer2.getDelay());
@@ -704,7 +716,7 @@ public class VersusGamePage extends JFrame{
 
                 //다음 블럭 그리기
                 drawNextBlock(tempClassForPlayer2.getNextBlock(),2);
-
+                drawPassedBlock(toSend2,2);
             }
 
         });
@@ -769,55 +781,55 @@ public class VersusGamePage extends JFrame{
     }
 
 
-    public void drawGameBoard(int[][] background, int index) {
+    public void drawGameBoard(int[][] background, int playerIndex) {
 
         //이전 화면 지우기
-        gameBoardPaneArray[index-1].setText("");
+        gameBoardPaneArray[playerIndex-1].setText("");
         //여기서부턴 화면에 그리기
 
 
-        drawTextWithColor(gameBoardPaneArray[index-1], "XXXXXXXXXXXX\n", Color.BLACK);
+        drawTextWithColor(gameBoardPaneArray[playerIndex-1], "XXXXXXXXXXXX\n", Color.BLACK);
 
 
         for (int i = 0; i < 20; i++) {
-            drawTextWithColor(gameBoardPaneArray[index-1], "X", Color.BLACK);
+            drawTextWithColor(gameBoardPaneArray[playerIndex-1], "X", Color.BLACK);
 
             for (int j = 0; j < 10; j++) {
                 //일반 블럭 그리기
                 if (background[i][j] < 8) {
                     if (settingForPlayer1.getDisplayMode() ==NotBlindMode ) { //일반모드 그리기
-                        drawTextWithColor(gameBoardPaneArray[index-1], "X", colorForBlock[background[i][j]]);
+                        drawTextWithColor(gameBoardPaneArray[playerIndex-1], "X", colorForBlock[background[i][j]]);
                     } else { // 색맹모드 그리기
-                        drawTextWithColor(gameBoardPaneArray[index-1], "X", colorFOrBlindModeBlock[background[i][j]]);
+                        drawTextWithColor(gameBoardPaneArray[playerIndex-1], "X", colorFOrBlindModeBlock[background[i][j]]);
                     }
                 }
                 else {
                     if (settingForPlayer1.getDisplayMode() == NotBlindMode) { //일반모드 그리기
-                        drawTextWithColor(gameBoardPaneArray[index-1], String.valueOf(blockShape[background[i][j]]), colorForBlock[background[i][j]]);
+                        drawTextWithColor(gameBoardPaneArray[playerIndex-1], String.valueOf(blockShape[background[i][j]]), colorForBlock[background[i][j]]);
                     } else { // 색맹모드 그리기
-                        drawTextWithColor(gameBoardPaneArray[index-1], String.valueOf(blockShape[background[i][j]]), colorFOrBlindModeBlock[background[i][j]]);
+                        drawTextWithColor(gameBoardPaneArray[playerIndex-1], String.valueOf(blockShape[background[i][j]]), colorFOrBlindModeBlock[background[i][j]]);
                     }
                 }
 
             }
-            drawTextWithColor(gameBoardPaneArray[index-1], "X\n", Color.BLACK);
+            drawTextWithColor(gameBoardPaneArray[playerIndex-1], "X\n", Color.BLACK);
         }
 
 
-        drawTextWithColor(gameBoardPaneArray[index-1], "XXXXXXXXXXXX", Color.BLACK);
+        drawTextWithColor(gameBoardPaneArray[playerIndex-1], "XXXXXXXXXXXX", Color.BLACK);
 
         //이거 없어도 보드는 그려진다. 뭔가 스타일 관련 코드인 듯
-        StyledDocument doc = gameBoardPaneArray[index-1].getStyledDocument();
+        StyledDocument doc = gameBoardPaneArray[playerIndex-1].getStyledDocument();
         doc.setParagraphAttributes(0, doc.getLength(), styleSet, false);
-        gameBoardPaneArray[index-1].setStyledDocument(doc);
+        gameBoardPaneArray[playerIndex-1].setStyledDocument(doc);
 
     }
 
 
-    private void drawNextBlock(int[][] background, int index) {
+    private void drawNextBlock(int[][] background, int playerIndex) {
 
         //이전 화면 지우기
-        nextBlockPaneArray[index-1].setText("");
+        nextBlockPaneArray[playerIndex-1].setText("");
 
 
         //여기서부턴 화면에 그리기
@@ -827,20 +839,43 @@ public class VersusGamePage extends JFrame{
         for (int i = 0; i < nextBlock.length; i++) {
 
             for (int j = 0; j < nextBlock[i].length; j++) {
-                if(settingForPlayer1.getDisplayMode()==NotBlindMode) drawTextWithColor(nextBlockPaneArray[index-1], String.valueOf(blockShape[background[i][j]]), colorForBlock[background[i][j]]); //일반 모드
-                else drawTextWithColor(nextBlockPaneArray[index-1], String.valueOf(blockShape[background[i][j]]), colorFOrBlindModeBlock[background[i][j]]); //색맹 모드
+                if(settingForPlayer1.getDisplayMode()==NotBlindMode)
+                    drawTextWithColor(nextBlockPaneArray[playerIndex-1], String.valueOf(blockShape[background[i][j]]), colorForBlock[background[i][j]]); //일반 모드
+                else
+                    drawTextWithColor(nextBlockPaneArray[playerIndex-1], String.valueOf(blockShape[background[i][j]]), colorFOrBlindModeBlock[background[i][j]]); //색맹 모드
             }
 
-            drawTextWithColor(nextBlockPaneArray[index-1], "\n", Color.BLACK);
+            drawTextWithColor(nextBlockPaneArray[playerIndex-1], "\n", Color.BLACK);
         }
         //이거 없어도 보드는 그려진다. 뭔가 스타일 관련 코드인 듯
-        StyledDocument doc = nextBlockPaneArray[index-1].getStyledDocument();
+        StyledDocument doc = nextBlockPaneArray[playerIndex-1].getStyledDocument();
 
 
         doc.setParagraphAttributes(0, doc.getLength(), styleSet, false);
-        nextBlockPaneArray[index-1].setStyledDocument(doc);
+        nextBlockPaneArray[playerIndex-1].setStyledDocument(doc);
 
     }
+
+    private void drawPassedBlock(int [][] passedBlock, int playerIndex)
+    {
+        passedBlockPaneArray[playerIndex-1].setText("");
+
+        if(passedBlock==null)
+            return;
+
+        for(int i=0;i<passedBlock.length;i++){
+            for(int j=0;j<passedBlock[i].length;j++){
+                drawTextWithColor(passedBlockPaneArray[playerIndex-1],String.valueOf("X"),Color.GRAY);
+            }
+            drawTextWithColor(passedBlockPaneArray[playerIndex-1], "\n", Color.BLACK);
+        }
+        StyledDocument doc = passedBlockPaneArray[playerIndex-1].getStyledDocument();
+
+
+        doc.setParagraphAttributes(0, doc.getLength(), styleSet, false);
+        passedBlockPaneArray[playerIndex-1].setStyledDocument(doc);
+    }
+
 
     private void drawTextWithColor(JTextPane tp, String msg, Color c) {
         StyleContext sc = StyleContext.getDefaultStyleContext();
