@@ -466,6 +466,7 @@ public class VersusGamePage extends JFrame{
                         }
                     }
                     drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
+                    drawPassedBlock(toSend1,1);
                 }
 
                 else {
@@ -619,6 +620,7 @@ public class VersusGamePage extends JFrame{
                         }
                     }
                     drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
+                    drawPassedBlock(toSend2,2);
                 }
                 else {
 
