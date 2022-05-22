@@ -7,10 +7,7 @@ import model.setting.JsonSetting;
 import javax.swing.*;
 import javax.swing.text.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.util.HashMap;
 
 public class VersusGamePage extends JFrame{
@@ -42,6 +39,7 @@ public class VersusGamePage extends JFrame{
 
     private JTextPane gameBoardPaneArray[] = {gameBoardPane1,gameBoardPane2};
     private JTextPane nextBlockPaneArray[] = {nextBlockPane1,nextBlockPane2};
+    private JTextPane passedBlockPaneArray[]={passedBlockPane1,passedBlockPane2};
 
     private PageController pageController;
 
@@ -50,8 +48,16 @@ public class VersusGamePage extends JFrame{
     private final int TimerMode=2;
     private final int BlindMode=1;
     private final int NotBlindMode=0;
-    public int receive;
-    public int[][] toSend;
+
+
+    public boolean receive1;
+    public int[][] toSend1={};
+    public int received1;
+
+    public boolean receive2;
+    public int[][] toSend2={};
+    public int received2;
+
 
     private temp tempClassForPlayer1;
     private temp tempClassForPlayer2;
@@ -87,6 +93,8 @@ public class VersusGamePage extends JFrame{
 
 
     private double limitTime=300;
+
+    private VersusGamePageKeyListener versusGamePageKeyListener;
 
     public VersusGamePage() {
         //초기화
@@ -127,6 +135,9 @@ public class VersusGamePage extends JFrame{
         //초기 게임 화면 그리기
         gameBoardPane2.setMargin(new Insets(150, 0, 0, 0));
         nextBlockPane2.setMargin(new Insets(300, 0, 0, 0));
+
+        passedBlockPane1.setMargin(new Insets(150, 0, 0, 0));
+        passedBlockPane2.setMargin(new Insets(150, 0, 0, 0));
 
         gameBoardPane1.setEditable(true);
         gameBoardPane2.setEditable(true);
@@ -183,7 +194,8 @@ public class VersusGamePage extends JFrame{
 
         //화면 가운데에 생성
         this.setLocationRelativeTo(null);
-        this.receive=0;
+        this.receive1=false;
+        this.receive2=false;
 
     }
 
@@ -201,11 +213,6 @@ public class VersusGamePage extends JFrame{
 
                 tempClassForPlayer1.clearLinesInTempClass();
                 //블럭 다운 하기 전에 받을 게 있는 지 확인.
-                if(receive==1){
-                    tempClassForPlayer1.itemGameAreaController.receive(toSend);
-                    receive=0;
-                    toSend=null;
-                }
                 //여기 바꿈
                 tempClassForPlayer1.itemGameAreaController.moveBlockDown();
 
@@ -219,21 +226,46 @@ public class VersusGamePage extends JFrame{
                     if (tempClassForPlayer1.itemGameAreaController.isBlockOuOofBounds()) {
                         //게임 종료시
                         timerForPlyer1.stop();
+                        timerForPlyer2.stop();
+
                         dispose();
                         pageController = new PageController();
-                        pageController.setScore(tempClassForPlayer1.getScore());
-                        pageController.createGameEndPage();
+                        // player 1이 졌다.
+                        pageController.setWinner(2);
+                        pageController.createVersusGameEndPage();
                     }
                     else {
                         int[][] rowsToSend = tempClassForPlayer1.itemGameAreaController.rowsToSend();
                         if(rowsToSend!=null){
-
-                            toSend=rowsToSend;
-                            receive=2;
+                            toSend2=rowsToSend;
+                            receive2=true;
                             rowsToSend=null;
                         }
-
                         tempClassForPlayer1.clearLinesWhenBlockIsBottomButNotEnd();
+                        if(receive1){
+                            if(received1>10){
+                                receive1=false;
+                                toSend1=null;
+                            }
+                            else if(received1+toSend1.length>10){
+                                int a = 10-received1;
+                                int[][] k= new int[a][10];
+                                for(int i=0; i<a;i++){
+                                    k[i]=toSend1[i];
+                                }
+                                tempClassForPlayer1.itemGameAreaController.receive(k);
+                                receive1=false;
+                                toSend1=null;
+                                received1=11;
+                            }
+                            else {
+                                tempClassForPlayer1.itemGameAreaController.receive(toSend1);
+                                receive1 = false;
+                                received1+= toSend1.length;
+                                toSend1= null;
+                            }
+                        }
+
                         timerForPlyer1.setDelay((int) tempClassForPlayer1.getDelay());
                         drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
                     }
@@ -245,7 +277,7 @@ public class VersusGamePage extends JFrame{
 
                 //다음 블럭 그리기
                 drawNextBlock(tempClassForPlayer1.getNextBlock(),1);
-
+                drawPassedBlock(toSend1,1);
             }
 
         });
@@ -261,12 +293,7 @@ public class VersusGamePage extends JFrame{
 
 
                 tempClassForPlayer2.clearLinesInTempClass();
-                if(receive==2){
-                    Debug(toSend);
-                    tempClassForPlayer2.itemGameAreaController.receive(toSend);
-                    receive=0;
-                    toSend=null;
-                }
+
                 //여기 바꿈
                 tempClassForPlayer2.itemGameAreaController.moveBlockDown();
 
@@ -279,20 +306,45 @@ public class VersusGamePage extends JFrame{
                 if (!tempClassForPlayer2.itemGameAreaController.checkBottom()) {
                     if (tempClassForPlayer2.itemGameAreaController.isBlockOuOofBounds()) {
                         //게임 종료시
+                        timerForPlyer1.stop();
                         timerForPlyer2.stop();
                         dispose();
                         pageController = new PageController();
-                        pageController.setScore(tempClassForPlayer2.getScore());
-                        pageController.createGameEndPage();
+                        //플레이어2가 졌다
+                        pageController.setWinner(1);
+                        pageController.createVersusGameEndPage();
                     }
                     else {
                         int[][] rowsToSend = tempClassForPlayer2.itemGameAreaController.rowsToSend();
                         if(rowsToSend!=null){
-                            toSend=rowsToSend;
-                            receive=1;
+                            toSend1=rowsToSend;
+                            receive1=true;
                             rowsToSend=null;
                         }
                         tempClassForPlayer2.clearLinesWhenBlockIsBottomButNotEnd();
+                        if(receive2){
+                            if(received2>10){
+                                receive2=false;
+                                toSend2=null;
+                            }
+                            else if(received2+toSend2.length>10){
+                                int a = 10-received2;
+                                int[][] k= new int[a][10];
+                                for(int i=0; i<a;i++){
+                                    k[i]=toSend2[i];
+                                }
+                                tempClassForPlayer2.itemGameAreaController.receive(k);
+                                receive2=false;
+                                toSend2=null;
+                                received2=11;
+                            }
+                            else {
+                                tempClassForPlayer2.itemGameAreaController.receive(toSend2);
+                                receive2 = false;
+                                received2+= toSend2.length;
+                                toSend2=null;
+                            }
+                        }
                         timerForPlyer2.setDelay((int) tempClassForPlayer2.getDelay());
                         drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
                     }
@@ -304,6 +356,7 @@ public class VersusGamePage extends JFrame{
 
                 //다음 블럭 그리기
                 drawNextBlock(tempClassForPlayer2.getNextBlock(),2);
+                drawPassedBlock(toSend2,2);
 
             }
 
@@ -330,11 +383,7 @@ public class VersusGamePage extends JFrame{
 
                 else {
                     tempClassForPlayer1.clearLinesInTempClass(); //줄을 지우고
-                    if(receive==1){
-                        tempClassForPlayer1.itemGameAreaController.receive(toSend);
-                        receive=0;
-                        toSend=null;
-                    }
+
                     tempClassForPlayer1.itemGameAreaController.moveBlockDown(); //블럭 1칸 떨어뜨림
 
 
@@ -348,11 +397,13 @@ public class VersusGamePage extends JFrame{
                             //게임 종료
                             // (아이템전)
                             timerForPlyer1.stop();
+                            timerForPlyer2.stop();
                             dispose();
 
+                            //player1이 졌다
                             pageController = new PageController();
-                            pageController.setScore(tempClassForPlayer1.getScore());
-                            pageController.createGameEndPage();
+                            pageController.setWinner(2);
+                            pageController.createVersusGameEndPage();
                         }
 
 
@@ -360,12 +411,35 @@ public class VersusGamePage extends JFrame{
                         else {
                             int[][] rowsToSend = tempClassForPlayer1.itemGameAreaController.rowsToSend();
                             if(rowsToSend!=null){
-
-                                toSend=rowsToSend;
-                                receive=2;
+                                toSend2=rowsToSend;
+                                receive2=true;
                                 rowsToSend=null;
                             }
                             tempClassForPlayer1.func1(); //색을 바꾸고
+                            if(receive1){
+                                if(received1>10){
+                                    receive1=false;
+                                    toSend1=null;
+                                }
+                                else if(received1+toSend1.length>10){
+                                    int a = 10-received1;
+                                    int[][] k= new int[a][10];
+                                    for(int i=0; i<a;i++){
+                                        k[i]=toSend1[i];
+                                    }
+                                    tempClassForPlayer1.itemGameAreaController.receive(k);
+                                    receive1=false;
+                                    toSend1=null;
+                                    received1=11;
+                                }
+                                else {
+                                    tempClassForPlayer1.itemGameAreaController.receive(toSend1);
+                                    receive1 = false;
+                                    received1+= toSend1.length;
+                                    toSend1= null;
+                                }
+                            }
+
                             timerForPlyer1.setDelay((int) tempClassForPlayer1.getDelay());
                             drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
                         }
@@ -377,6 +451,7 @@ public class VersusGamePage extends JFrame{
                     scoreLabel1.setText(Integer.toString(tempClassForPlayer1.getScore()) + "   Delay:  " + Integer.toString((int) tempClassForPlayer1.getDelay()) + "   DoblueScore(Left):  " + Integer.toString(tempClassForPlayer1.getDoubleIndex()));
                     //다음 블럭 그리기
                     drawNextBlock(tempClassForPlayer1.getNextBlock(),1);
+                    drawPassedBlock(toSend1,1);
                 }
             }
 
@@ -392,16 +467,9 @@ public class VersusGamePage extends JFrame{
                     tempClassForPlayer2.func2();
                     drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
                 }
-
                 else {
 
                     tempClassForPlayer2.clearLinesInTempClass(); //줄을 지우고
-                    if(receive==2){
-                        Debug(toSend);
-                        tempClassForPlayer2.itemGameAreaController.receive(toSend);
-                        receive=0;
-                        toSend=null;
-                    }
                     tempClassForPlayer2.itemGameAreaController.moveBlockDown(); //블럭 1칸 떨어뜨림
 
 
@@ -414,12 +482,14 @@ public class VersusGamePage extends JFrame{
                         if (tempClassForPlayer2.itemGameAreaController.isBlockOuOofBounds()) {
                             //게임 종료
                             // (아이템전)
+                            timerForPlyer1.stop();
                             timerForPlyer2.stop();
                             dispose();
 
                             pageController = new PageController();
-                            pageController.setScore(tempClassForPlayer2.getScore());
-                            pageController.createGameEndPage();
+                            //player2가 졌다
+                            pageController.setWinner(1);
+                            pageController.createVersusGameEndPage();
                         }
 
 
@@ -427,11 +497,35 @@ public class VersusGamePage extends JFrame{
                         else {
                             int[][] rowsToSend = tempClassForPlayer2.itemGameAreaController.rowsToSend();
                             if(rowsToSend!=null){
-                                toSend=rowsToSend;
-                                receive=1;
+                                toSend1=rowsToSend;
+                                receive1=true;
                                 rowsToSend=null;
                             }
                             tempClassForPlayer2.func1(); //색을 바꾸고
+                            if(receive2){
+                                if(received2>10){
+                                    receive2=false;
+                                    toSend2=null;
+                                }
+                                else if(received2+toSend2.length>10){
+                                    int a = 10-received2;
+                                    int[][] k= new int[a][10];
+                                    for(int i=0; i<a;i++){
+                                        k[i]=toSend2[i];
+                                    }
+                                    tempClassForPlayer2.itemGameAreaController.receive(k);
+                                    receive2=false;
+                                    toSend2=null;
+                                    received2=11;
+                                }
+                                else {
+                                    tempClassForPlayer2.itemGameAreaController.receive(toSend2);
+                                    receive2 = false;
+                                    received2+= toSend2.length;
+                                    toSend2=null;
+                                }
+                            }
+
                             timerForPlyer2.setDelay((int) tempClassForPlayer2.getDelay());
                             drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
                         }
@@ -443,6 +537,7 @@ public class VersusGamePage extends JFrame{
                     scoreLabel2.setText(Integer.toString(tempClassForPlayer2.getScore()) + "   Delay:  " + Integer.toString((int) tempClassForPlayer2.getDelay()) + "   DoblueScore(Left):  " + Integer.toString(tempClassForPlayer2.getDoubleIndex()));
                     //다음 블럭 그리기
                     drawNextBlock(tempClassForPlayer2.getNextBlock(),2);
+                    drawPassedBlock(toSend2,2);
                 }
             }
 
@@ -468,17 +563,19 @@ public class VersusGamePage extends JFrame{
                 //제한시간이 0이하면 게임 종료
                 if(limitTime<0)
                 {
-                    
+                    timerForPlyer1.stop();
+                    timerForPlyer2.stop();
+                    dispose();
+                    pageController = new PageController();
+                    //player1이 졌다.
+                    pageController.setWinner(tempClassForPlayer1.getScore()>= tempClassForPlayer2.getScore()?1:2);
+                    pageController.createVersusGameEndPage();
                 }
 
 
                 tempClassForPlayer1.clearLinesInTempClass();
                 //여기 바꿈
-                if(receive==1){
-                    tempClassForPlayer1.itemGameAreaController.receive(toSend);
-                    receive=0;
-                    toSend=null;
-                }
+
                 tempClassForPlayer1.itemGameAreaController.moveBlockDown();
 
 
@@ -491,20 +588,45 @@ public class VersusGamePage extends JFrame{
                     if (tempClassForPlayer1.itemGameAreaController.isBlockOuOofBounds()) {
                         //게임 종료시
                         timerForPlyer1.stop();
+                        timerForPlyer2.stop();
                         dispose();
                         pageController = new PageController();
-                        pageController.setScore(tempClassForPlayer1.getScore());
-                        pageController.createGameEndPage();
+                        //player1이 졌다.
+                        pageController.setWinner(2);
+                        pageController.createVersusGameEndPage();
                     }
                     else {
                         int[][] rowsToSend = tempClassForPlayer1.itemGameAreaController.rowsToSend();
                         if(rowsToSend!=null){
-
-                            toSend=rowsToSend;
-                            receive=2;
+                            toSend2=rowsToSend;
+                            receive2=true;
                             rowsToSend=null;
                         }
                         tempClassForPlayer1.clearLinesWhenBlockIsBottomButNotEnd();
+                        if(receive1){
+                            if(received1>10){
+                                receive1=false;
+                                toSend1=null;
+                            }
+                            else if(received1+toSend1.length>10){
+                                int a = 10-received1;
+                                int[][] k= new int[a][10];
+                                for(int i=0; i<a;i++){
+                                    k[i]=toSend1[i];
+                                }
+                                tempClassForPlayer1.itemGameAreaController.receive(k);
+                                receive1=false;
+                                toSend1=null;
+                                received1=11;
+                            }
+                            else {
+                                tempClassForPlayer1.itemGameAreaController.receive(toSend1);
+                                receive1 = false;
+                                received1+= toSend1.length;
+                                toSend1= null;
+                            }
+                        }
+
                         timerForPlyer1.setDelay((int) tempClassForPlayer1.getDelay());
                         drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
                     }
@@ -516,7 +638,7 @@ public class VersusGamePage extends JFrame{
 
                 //다음 블럭 그리기
                 drawNextBlock(tempClassForPlayer1.getNextBlock(),1);
-
+                drawPassedBlock(toSend1,1);
             }
 
         });
@@ -532,13 +654,7 @@ public class VersusGamePage extends JFrame{
 
 
                 tempClassForPlayer2.clearLinesInTempClass();
-                if(receive==2){
-                    Debug(toSend);
-                    tempClassForPlayer2.itemGameAreaController.receive(toSend);
-                    receive=0;
-                    toSend=null;
-                }
-                //여기 바꿈
+
                 tempClassForPlayer2.itemGameAreaController.moveBlockDown();
 
 
@@ -550,20 +666,45 @@ public class VersusGamePage extends JFrame{
                 if (!tempClassForPlayer2.itemGameAreaController.checkBottom()) {
                     if (tempClassForPlayer2.itemGameAreaController.isBlockOuOofBounds()) {
                         //게임 종료시
+                        timerForPlyer1.stop();
                         timerForPlyer2.stop();
                         dispose();
                         pageController = new PageController();
-                        pageController.setScore(tempClassForPlayer2.getScore());
-                        pageController.createGameEndPage();
+                        //player2가 졌다
+                        pageController.setWinner(1);
+                        pageController.createVersusGameEndPage();
                     }
                     else {
                         int[][] rowsToSend = tempClassForPlayer2.itemGameAreaController.rowsToSend();
                         if(rowsToSend!=null){
-                            toSend=rowsToSend;
-                            receive=1;
+                            toSend1=rowsToSend;
+                            receive1=true;
                             rowsToSend=null;
                         }
                         tempClassForPlayer2.clearLinesWhenBlockIsBottomButNotEnd();
+                        if(receive2){
+                            if(received2>10){
+                                receive2=false;
+                                toSend2=null;
+                            }
+                            else if(received2+toSend2.length>10){
+                                int a = 10-received2;
+                                int[][] k= new int[a][10];
+                                for(int i=0; i<a;i++){
+                                    k[i]=toSend2[i];
+                                }
+                                tempClassForPlayer2.itemGameAreaController.receive(k);
+                                receive2=false;
+                                toSend2=null;
+                                received2=11;
+                            }
+                            else {
+                                tempClassForPlayer2.itemGameAreaController.receive(toSend2);
+                                receive2 = false;
+                                received2+= toSend2.length;
+                                toSend2=null;
+                            }
+                        }
                         timerForPlyer2.setDelay((int) tempClassForPlayer2.getDelay());
                         drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
                     }
@@ -575,7 +716,7 @@ public class VersusGamePage extends JFrame{
 
                 //다음 블럭 그리기
                 drawNextBlock(tempClassForPlayer2.getNextBlock(),2);
-
+                drawPassedBlock(toSend2,2);
             }
 
         });
@@ -594,302 +735,8 @@ public class VersusGamePage extends JFrame{
 
 
     private void setKeyEventController() {
-        addKeyListener(new KeyAdapter() { //키 이벤트
-            @Override
-            public void keyPressed(KeyEvent e) { //키 눌렀을때
-                // TODO Auto-generated method stub
-                //원래 switch case문인데, case에 constant 값만 들어갈 수 있어서 if로 교체
-                int pressedKey = e.getKeyCode();
-
-                if (pressedKey == keySettingMapForPlayer1.get("resume")) {
-                    if (isStop) {
-                        isStop = false;
-                        timerForPlyer1.start();
-                        timerForPlyer2.start();
-                    }
-                }
-                else if (pressedKey == keySettingMapForPlayer1.get("exit")) {
-                    timerForPlyer1.stop();
-                    timerForPlyer2.stop();
-                    dispose();
-
-                    pageController = new PageController("Main");
-
-                }
-                else if (pressedKey == keySettingMapForPlayer1.get("pause")) {
-                    if (!isStop) {
-                        isStop = true;
-                        timerForPlyer1.stop();
-                        timerForPlyer2.stop();
-                    }
-                }
-
-
-                //player1 key setting
-                else if (pressedKey == keySettingMapForPlayer1.get("drop")) {
-                    if (settingForPlayer1.getGameMode() == NormalMode || settingForPlayer1.getGameMode()==TimerMode) {
-                        // 일반모드, 타이머 모드
-                        if (tempClassForPlayer1.itemGameAreaController.ga.block == null || tempClassForPlayer1.getEffect()) {
-                        } else {
-
-                            tempClassForPlayer1.itemGameAreaController.dropBlock();
-                            drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
-                        }
-                    }
-                    else {
-                        //아이템전
-                        if (tempClassForPlayer1.itemGameAreaController.ga.block.shape[0][0] == 9) {
-                            if (tempClassForPlayer1.getChew()) {
-                            } else {
-                                tempClassForPlayer1.itemGameAreaController.dropBlock();
-                                drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
-                            }
-                        }
-                        else {
-                            if (tempClassForPlayer1.itemGameAreaController.ga.block == null) {
-                            } else {
-                                tempClassForPlayer1.itemGameAreaController.dropBlock();
-                                drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
-                            }
-                        }
-                    }
-                }
-
-                else if ((settingForPlayer1.getGameMode() == 0 && tempClassForPlayer1.itemGameAreaController.ga.block == null) ||
-                        (settingForPlayer1.getGameMode() == 1 && tempClassForPlayer1.itemGameAreaController.ga.block == null))
-                {
-                }
-                else if (pressedKey == keySettingMapForPlayer1.get("left")) {
-                    if (settingForPlayer1.getGameMode() == NormalMode || settingForPlayer1.getGameMode()==TimerMode) {
-                        //일반전 혹은 타이머
-                        if (tempClassForPlayer1.itemGameAreaController.ga.block == null) {
-                        } else {
-                            tempClassForPlayer1.itemGameAreaController.moveBlockLeft();
-                            drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
-                        }
-                    }
-                    else {
-                        //아이템전
-                        if (tempClassForPlayer1.itemGameAreaController.ga.block.shape[0][0] == 9) {
-                            if (tempClassForPlayer1.getChew()) {
-                            } else {
-                                tempClassForPlayer1.itemGameAreaController.moveBlockLeft();
-                                drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
-                            }
-                        } else {
-                            if (tempClassForPlayer1.itemGameAreaController.ga.block == null) {
-                            } else {
-                                tempClassForPlayer1.itemGameAreaController.moveBlockLeft();
-                                drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
-                            }
-                        }
-                    }
-
-                }
-                else if (pressedKey == keySettingMapForPlayer1.get("rotate")) {
-                    if (settingForPlayer1.getGameMode() == NormalMode || settingForPlayer1.getGameMode()==TimerMode) {
-                        //일반모드 혹은 타이머모드
-                        if (tempClassForPlayer1.itemGameAreaController.ga.block == null) {
-                        } else {
-                            tempClassForPlayer1.itemGameAreaController.rotateBlock();
-                            drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
-                        }
-                    } 
-                    else {
-                        //아이템전
-                        if (tempClassForPlayer1.itemGameAreaController.ga.block.shape[0][0] == 9) {
-                        } else {
-                            if (tempClassForPlayer1.itemGameAreaController.ga.block == null) {
-                            } else {
-                                tempClassForPlayer1.itemGameAreaController.rotateBlock();
-                                drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
-                            }
-
-                        }
-                    }
-                }
-                else if (pressedKey == keySettingMapForPlayer1.get("right")) {
-                    if (settingForPlayer1.getGameMode() == NormalMode || settingForPlayer1.getGameMode()==TimerMode) {
-                        //일반모드 혹은 타이머모드
-                        if (tempClassForPlayer1.itemGameAreaController.ga.block == null) {
-                        } else {
-                            tempClassForPlayer1.itemGameAreaController.moveBlockRight();
-                            drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
-                        }
-                    }
-                    else {
-                        //아이템전
-                        if (tempClassForPlayer1.itemGameAreaController.ga.block.shape[0][0] == 9) {
-                            if (tempClassForPlayer1.getChew()) {
-                            } else {
-                                tempClassForPlayer1.itemGameAreaController.moveBlockRight();
-                                drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
-                            }
-                        } else {
-                            if (tempClassForPlayer1.itemGameAreaController.ga.block == null) {
-                            } else {
-                                tempClassForPlayer1.itemGameAreaController.moveBlockRight();
-                                drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
-                            }
-                        }
-                    }
-                }
-                else if (pressedKey == keySettingMapForPlayer1.get("down")) {
-                    if (settingForPlayer1.getGameMode() == NormalMode || settingForPlayer1.getGameMode()==TimerMode) {
-                        //일반모드 혹은 타이머모드
-                        if (tempClassForPlayer1.itemGameAreaController.ga.block == null) {
-                        } else {
-                            tempClassForPlayer1.itemGameAreaController.moveBlockDown();
-                            drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
-                        }
-                    }
-                    else {
-                        //아이템모드
-                        if (tempClassForPlayer1.itemGameAreaController.ga.block == null || tempClassForPlayer1.getChew()) {
-                        } else if (tempClassForPlayer1.itemGameAreaController.ga.block.shape[0][0] == 9){
-                            tempClassForPlayer1.itemGameAreaController.moveBlockDown2();
-                            drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
-                        }
-                        else{
-                            tempClassForPlayer1.itemGameAreaController.moveBlockDown();
-                            drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
-                        }
-                    }
-                }
-
-
-                //player2 key setting
-                else if (pressedKey == keySettingMapForPlayer2.get("drop")) {
-                    if (settingForPlayer1.getGameMode() == NormalMode || settingForPlayer1.getGameMode()==TimerMode) {
-                        //일반전 혹은 타이머 모드
-                        if (tempClassForPlayer2.itemGameAreaController.ga.block == null || tempClassForPlayer2.getEffect()) {
-                        } else {
-
-                            tempClassForPlayer2.itemGameAreaController.dropBlock();
-                            drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
-                        }
-                    }
-                    else {
-                        //아이템전
-                        if (tempClassForPlayer2.itemGameAreaController.ga.block.shape[0][0] == 9) {
-                            if (tempClassForPlayer2.getChew()) {
-                            } else {
-                                tempClassForPlayer2.itemGameAreaController.dropBlock();
-                                drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
-                            }
-                        } else {
-                            if (tempClassForPlayer2.itemGameAreaController.ga.block == null) {
-                            } else {
-                                tempClassForPlayer2.itemGameAreaController.dropBlock();
-                                drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
-                            }
-                        }
-                    }
-                }
-
-                else if ((settingForPlayer2.getGameMode() == 0 && tempClassForPlayer2.itemGameAreaController.ga.block == null) ||
-                        (settingForPlayer2.getGameMode() == 1 && tempClassForPlayer2.itemGameAreaController.ga.block == null)) {
-                }
-                else if (pressedKey == keySettingMapForPlayer2.get("left")) {
-                    if (settingForPlayer1.getGameMode() == NormalMode || settingForPlayer1.getGameMode()==TimerMode) {
-                        //일반모드 혹은 타이머모드
-                        if (tempClassForPlayer2.itemGameAreaController.ga.block == null) {
-                        } else {
-                            tempClassForPlayer2.itemGameAreaController.moveBlockLeft();
-                            drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
-                        }
-                    }
-                    else {
-                        //아이템 모드
-                        if (tempClassForPlayer2.itemGameAreaController.ga.block.shape[0][0] == 9) {
-                            if (tempClassForPlayer2.getChew()) {
-                            } else {
-                                tempClassForPlayer2.itemGameAreaController.moveBlockLeft();
-                                drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
-                            }
-                        } else {
-                            if (tempClassForPlayer2.itemGameAreaController.ga.block == null) {
-                            } else {
-                                tempClassForPlayer2.itemGameAreaController.moveBlockLeft();
-                                drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
-                            }
-                        }
-                    }
-
-                }
-                else if (pressedKey == keySettingMapForPlayer2.get("rotate")) {
-                    if (settingForPlayer1.getGameMode() == NormalMode || settingForPlayer1.getGameMode()==TimerMode) {
-                        //일반모드 혹은 타이머 모드
-                        if (tempClassForPlayer2.itemGameAreaController.ga.block == null) {
-                        } else {
-                            tempClassForPlayer2.itemGameAreaController.rotateBlock();
-                            drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
-                        }
-                    } 
-                    else {
-                        //아이템모드
-                        if (tempClassForPlayer2.itemGameAreaController.ga.block.shape[0][0] == 9) {
-                        } else {
-                            if (tempClassForPlayer2.itemGameAreaController.ga.block == null) {
-                            } else {
-                                tempClassForPlayer2.itemGameAreaController.rotateBlock();
-                                drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
-                            }
-
-                        }
-                    }
-                }
-                else if (pressedKey == keySettingMapForPlayer2.get("right")) {
-                    if (settingForPlayer1.getGameMode() == NormalMode || settingForPlayer1.getGameMode()==TimerMode) {
-                        //일반전 혹은 타이머 모드
-                        if (tempClassForPlayer2.itemGameAreaController.ga.block == null) {
-                        } else {
-                            tempClassForPlayer2.itemGameAreaController.moveBlockRight();
-                            drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
-                        }
-                    }
-                    else {
-                        //타이머 모드
-                        if (tempClassForPlayer2.itemGameAreaController.ga.block.shape[0][0] == 9) {
-                            if (tempClassForPlayer2.getChew()) {
-                            } else {
-                                tempClassForPlayer2.itemGameAreaController.moveBlockRight();
-                                drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
-                            }
-                        } else {
-                            if (tempClassForPlayer2.itemGameAreaController.ga.block == null) {
-                            } else {
-                                tempClassForPlayer2.itemGameAreaController.moveBlockRight();
-                                drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
-                            }
-                        }
-                    }
-                }
-                else if (pressedKey == keySettingMapForPlayer2.get("down")) {
-                    if (settingForPlayer1.getGameMode() == NormalMode || settingForPlayer1.getGameMode()==TimerMode) {
-                        //일반 모드 혹은 타이머 모드
-                        if (tempClassForPlayer2.itemGameAreaController.ga.block == null) {
-                        } else {
-                            tempClassForPlayer2.itemGameAreaController.moveBlockDown();
-                            drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
-                        }
-                    }
-                    else {
-                        //아이템모드
-                        if (tempClassForPlayer2.itemGameAreaController.ga.block == null || tempClassForPlayer2.getChew()) {
-                        } else if (tempClassForPlayer2.itemGameAreaController.ga.block.shape[0][0] == 9){
-                            tempClassForPlayer2.itemGameAreaController.moveBlockDown2();
-                            drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
-                        }
-                        else{
-                            tempClassForPlayer2.itemGameAreaController.moveBlockDown();
-                            drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
-                        }
-                    }
-                }
-
-            }
-        });
+        versusGamePageKeyListener=new VersusGamePageKeyListener();
+        addKeyListener(versusGamePageKeyListener);
     }
 
 
@@ -934,55 +781,55 @@ public class VersusGamePage extends JFrame{
     }
 
 
-    public void drawGameBoard(int[][] background, int index) {
+    public void drawGameBoard(int[][] background, int playerIndex) {
 
         //이전 화면 지우기
-        gameBoardPaneArray[index-1].setText("");
+        gameBoardPaneArray[playerIndex-1].setText("");
         //여기서부턴 화면에 그리기
 
 
-        drawTextWithColor(gameBoardPaneArray[index-1], "XXXXXXXXXXXX\n", Color.BLACK);
+        drawTextWithColor(gameBoardPaneArray[playerIndex-1], "XXXXXXXXXXXX\n", Color.BLACK);
 
 
         for (int i = 0; i < 20; i++) {
-            drawTextWithColor(gameBoardPaneArray[index-1], "X", Color.BLACK);
+            drawTextWithColor(gameBoardPaneArray[playerIndex-1], "X", Color.BLACK);
 
             for (int j = 0; j < 10; j++) {
                 //일반 블럭 그리기
                 if (background[i][j] < 8) {
                     if (settingForPlayer1.getDisplayMode() ==NotBlindMode ) { //일반모드 그리기
-                        drawTextWithColor(gameBoardPaneArray[index-1], "X", colorForBlock[background[i][j]]);
+                        drawTextWithColor(gameBoardPaneArray[playerIndex-1], "X", colorForBlock[background[i][j]]);
                     } else { // 색맹모드 그리기
-                        drawTextWithColor(gameBoardPaneArray[index-1], "X", colorFOrBlindModeBlock[background[i][j]]);
+                        drawTextWithColor(gameBoardPaneArray[playerIndex-1], "X", colorFOrBlindModeBlock[background[i][j]]);
                     }
                 }
                 else {
                     if (settingForPlayer1.getDisplayMode() == NotBlindMode) { //일반모드 그리기
-                        drawTextWithColor(gameBoardPaneArray[index-1], String.valueOf(blockShape[background[i][j]]), colorForBlock[background[i][j]]);
+                        drawTextWithColor(gameBoardPaneArray[playerIndex-1], String.valueOf(blockShape[background[i][j]]), colorForBlock[background[i][j]]);
                     } else { // 색맹모드 그리기
-                        drawTextWithColor(gameBoardPaneArray[index-1], String.valueOf(blockShape[background[i][j]]), colorFOrBlindModeBlock[background[i][j]]);
+                        drawTextWithColor(gameBoardPaneArray[playerIndex-1], String.valueOf(blockShape[background[i][j]]), colorFOrBlindModeBlock[background[i][j]]);
                     }
                 }
 
             }
-            drawTextWithColor(gameBoardPaneArray[index-1], "X\n", Color.BLACK);
+            drawTextWithColor(gameBoardPaneArray[playerIndex-1], "X\n", Color.BLACK);
         }
 
 
-        drawTextWithColor(gameBoardPaneArray[index-1], "XXXXXXXXXXXX", Color.BLACK);
+        drawTextWithColor(gameBoardPaneArray[playerIndex-1], "XXXXXXXXXXXX", Color.BLACK);
 
         //이거 없어도 보드는 그려진다. 뭔가 스타일 관련 코드인 듯
-        StyledDocument doc = gameBoardPaneArray[index-1].getStyledDocument();
+        StyledDocument doc = gameBoardPaneArray[playerIndex-1].getStyledDocument();
         doc.setParagraphAttributes(0, doc.getLength(), styleSet, false);
-        gameBoardPaneArray[index-1].setStyledDocument(doc);
+        gameBoardPaneArray[playerIndex-1].setStyledDocument(doc);
 
     }
 
 
-    private void drawNextBlock(int[][] background, int index) {
+    private void drawNextBlock(int[][] background, int playerIndex) {
 
         //이전 화면 지우기
-        nextBlockPaneArray[index-1].setText("");
+        nextBlockPaneArray[playerIndex-1].setText("");
 
 
         //여기서부턴 화면에 그리기
@@ -992,20 +839,43 @@ public class VersusGamePage extends JFrame{
         for (int i = 0; i < nextBlock.length; i++) {
 
             for (int j = 0; j < nextBlock[i].length; j++) {
-                if(settingForPlayer1.getDisplayMode()==NotBlindMode) drawTextWithColor(nextBlockPaneArray[index-1], String.valueOf(blockShape[background[i][j]]), colorForBlock[background[i][j]]); //일반 모드
-                else drawTextWithColor(nextBlockPaneArray[index-1], String.valueOf(blockShape[background[i][j]]), colorFOrBlindModeBlock[background[i][j]]); //색맹 모드
+                if(settingForPlayer1.getDisplayMode()==NotBlindMode)
+                    drawTextWithColor(nextBlockPaneArray[playerIndex-1], String.valueOf(blockShape[background[i][j]]), colorForBlock[background[i][j]]); //일반 모드
+                else
+                    drawTextWithColor(nextBlockPaneArray[playerIndex-1], String.valueOf(blockShape[background[i][j]]), colorFOrBlindModeBlock[background[i][j]]); //색맹 모드
             }
 
-            drawTextWithColor(nextBlockPaneArray[index-1], "\n", Color.BLACK);
+            drawTextWithColor(nextBlockPaneArray[playerIndex-1], "\n", Color.BLACK);
         }
         //이거 없어도 보드는 그려진다. 뭔가 스타일 관련 코드인 듯
-        StyledDocument doc = nextBlockPaneArray[index-1].getStyledDocument();
+        StyledDocument doc = nextBlockPaneArray[playerIndex-1].getStyledDocument();
 
 
         doc.setParagraphAttributes(0, doc.getLength(), styleSet, false);
-        nextBlockPaneArray[index-1].setStyledDocument(doc);
+        nextBlockPaneArray[playerIndex-1].setStyledDocument(doc);
 
     }
+
+    private void drawPassedBlock(int [][] passedBlock, int playerIndex)
+    {
+        passedBlockPaneArray[playerIndex-1].setText("");
+
+        if(passedBlock==null)
+            return;
+
+        for(int i=0;i<passedBlock.length;i++){
+            for(int j=0;j<passedBlock[i].length;j++){
+                drawTextWithColor(passedBlockPaneArray[playerIndex-1],String.valueOf("X"),Color.GRAY);
+            }
+            drawTextWithColor(passedBlockPaneArray[playerIndex-1], "\n", Color.BLACK);
+        }
+        StyledDocument doc = passedBlockPaneArray[playerIndex-1].getStyledDocument();
+
+
+        doc.setParagraphAttributes(0, doc.getLength(), styleSet, false);
+        passedBlockPaneArray[playerIndex-1].setStyledDocument(doc);
+    }
+
 
     private void drawTextWithColor(JTextPane tp, String msg, Color c) {
         StyleContext sc = StyleContext.getDefaultStyleContext();
@@ -1032,6 +902,313 @@ public class VersusGamePage extends JFrame{
                 }
                 System.out.println();
             }
+        }
+    }
+
+    public class VersusGamePageKeyListener implements KeyListener{
+        @Override
+        public void keyTyped(KeyEvent e) {
+
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+
+
+        }
+        @Override
+        public void keyPressed(KeyEvent e) { //키 눌렀을때
+            // TODO Auto-generated method stub
+            //원래 switch case문인데, case에 constant 값만 들어갈 수 있어서 if로 교체
+            int pressedKey = e.getKeyCode();
+
+            if (pressedKey == keySettingMapForPlayer1.get("resume")) {
+                if (isStop) {
+                    isStop = false;
+                    timerForPlyer1.start();
+                    timerForPlyer2.start();
+                }
+            }
+            else if (pressedKey == keySettingMapForPlayer1.get("exit")) {
+                timerForPlyer1.stop();
+                timerForPlyer2.stop();
+                dispose();
+
+                pageController = new PageController("Main");
+
+            }
+            else if (pressedKey == keySettingMapForPlayer1.get("pause")) {
+                if (!isStop) {
+                    isStop = true;
+                    timerForPlyer1.stop();
+                    timerForPlyer2.stop();
+                }
+            }
+
+
+            //player1 key setting
+            else if (pressedKey == keySettingMapForPlayer1.get("drop")) {
+                if (settingForPlayer1.getGameMode() == NormalMode || settingForPlayer1.getGameMode()==TimerMode) {
+                    // 일반모드, 타이머 모드
+                    if (tempClassForPlayer1.itemGameAreaController.ga.block == null || tempClassForPlayer1.getEffect()) {
+                    } else {
+
+                        tempClassForPlayer1.itemGameAreaController.dropBlock();
+                        drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
+                    }
+                }
+                else {
+                    //아이템전
+                    if (tempClassForPlayer1.itemGameAreaController.ga.block.shape[0][0] == 9) {
+                        if (tempClassForPlayer1.getChew()) {
+                        } else {
+                            tempClassForPlayer1.itemGameAreaController.dropBlock();
+                            drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
+                        }
+                    }
+                    else {
+                        if (tempClassForPlayer1.itemGameAreaController.ga.block == null) {
+                        } else {
+                            tempClassForPlayer1.itemGameAreaController.dropBlock();
+                            drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
+                        }
+                    }
+                }
+            }
+
+            else if ((settingForPlayer1.getGameMode() == 0 && tempClassForPlayer1.itemGameAreaController.ga.block == null) ||
+                    (settingForPlayer1.getGameMode() == 1 && tempClassForPlayer1.itemGameAreaController.ga.block == null))
+            {
+            }
+            else if (pressedKey == keySettingMapForPlayer1.get("left")) {
+                if (settingForPlayer1.getGameMode() == NormalMode || settingForPlayer1.getGameMode()==TimerMode) {
+                    //일반전 혹은 타이머
+                    if (tempClassForPlayer1.itemGameAreaController.ga.block == null) {
+                    } else {
+                        tempClassForPlayer1.itemGameAreaController.moveBlockLeft();
+                        drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
+                    }
+                }
+                else {
+                    //아이템전
+                    if (tempClassForPlayer1.itemGameAreaController.ga.block.shape[0][0] == 9) {
+                        if (tempClassForPlayer1.getChew()) {
+                        } else {
+                            tempClassForPlayer1.itemGameAreaController.moveBlockLeft();
+                            drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
+                        }
+                    } else {
+                        if (tempClassForPlayer1.itemGameAreaController.ga.block == null) {
+                        } else {
+                            tempClassForPlayer1.itemGameAreaController.moveBlockLeft();
+                            drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
+                        }
+                    }
+                }
+
+            }
+            else if (pressedKey == keySettingMapForPlayer1.get("rotate")) {
+                if (settingForPlayer1.getGameMode() == NormalMode || settingForPlayer1.getGameMode()==TimerMode) {
+                    //일반모드 혹은 타이머모드
+                    if (tempClassForPlayer1.itemGameAreaController.ga.block == null) {
+                    } else {
+                        tempClassForPlayer1.itemGameAreaController.rotateBlock();
+                        drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
+                    }
+                }
+                else {
+                    //아이템전
+                    if (tempClassForPlayer1.itemGameAreaController.ga.block.shape[0][0] == 9) {
+                    } else {
+                        if (tempClassForPlayer1.itemGameAreaController.ga.block == null) {
+                        } else {
+                            tempClassForPlayer1.itemGameAreaController.rotateBlock();
+                            drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
+                        }
+
+                    }
+                }
+            }
+            else if (pressedKey == keySettingMapForPlayer1.get("right")) {
+                if (settingForPlayer1.getGameMode() == NormalMode || settingForPlayer1.getGameMode()==TimerMode) {
+                    //일반모드 혹은 타이머모드
+                    if (tempClassForPlayer1.itemGameAreaController.ga.block == null) {
+                    } else {
+                        tempClassForPlayer1.itemGameAreaController.moveBlockRight();
+                        drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
+                    }
+                }
+                else {
+                    //아이템전
+                    if (tempClassForPlayer1.itemGameAreaController.ga.block.shape[0][0] == 9) {
+                        if (tempClassForPlayer1.getChew()) {
+                        } else {
+                            tempClassForPlayer1.itemGameAreaController.moveBlockRight();
+                            drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
+                        }
+                    } else {
+                        if (tempClassForPlayer1.itemGameAreaController.ga.block == null) {
+                        } else {
+                            tempClassForPlayer1.itemGameAreaController.moveBlockRight();
+                            drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
+                        }
+                    }
+                }
+            }
+            else if (pressedKey == keySettingMapForPlayer1.get("down")) {
+                if (settingForPlayer1.getGameMode() == NormalMode || settingForPlayer1.getGameMode()==TimerMode) {
+                    //일반모드 혹은 타이머모드
+                    if (tempClassForPlayer1.itemGameAreaController.ga.block == null) {
+                    } else {
+                        tempClassForPlayer1.itemGameAreaController.moveBlockDown();
+                        drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
+                    }
+                }
+                else {
+                    //아이템모드
+                    if (tempClassForPlayer1.itemGameAreaController.ga.block == null || tempClassForPlayer1.getChew()) {
+                    } else if (tempClassForPlayer1.itemGameAreaController.ga.block.shape[0][0] == 9){
+                        tempClassForPlayer1.itemGameAreaController.moveBlockDown2();
+                        drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
+                    }
+                    else{
+                        tempClassForPlayer1.itemGameAreaController.moveBlockDown();
+                        drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
+                    }
+                }
+            }
+
+
+            //player2 key setting
+            else if (pressedKey == keySettingMapForPlayer2.get("drop")) {
+                if (settingForPlayer1.getGameMode() == NormalMode || settingForPlayer1.getGameMode()==TimerMode) {
+                    //일반전 혹은 타이머 모드
+                    if (tempClassForPlayer2.itemGameAreaController.ga.block == null || tempClassForPlayer2.getEffect()) {
+                    } else {
+
+                        tempClassForPlayer2.itemGameAreaController.dropBlock();
+                        drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
+                    }
+                }
+                else {
+                    //아이템전
+                    if (tempClassForPlayer2.itemGameAreaController.ga.block.shape[0][0] == 9) {
+                        if (tempClassForPlayer2.getChew()) {
+                        } else {
+                            tempClassForPlayer2.itemGameAreaController.dropBlock();
+                            drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
+                        }
+                    } else {
+                        if (tempClassForPlayer2.itemGameAreaController.ga.block == null) {
+                        } else {
+                            tempClassForPlayer2.itemGameAreaController.dropBlock();
+                            drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
+                        }
+                    }
+                }
+            }
+
+            else if ((settingForPlayer2.getGameMode() == 0 && tempClassForPlayer2.itemGameAreaController.ga.block == null) ||
+                    (settingForPlayer2.getGameMode() == 1 && tempClassForPlayer2.itemGameAreaController.ga.block == null)) {
+            }
+            else if (pressedKey == keySettingMapForPlayer2.get("left")) {
+                if (settingForPlayer1.getGameMode() == NormalMode || settingForPlayer1.getGameMode()==TimerMode) {
+                    //일반모드 혹은 타이머모드
+                    if (tempClassForPlayer2.itemGameAreaController.ga.block == null) {
+                    } else {
+                        tempClassForPlayer2.itemGameAreaController.moveBlockLeft();
+                        drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
+                    }
+                }
+                else {
+                    //아이템 모드
+                    if (tempClassForPlayer2.itemGameAreaController.ga.block.shape[0][0] == 9) {
+                        if (tempClassForPlayer2.getChew()) {
+                        } else {
+                            tempClassForPlayer2.itemGameAreaController.moveBlockLeft();
+                            drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
+                        }
+                    } else {
+                        if (tempClassForPlayer2.itemGameAreaController.ga.block == null) {
+                        } else {
+                            tempClassForPlayer2.itemGameAreaController.moveBlockLeft();
+                            drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
+                        }
+                    }
+                }
+
+            }
+            else if (pressedKey == keySettingMapForPlayer2.get("rotate")) {
+                if (settingForPlayer1.getGameMode() == NormalMode || settingForPlayer1.getGameMode()==TimerMode) {
+                    //일반모드 혹은 타이머 모드
+                    if (tempClassForPlayer2.itemGameAreaController.ga.block == null) {
+                    } else {
+                        tempClassForPlayer2.itemGameAreaController.rotateBlock();
+                        drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
+                    }
+                }
+                else {
+                    //아이템모드
+                    if (tempClassForPlayer2.itemGameAreaController.ga.block.shape[0][0] == 9) {
+                    } else {
+                        if (tempClassForPlayer2.itemGameAreaController.ga.block == null) {
+                        } else {
+                            tempClassForPlayer2.itemGameAreaController.rotateBlock();
+                            drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
+                        }
+
+                    }
+                }
+            }
+            else if (pressedKey == keySettingMapForPlayer2.get("right")) {
+                if (settingForPlayer1.getGameMode() == NormalMode || settingForPlayer1.getGameMode()==TimerMode) {
+                    //일반전 혹은 타이머 모드
+                    if (tempClassForPlayer2.itemGameAreaController.ga.block == null) {
+                    } else {
+                        tempClassForPlayer2.itemGameAreaController.moveBlockRight();
+                        drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
+                    }
+                }
+                else {
+                    //타이머 모드
+                    if (tempClassForPlayer2.itemGameAreaController.ga.block.shape[0][0] == 9) {
+                        if (tempClassForPlayer2.getChew()) {
+                        } else {
+                            tempClassForPlayer2.itemGameAreaController.moveBlockRight();
+                            drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
+                        }
+                    } else {
+                        if (tempClassForPlayer2.itemGameAreaController.ga.block == null) {
+                        } else {
+                            tempClassForPlayer2.itemGameAreaController.moveBlockRight();
+                            drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
+                        }
+                    }
+                }
+            }
+            else if (pressedKey == keySettingMapForPlayer2.get("down")) {
+                if (settingForPlayer1.getGameMode() == NormalMode || settingForPlayer1.getGameMode()==TimerMode) {
+                    //일반 모드 혹은 타이머 모드
+                    if (tempClassForPlayer2.itemGameAreaController.ga.block == null) {
+                    } else {
+                        tempClassForPlayer2.itemGameAreaController.moveBlockDown();
+                        drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
+                    }
+                }
+                else {
+                    //아이템모드
+                    if (tempClassForPlayer2.itemGameAreaController.ga.block == null || tempClassForPlayer2.getChew()) {
+                    } else if (tempClassForPlayer2.itemGameAreaController.ga.block.shape[0][0] == 9){
+                        tempClassForPlayer2.itemGameAreaController.moveBlockDown2();
+                        drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
+                    }
+                    else{
+                        tempClassForPlayer2.itemGameAreaController.moveBlockDown();
+                        drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
+                    }
+                }
+            }
+
         }
     }
 }

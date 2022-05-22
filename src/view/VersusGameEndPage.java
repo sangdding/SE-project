@@ -16,7 +16,7 @@ public class VersusGameEndPage extends JFrame {
     private PageController pageController;
 
 
-    VersusGameEndPage(int winner)
+    public VersusGameEndPage(int winner)
     {
 
 

@@ -132,7 +132,6 @@ public class temp {
     public int[][] getNextBlock() {
         ItemBlockController nextBlock = itemGameAreaController.getNextBlock();
         int[][] now = now = nextBlock.getShape();
-
         int color= nextBlock.getColor();
         for (int r = 0; r < now.length; r++) {
             for (int c = 0; c < now[0].length; c++) {
@@ -141,7 +140,8 @@ public class temp {
                 }
             }
         }
-        return now;
+        if(now[0][0]==9){return new int[][]{{9,9,9,9}};}
+        else{return now;}
     }
 
     public void func1()

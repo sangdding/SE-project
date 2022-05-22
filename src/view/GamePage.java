@@ -11,10 +11,7 @@ import model.block.NormalBlock;
 import javax.swing.*;
 import javax.swing.text.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.util.HashMap;
 import controller.HashMapParser;
 import java.util.Random;
@@ -41,6 +38,7 @@ public class GamePage extends JFrame {
     private JButton exitButton;
     private JLabel scoreLabel;
     private PageController pageController;
+    private GamePageKeyListener gamePageKeyListener;
 
 
     public Timer timer;
@@ -253,148 +251,8 @@ public class GamePage extends JFrame {
     }
 
     private void setKeyEventController() {
-        addKeyListener(new KeyAdapter() { //키 이벤트
-            @Override
-            public void keyPressed(KeyEvent e) { //키 눌렀을때
-                // TODO Auto-generated method stub
-                //원래 switch case문인데, case에 constant 값만 들어갈 수 있어서 if로 교체
-                int pressedKey = e.getKeyCode();
-
-                if (pressedKey == keySettingMap.get("resume")) {
-                    if (isStop) {
-                        isStop = false;
-                        timer.start();
-                    }
-                }
-                else if (pressedKey == keySettingMap.get("drop")) {
-                    if (setting.getGameMode() == 0) {
-                        if (tempClass.itemGameAreaController.ga.block == null || tempClass.getEffect()) {
-                        } else {
-
-                            tempClass.itemGameAreaController.dropBlock();
-                            drawGameBoard(tempClass.itemGameAreaController.newBackground());
-                        }
-                    } else {
-                        if (tempClass.itemGameAreaController.ga.block.shape[0][0] == 9) {
-                            if (tempClass.getChew()) {
-                            } else {
-                                tempClass.itemGameAreaController.dropBlock();
-                                drawGameBoard(tempClass.itemGameAreaController.newBackground());
-                            }
-                        } else {
-                            if (tempClass.itemGameAreaController.ga.block == null) {
-                            } else {
-                                tempClass.itemGameAreaController.dropBlock();
-                                drawGameBoard(tempClass.itemGameAreaController.newBackground());
-                            }
-                        }
-                    }
-                }
-                else if (pressedKey == keySettingMap.get("exit")) {
-                    timer.stop();
-                    dispose();
-
-                    pageController = new PageController("Main");
-
-                }
-                else if ((setting.getGameMode() == 0 && tempClass.itemGameAreaController.ga.block == null) ||
-                        (setting.getGameMode() == 1 && tempClass.itemGameAreaController.ga.block == null)) {
-                }
-                else if (pressedKey == keySettingMap.get("left")) {
-                    if (setting.getGameMode() == 0) {
-                        if (tempClass.itemGameAreaController.ga.block == null) {
-                        } else {
-                            tempClass.itemGameAreaController.moveBlockLeft();
-                            drawGameBoard(tempClass.itemGameAreaController.newBackground());
-                        }
-                    }
-                    else {
-                        if (tempClass.itemGameAreaController.ga.block.shape[0][0] == 9) {
-                            if (tempClass.getChew()) {
-                            } else {
-                                tempClass.itemGameAreaController.moveBlockLeft();
-                                drawGameBoard(tempClass.itemGameAreaController.newBackground());
-                            }
-                        } else {
-                            if (tempClass.itemGameAreaController.ga.block == null) {
-                            } else {
-                                tempClass.itemGameAreaController.moveBlockLeft();
-                                drawGameBoard(tempClass.itemGameAreaController.newBackground());
-                            }
-                        }
-                    }
-
-                }
-                else if (pressedKey == keySettingMap.get("rotate")) {
-                    if (setting.getGameMode() == 0) {
-                        if (tempClass.itemGameAreaController.ga.block == null) {
-                        } else {
-                            tempClass.itemGameAreaController.rotateBlock();
-                            drawGameBoard(tempClass.itemGameAreaController.newBackground());
-                        }
-                    } else {
-                        if (tempClass.itemGameAreaController.ga.block.shape[0][0] == 9) {
-                        } else {
-                            if (tempClass.itemGameAreaController.ga.block == null) {
-                            } else {
-                                tempClass.itemGameAreaController.rotateBlock();
-                                drawGameBoard(tempClass.itemGameAreaController.newBackground());
-                            }
-
-                        }
-                    }
-                }
-                else if (pressedKey == keySettingMap.get("right")) {
-                    if (setting.getGameMode() == 0) {
-                        if (tempClass.itemGameAreaController.ga.block == null) {
-                        } else {
-                            tempClass.itemGameAreaController.moveBlockRight();
-                            drawGameBoard(tempClass.itemGameAreaController.newBackground());
-                        }
-                    } else {
-                        if (tempClass.itemGameAreaController.ga.block.shape[0][0] == 9) {
-                            if (tempClass.getChew()) {
-                            } else {
-                                tempClass.itemGameAreaController.moveBlockRight();
-                                drawGameBoard(tempClass.itemGameAreaController.newBackground());
-                            }
-                        } else {
-                            if (tempClass.itemGameAreaController.ga.block == null) {
-                            } else {
-                                tempClass.itemGameAreaController.moveBlockRight();
-                                drawGameBoard(tempClass.itemGameAreaController.newBackground());
-                            }
-                        }
-                    }
-                }
-                else if (pressedKey == keySettingMap.get("down")) {
-                    if (setting.getGameMode() == 0) {
-                        if (tempClass.itemGameAreaController.ga.block == null) {
-                        } else {
-                            tempClass.itemGameAreaController.moveBlockDown();
-                            drawGameBoard(tempClass.itemGameAreaController.newBackground());
-                        }
-                    }
-                    else {
-                        if (tempClass.itemGameAreaController.ga.block == null || tempClass.getChew()) {
-                        } else if (tempClass.itemGameAreaController.ga.block.shape[0][0] == 9){
-                            tempClass.itemGameAreaController.moveBlockDown2();
-                            drawGameBoard(tempClass.itemGameAreaController.newBackground());
-                        }
-                        else{
-                            tempClass.itemGameAreaController.moveBlockDown();
-                            drawGameBoard(tempClass.itemGameAreaController.newBackground());
-                        }
-                    }
-                }
-                else if (pressedKey == keySettingMap.get("pause")) {
-                    if (!isStop) {
-                        isStop = true;
-                        timer.stop();
-                    }
-                }
-            }
-        });
+        gamePageKeyListener=new GamePageKeyListener();
+        addKeyListener(gamePageKeyListener);
     }
 
     private void setButtonClickController() {
@@ -529,6 +387,159 @@ public class GamePage extends JFrame {
         tp.setCharacterAttributes(aset, false);
         tp.replaceSelection(msg);
 
+    }
+
+    public class GamePageKeyListener implements KeyListener{
+        @Override
+        public void keyTyped(KeyEvent e) {
+
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+
+
+        }
+        @Override
+        public void keyPressed(KeyEvent e) { //키 눌렀을때
+            // TODO Auto-generated method stub
+            //원래 switch case문인데, case에 constant 값만 들어갈 수 있어서 if로 교체
+            int pressedKey = e.getKeyCode();
+
+            if (pressedKey == keySettingMap.get("resume")) {
+                if (isStop) {
+                    isStop = false;
+                    timer.start();
+                }
+            }
+            else if (pressedKey == keySettingMap.get("drop")) {
+                if (setting.getGameMode() == 0) {
+                    if (tempClass.itemGameAreaController.ga.block == null || tempClass.getEffect()) {
+                    } else {
+
+                        tempClass.itemGameAreaController.dropBlock();
+                        drawGameBoard(tempClass.itemGameAreaController.newBackground());
+                    }
+                } else {
+                    if (tempClass.itemGameAreaController.ga.block.shape[0][0] == 9) {
+                        if (tempClass.getChew()) {
+                        } else {
+                            tempClass.itemGameAreaController.dropBlock();
+                            drawGameBoard(tempClass.itemGameAreaController.newBackground());
+                        }
+                    } else {
+                        if (tempClass.itemGameAreaController.ga.block == null) {
+                        } else {
+                            tempClass.itemGameAreaController.dropBlock();
+                            drawGameBoard(tempClass.itemGameAreaController.newBackground());
+                        }
+                    }
+                }
+            }
+            else if (pressedKey == keySettingMap.get("exit")) {
+                timer.stop();
+                dispose();
+
+                pageController = new PageController("Main");
+
+            }
+            else if ((setting.getGameMode() == 0 && tempClass.itemGameAreaController.ga.block == null) ||
+                    (setting.getGameMode() == 1 && tempClass.itemGameAreaController.ga.block == null)) {
+            }
+            else if (pressedKey == keySettingMap.get("left")) {
+                if (setting.getGameMode() == 0) {
+                    if (tempClass.itemGameAreaController.ga.block == null) {
+                    } else {
+                        tempClass.itemGameAreaController.moveBlockLeft();
+                        drawGameBoard(tempClass.itemGameAreaController.newBackground());
+                    }
+                }
+                else {
+                    if (tempClass.itemGameAreaController.ga.block.shape[0][0] == 9) {
+                        if (tempClass.getChew()) {
+                        } else {
+                            tempClass.itemGameAreaController.moveBlockLeft();
+                            drawGameBoard(tempClass.itemGameAreaController.newBackground());
+                        }
+                    } else {
+                        if (tempClass.itemGameAreaController.ga.block == null) {
+                        } else {
+                            tempClass.itemGameAreaController.moveBlockLeft();
+                            drawGameBoard(tempClass.itemGameAreaController.newBackground());
+                        }
+                    }
+                }
+
+            }
+            else if (pressedKey == keySettingMap.get("rotate")) {
+                if (setting.getGameMode() == 0) {
+                    if (tempClass.itemGameAreaController.ga.block == null) {
+                    } else {
+                        tempClass.itemGameAreaController.rotateBlock();
+                        drawGameBoard(tempClass.itemGameAreaController.newBackground());
+                    }
+                } else {
+                    if (tempClass.itemGameAreaController.ga.block.shape[0][0] == 9) {
+                    } else {
+                        if (tempClass.itemGameAreaController.ga.block == null) {
+                        } else {
+                            tempClass.itemGameAreaController.rotateBlock();
+                            drawGameBoard(tempClass.itemGameAreaController.newBackground());
+                        }
+
+                    }
+                }
+            }
+            else if (pressedKey == keySettingMap.get("right")) {
+                if (setting.getGameMode() == 0) {
+                    if (tempClass.itemGameAreaController.ga.block == null) {
+                    } else {
+                        tempClass.itemGameAreaController.moveBlockRight();
+                        drawGameBoard(tempClass.itemGameAreaController.newBackground());
+                    }
+                } else {
+                    if (tempClass.itemGameAreaController.ga.block.shape[0][0] == 9) {
+                        if (tempClass.getChew()) {
+                        } else {
+                            tempClass.itemGameAreaController.moveBlockRight();
+                            drawGameBoard(tempClass.itemGameAreaController.newBackground());
+                        }
+                    } else {
+                        if (tempClass.itemGameAreaController.ga.block == null) {
+                        } else {
+                            tempClass.itemGameAreaController.moveBlockRight();
+                            drawGameBoard(tempClass.itemGameAreaController.newBackground());
+                        }
+                    }
+                }
+            }
+            else if (pressedKey == keySettingMap.get("down")) {
+                if (setting.getGameMode() == 0) {
+                    if (tempClass.itemGameAreaController.ga.block == null) {
+                    } else {
+                        tempClass.itemGameAreaController.moveBlockDown();
+                        drawGameBoard(tempClass.itemGameAreaController.newBackground());
+                    }
+                }
+                else {
+                    if (tempClass.itemGameAreaController.ga.block == null || tempClass.getChew()) {
+                    } else if (tempClass.itemGameAreaController.ga.block.shape[0][0] == 9){
+                        tempClass.itemGameAreaController.moveBlockDown2();
+                        drawGameBoard(tempClass.itemGameAreaController.newBackground());
+                    }
+                    else{
+                        tempClass.itemGameAreaController.moveBlockDown();
+                        drawGameBoard(tempClass.itemGameAreaController.newBackground());
+                    }
+                }
+            }
+            else if (pressedKey == keySettingMap.get("pause")) {
+                if (!isStop) {
+                    isStop = true;
+                    timer.stop();
+                }
+            }
+        }
     }
 
 }
