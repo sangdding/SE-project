@@ -21,12 +21,12 @@
       "pause": 80
     }
   },
-  "difficulty": "easy",
+  "difficulty": "hard",
   "display": {
-    "width": 800,
-    "height": 800
+    "width": 1000,
+    "height": 1000
   },
-  "gameMode": "normal",
+  "gameMode": "item",
   "defaultKey": {
     "player1": {
       "resume": 82,

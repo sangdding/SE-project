@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.lang.reflect.Field;
 
 import static java.awt.event.KeyEvent.VK_DOWN;
 import static java.awt.event.KeyEvent.VK_ENTER;

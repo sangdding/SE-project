@@ -1,14 +1,18 @@
 {
   "normal": {
+    "DAFDD": 122412,
     "admin": -1
   },
   "item": {
+    "DAFDD": 122412,
     "admin": -1
   },
   "normalDifficulty": {
+    "DAFDD": 1,
     "admin": -1
   },
   "itemDifficulty": {
+    "DAFDD": 1,
     "admin": -1
   }
 }
