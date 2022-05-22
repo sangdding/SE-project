@@ -6,11 +6,7 @@ import model.setting.Setting;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-
+import java.awt.event.*;
 
 
 public class MainPage extends JFrame{
@@ -31,6 +27,8 @@ public class MainPage extends JFrame{
 
     private JButton[] buttons=new JButton[]{gameStartNormalModeButton, gameStartItemModeButton, gameStartVersusModeButton,  settingButton, scoreBoardNormalButton, scoreBoardItemButton, exitButton };
     private int buttonSelectorIndex =0;
+
+    private MainPageKeyListener mainPageKeyListener;
 
 
 
@@ -76,84 +74,8 @@ public class MainPage extends JFrame{
     }
     private void setKeyEventController()
     {
-        addKeyListener(new KeyAdapter() { //키 이벤트
-            @Override
-            public void keyPressed(KeyEvent e) { //키 눌렀을때
-                System.out.println("main page key event enter");
-                System.out.println(e.getKeyCode());
-                // TODO Auto-generated method stub
-                switch (e.getKeyCode()) {//키 코드로 스위치
-
-                    case KeyEvent.VK_RIGHT:
-                        if(buttonSelectorIndex!=2) break;
-                        if(buttons[buttonSelectorIndex].getText().equals("Game Start - Versus - NormalMode"))
-                        {
-                            buttons[buttonSelectorIndex].setText("Game Start - Versus - ItemMode");
-                        }
-                        else if(buttons[buttonSelectorIndex].getText().equals("Game Start - Versus - ItemMode"))
-                        {
-                            buttons[buttonSelectorIndex].setText("Game Start - Versus - TimerMode");
-                        }
-                        else if(buttons[buttonSelectorIndex].getText().equals("Game Start - Versus - TimerMode"))
-                        {
-                            buttons[buttonSelectorIndex].setText("Game Start - Versus - NormalMode");
-                        }
-                        break;
-
-                    case KeyEvent.VK_LEFT:
-                        if(buttonSelectorIndex!=2) break;
-                        if(buttons[buttonSelectorIndex].getText().equals("Game Start - Versus - NormalMode"))
-                        {
-                            buttons[buttonSelectorIndex].setText("Game Start - Versus - TimerMode");
-                        }
-                        else if(buttons[buttonSelectorIndex].getText().equals("Game Start - Versus - ItemMode"))
-                        {
-                            buttons[buttonSelectorIndex].setText("Game Start - Versus - NormalMode");
-                        }
-                        else if(buttons[buttonSelectorIndex].getText().equals("Game Start - Versus - TimerMode"))
-                        {
-                            buttons[buttonSelectorIndex].setText("Game Start - Versus - ItemMode");
-                        }
-                        break;
-                    case KeyEvent.VK_DOWN: //방향키(아래) 눌렀을때
-                        if (buttonSelectorIndex +1<buttons.length)
-                        {
-                            buttons[buttonSelectorIndex].setBackground(null);
-                            buttons[++buttonSelectorIndex].setBackground(Color.RED);
-                        }
-                        break;
-                    case KeyEvent.VK_UP: //방향키(위)눌렀을때
-                        if(buttonSelectorIndex >0)
-                        {
-                            buttons[buttonSelectorIndex].setBackground(null);
-                            buttons[--buttonSelectorIndex].setBackground(Color.RED);
-                        }
-                        break;
-                    case KeyEvent.VK_ENTER:
-                        setVisible(false);
-                        String gameButtonText=buttons[buttonSelectorIndex].getText();
-
-                        if(gameButtonText.equals("Game Start - Normal Mode") || gameButtonText.equals("Game Start - Versus - NormalMode"))
-                        {
-                            setting.setGameMode(0);
-                        }
-                        else if (gameButtonText.equals("Game Start - Item Mode")|| gameButtonText.equals("Game Start - Versus - ItemMode"))
-                        {
-                            setting.setGameMode(1);
-                        }
-                        else if (gameButtonText.equals("Game Start - Versus - TimerMode"))
-                        {
-                            setting.setGameMode(2);
-                        }
-                        pageController = new PageController(gameButtonText);
-                        break;
-
-                    default:
-                        break;
-                }
-
-            }
-        });
+        mainPageKeyListener=new MainPageKeyListener();
+        addKeyListener(mainPageKeyListener);
 
     }
     private void setButtonClickController(){
@@ -230,4 +152,95 @@ public class MainPage extends JFrame{
         });
 
     }
+
+    public class MainPageKeyListener implements KeyListener {
+        @Override
+        public void keyPressed(KeyEvent e) {
+            System.out.println("main page key event enter");
+            System.out.println(e.getKeyCode());
+            // TODO Auto-generated method stub
+            switch (e.getKeyCode()) {//키 코드로 스위치
+
+                case KeyEvent.VK_RIGHT:
+                    if(buttonSelectorIndex!=2) break;
+                    if(buttons[buttonSelectorIndex].getText().equals("Game Start - Versus - NormalMode"))
+                    {
+                        buttons[buttonSelectorIndex].setText("Game Start - Versus - ItemMode");
+                    }
+                    else if(buttons[buttonSelectorIndex].getText().equals("Game Start - Versus - ItemMode"))
+                    {
+                        buttons[buttonSelectorIndex].setText("Game Start - Versus - TimerMode");
+                    }
+                    else if(buttons[buttonSelectorIndex].getText().equals("Game Start - Versus - TimerMode"))
+                    {
+                        buttons[buttonSelectorIndex].setText("Game Start - Versus - NormalMode");
+                    }
+                    break;
+
+                case KeyEvent.VK_LEFT:
+                    if(buttonSelectorIndex!=2) break;
+                    if(buttons[buttonSelectorIndex].getText().equals("Game Start - Versus - NormalMode"))
+                    {
+                        buttons[buttonSelectorIndex].setText("Game Start - Versus - TimerMode");
+                    }
+                    else if(buttons[buttonSelectorIndex].getText().equals("Game Start - Versus - ItemMode"))
+                    {
+                        buttons[buttonSelectorIndex].setText("Game Start - Versus - NormalMode");
+                    }
+                    else if(buttons[buttonSelectorIndex].getText().equals("Game Start - Versus - TimerMode"))
+                    {
+                        buttons[buttonSelectorIndex].setText("Game Start - Versus - ItemMode");
+                    }
+                    break;
+                case KeyEvent.VK_DOWN: //방향키(아래) 눌렀을때
+                    if (buttonSelectorIndex +1<buttons.length)
+                    {
+                        buttons[buttonSelectorIndex].setBackground(null);
+                        buttons[++buttonSelectorIndex].setBackground(Color.RED);
+                    }
+                    break;
+                case KeyEvent.VK_UP: //방향키(위)눌렀을때
+                    if(buttonSelectorIndex >0)
+                    {
+                        buttons[buttonSelectorIndex].setBackground(null);
+                        buttons[--buttonSelectorIndex].setBackground(Color.RED);
+                    }
+                    break;
+                case KeyEvent.VK_ENTER:
+                    setVisible(false);
+                    String gameButtonText=buttons[buttonSelectorIndex].getText();
+
+                    if(gameButtonText.equals("Game Start - Normal Mode") || gameButtonText.equals("Game Start - Versus - NormalMode"))
+                    {
+                        setting.setGameMode(0);
+                    }
+                    else if (gameButtonText.equals("Game Start - Item Mode")|| gameButtonText.equals("Game Start - Versus - ItemMode"))
+                    {
+                        setting.setGameMode(1);
+                    }
+                    else if (gameButtonText.equals("Game Start - Versus - TimerMode"))
+                    {
+                        setting.setGameMode(2);
+                    }
+                    pageController = new PageController(gameButtonText);
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        @Override
+        public void keyTyped(KeyEvent e) {
+
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+
+
+        }
+    }
 }
+
+

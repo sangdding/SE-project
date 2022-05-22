@@ -26,7 +26,7 @@
     "width": 800,
     "height": 800
   },
-  "gameMode": "item",
+  "gameMode": "normal",
   "defaultKey": {
     "player1": {
       "resume": 82,
@@ -40,12 +40,12 @@
     },
     "player2": {
       "resume": 82,
-      "drop": 46,
+      "drop": 104,
       "exit": 27,
-      "rotate": 47,
-      "left": 37,
-      "right": 39,
-      "down": 40,
+      "rotate": 101,
+      "left": 97,
+      "right": 99,
+      "down": 98,
       "pause": 80
     }
   },

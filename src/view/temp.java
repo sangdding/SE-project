@@ -184,7 +184,7 @@ public class temp {
         next++;
     }
 
-    public void func2()
+    public boolean func2()
     {if (Effect) {
         itemGameAreaController.clearLines();
         Effect = false;
@@ -202,6 +202,10 @@ public class temp {
             next++;
             chew = false;
             end=false;
-        }}
+            return true;
+        }
+        else{
+        return false;}
+    }
 
 }
