@@ -10,7 +10,7 @@ public class GameAreaItem {
         gridRows = 20;
         background = new int[gridRows][gridColumns];
 
-        for(int i = 0; i<9;i++)
+        /*for(int i = 0; i<9;i++)
         {
             background[19][i]=1;
         }
@@ -21,7 +21,7 @@ public class GameAreaItem {
         for(int i = 0; i<9;i++)
         {
             background[17][i]=1;
-        }
+        }*/
     }
     public int[][] getBackground(){
         return background;
