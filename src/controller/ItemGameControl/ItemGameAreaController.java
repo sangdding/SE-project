@@ -73,13 +73,13 @@ public class ItemGameAreaController extends GameAreaItem implements ItemMode {
                 if(y<0){
                     if(r<0){break;}
                     else {
-                        if (ga.block.getShape()[r - y - 1][c - x] == 1) {
+                        if (ga.block.getShape()[r - y - 1][c - x] != 0) {
                             if (ga.getBackground()[r][c+1]!=0){return false;}
                         }
                     }
                 }
                 else{
-                    if(ga.block.getShape()[r-y][c-x]==1)
+                    if(ga.block.getShape()[r-y][c-x]!=0)
                     {
                         if(ga.getBackground()[r][c+1]!=0){return false;}
                     }
