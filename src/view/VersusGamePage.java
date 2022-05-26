@@ -253,16 +253,41 @@ public class VersusGamePage extends JFrame{
                                 for(int i=0; i<a;i++){
                                     k[i]=toSend1[i];
                                 }
-                                tempClassForPlayer1.itemGameAreaController.receive(k);
-                                receive1=false;
-                                toSend1=null;
-                                received1=11;
+                                if(!tempClassForPlayer1.itemGameAreaController.receive(k))
+                                {
+                                    timerForPlyer1.stop();
+                                    timerForPlyer2.stop();
+
+                                    dispose();
+                                    pageController = new PageController();
+                                    // player 1이 졌다.
+                                    pageController.setWinner(2);
+                                    pageController.createVersusGameEndPage();
+                                }
+                                else {
+                                    receive1 = false;
+                                    toSend1 = null;
+                                    received1 = 11;
+                                }
                             }
                             else {
-                                tempClassForPlayer1.itemGameAreaController.receive(toSend1);
-                                receive1 = false;
-                                received1+= toSend1.length;
-                                toSend1= null;
+
+                                if(!tempClassForPlayer1.itemGameAreaController.receive(toSend1))
+                                {
+                                    timerForPlyer1.stop();
+                                    timerForPlyer2.stop();
+
+                                    dispose();
+                                    pageController = new PageController();
+                                    // player 1이 졌다.
+                                    pageController.setWinner(2);
+                                    pageController.createVersusGameEndPage();
+                                }
+                                else {
+                                    receive1 = false;
+                                    received1 += toSend1.length;
+                                    toSend1 = null;
+                                }
                             }
                         }
 
@@ -333,16 +358,36 @@ public class VersusGamePage extends JFrame{
                                 for(int i=0; i<a;i++){
                                     k[i]=toSend2[i];
                                 }
-                                tempClassForPlayer2.itemGameAreaController.receive(k);
-                                receive2=false;
-                                toSend2=null;
-                                received2=11;
+                                if(!tempClassForPlayer2.itemGameAreaController.receive(k)){
+                                    timerForPlyer1.stop();
+                                    timerForPlyer2.stop();
+                                    dispose();
+                                    pageController = new PageController();
+                                    //플레이어2가 졌다
+                                    pageController.setWinner(1);
+                                    pageController.createVersusGameEndPage();
+                                }
+                                else {
+                                    receive2 = false;
+                                    toSend2 = null;
+                                    received2 = 11;
+                                }
                             }
                             else {
-                                tempClassForPlayer2.itemGameAreaController.receive(toSend2);
-                                receive2 = false;
-                                received2+= toSend2.length;
-                                toSend2=null;
+                                if(!tempClassForPlayer2.itemGameAreaController.receive(toSend2)){
+                                    timerForPlyer1.stop();
+                                    timerForPlyer2.stop();
+                                    dispose();
+                                    pageController = new PageController();
+                                    //플레이어2가 졌다
+                                    pageController.setWinner(1);
+                                    pageController.createVersusGameEndPage();
+                                }
+                                else {
+                                    receive2 = false;
+                                    received2 += toSend2.length;
+                                    toSend2 = null;
+                                }
                             }
                         }
                         timerForPlyer2.setDelay((int) tempClassForPlayer2.getDelay());
@@ -377,8 +422,51 @@ public class VersusGamePage extends JFrame{
                 if (tempClassForPlayer1.itemGameAreaController.ga.block == null) { //끝난경우
                 }
                 else if (tempClassForPlayer1.itemGameAreaController.ga.block.shape[0][0] == 9) { //무게추 아이템인 경우
-                    tempClassForPlayer1.func2();
+                    if(tempClassForPlayer1.func2()) {
+                        if (receive1) {
+                            if (received1 > 10) {
+                                receive1 = false;
+                                toSend1 = null;
+                            } else if (received1 + toSend1.length > 10) {
+                                int a = 10 - received1;
+                                int[][] k = new int[a][10];
+                                for (int i = 0; i < a; i++) {
+                                    k[i] = toSend1[i];
+                                }
+                                if (!tempClassForPlayer1.itemGameAreaController.receive(k)) {
+                                    timerForPlyer1.stop();
+                                    timerForPlyer2.stop();
+                                    dispose();
+
+                                    //player1이 졌다
+                                    pageController = new PageController();
+                                    pageController.setWinner(2);
+                                    pageController.createVersusGameEndPage();
+                                } else {
+                                    receive1 = false;
+                                    toSend1 = null;
+                                    received1 = 11;
+                                }
+                            } else {
+                                if (!tempClassForPlayer1.itemGameAreaController.receive(toSend1)) {
+                                    timerForPlyer1.stop();
+                                    timerForPlyer2.stop();
+                                    dispose();
+
+                                    //player1이 졌다
+                                    pageController = new PageController();
+                                    pageController.setWinner(2);
+                                    pageController.createVersusGameEndPage();
+                                } else {
+                                    receive1 = false;
+                                    received1 += toSend1.length;
+                                    toSend1 = null;
+                                }
+                            }
+                        }
+                    }
                     drawGameBoard(tempClassForPlayer1.itemGameAreaController.newBackground(),1);
+                    drawPassedBlock(toSend1,1);
                 }
 
                 else {
@@ -427,16 +515,39 @@ public class VersusGamePage extends JFrame{
                                     for(int i=0; i<a;i++){
                                         k[i]=toSend1[i];
                                     }
-                                    tempClassForPlayer1.itemGameAreaController.receive(k);
-                                    receive1=false;
-                                    toSend1=null;
-                                    received1=11;
+                                    if(!tempClassForPlayer1.itemGameAreaController.receive(k)){
+                                        timerForPlyer1.stop();
+                                        timerForPlyer2.stop();
+                                        dispose();
+
+                                        //player1이 졌다
+                                        pageController = new PageController();
+                                        pageController.setWinner(2);
+                                        pageController.createVersusGameEndPage();
+                                    }
+                                    else {
+                                        receive1 = false;
+                                        toSend1 = null;
+                                        received1 = 11;
+                                    }
                                 }
                                 else {
-                                    tempClassForPlayer1.itemGameAreaController.receive(toSend1);
-                                    receive1 = false;
-                                    received1+= toSend1.length;
-                                    toSend1= null;
+                                    if(!tempClassForPlayer1.itemGameAreaController.receive(toSend1))
+                                    {
+                                        timerForPlyer1.stop();
+                                        timerForPlyer2.stop();
+                                        dispose();
+
+                                        //player1이 졌다
+                                        pageController = new PageController();
+                                        pageController.setWinner(2);
+                                        pageController.createVersusGameEndPage();
+                                    }
+                                    else {
+                                        receive1 = false;
+                                        received1 += toSend1.length;
+                                        toSend1 = null;
+                                    }
                                 }
                             }
 
@@ -464,8 +575,52 @@ public class VersusGamePage extends JFrame{
                 if (tempClassForPlayer2.itemGameAreaController.ga.block == null) { //끝난경우
                 }
                 else if (tempClassForPlayer2.itemGameAreaController.ga.block.shape[0][0] == 9) { //무게추 아이템인 경우
-                    tempClassForPlayer2.func2();
+                    if(tempClassForPlayer2.func2())
+                    {
+                        if(receive2) {
+                            if (received2 > 10) {
+                                receive2 = false;
+                                toSend2 = null;
+                            } else if (received2 + toSend2.length > 10) {
+                                int a = 10 - received2;
+                                int[][] k = new int[a][10];
+                                for (int i = 0; i < a; i++) {
+                                    k[i] = toSend2[i];
+                                }
+                                if (!tempClassForPlayer2.itemGameAreaController.receive(k)) {
+                                    timerForPlyer1.stop();
+                                    timerForPlyer2.stop();
+                                    dispose();
+
+                                    pageController = new PageController();
+                                    //player2가 졌다
+                                    pageController.setWinner(1);
+                                    pageController.createVersusGameEndPage();
+                                } else {
+                                    receive2 = false;
+                                    toSend2 = null;
+                                    received2 = 11;
+                                }
+                            } else {
+                                if (!tempClassForPlayer2.itemGameAreaController.receive(toSend2)) {
+                                    timerForPlyer1.stop();
+                                    timerForPlyer2.stop();
+                                    dispose();
+
+                                    pageController = new PageController();
+                                    //player2가 졌다
+                                    pageController.setWinner(1);
+                                    pageController.createVersusGameEndPage();
+                                } else {
+                                    receive2 = false;
+                                    received2 += toSend2.length;
+                                    toSend2 = null;
+                                }
+                            }
+                        }
+                    }
                     drawGameBoard(tempClassForPlayer2.itemGameAreaController.newBackground(),2);
+                    drawPassedBlock(toSend2,2);
                 }
                 else {
 
@@ -513,16 +668,38 @@ public class VersusGamePage extends JFrame{
                                     for(int i=0; i<a;i++){
                                         k[i]=toSend2[i];
                                     }
-                                    tempClassForPlayer2.itemGameAreaController.receive(k);
-                                    receive2=false;
-                                    toSend2=null;
-                                    received2=11;
+                                    if(!tempClassForPlayer2.itemGameAreaController.receive(k)){
+                                        timerForPlyer1.stop();
+                                        timerForPlyer2.stop();
+                                        dispose();
+
+                                        pageController = new PageController();
+                                        //player2가 졌다
+                                        pageController.setWinner(1);
+                                        pageController.createVersusGameEndPage();
+                                    }
+                                    else{
+                                        receive2 = false;
+                                        toSend2 = null;
+                                        received2 = 11;
+                                    }
                                 }
                                 else {
-                                    tempClassForPlayer2.itemGameAreaController.receive(toSend2);
-                                    receive2 = false;
-                                    received2+= toSend2.length;
-                                    toSend2=null;
+                                    if(!tempClassForPlayer2.itemGameAreaController.receive(toSend2)) {
+                                        timerForPlyer1.stop();
+                                        timerForPlyer2.stop();
+                                        dispose();
+
+                                        pageController = new PageController();
+                                        //player2가 졌다
+                                        pageController.setWinner(1);
+                                        pageController.createVersusGameEndPage();
+                                    }
+                                    else {
+                                        receive2 = false;
+                                        received2 += toSend2.length;
+                                        toSend2 = null;
+                                    }
                                 }
                             }
 
@@ -614,16 +791,38 @@ public class VersusGamePage extends JFrame{
                                 for(int i=0; i<a;i++){
                                     k[i]=toSend1[i];
                                 }
-                                tempClassForPlayer1.itemGameAreaController.receive(k);
-                                receive1=false;
-                                toSend1=null;
-                                received1=11;
+                                if(!tempClassForPlayer1.itemGameAreaController.receive(k))
+                                {
+                                    timerForPlyer1.stop();
+                                    timerForPlyer2.stop();
+                                    dispose();
+                                    pageController = new PageController();
+                                    //player1이 졌다.
+                                    pageController.setWinner(2);
+                                    pageController.createVersusGameEndPage();
+                                }
+                                else {
+                                    receive1 = false;
+                                    toSend1 = null;
+                                    received1 = 11;
+                                }
                             }
                             else {
-                                tempClassForPlayer1.itemGameAreaController.receive(toSend1);
-                                receive1 = false;
-                                received1+= toSend1.length;
-                                toSend1= null;
+                                if(!tempClassForPlayer1.itemGameAreaController.receive(toSend1))
+                                {
+                                    timerForPlyer1.stop();
+                                    timerForPlyer2.stop();
+                                    dispose();
+                                    pageController = new PageController();
+                                    //player1이 졌다.
+                                    pageController.setWinner(2);
+                                    pageController.createVersusGameEndPage();
+                                }
+                                else {
+                                    receive1 = false;
+                                    received1 += toSend1.length;
+                                    toSend1 = null;
+                                }
                             }
                         }
 
@@ -693,16 +892,39 @@ public class VersusGamePage extends JFrame{
                                 for(int i=0; i<a;i++){
                                     k[i]=toSend2[i];
                                 }
-                                tempClassForPlayer2.itemGameAreaController.receive(k);
-                                receive2=false;
-                                toSend2=null;
-                                received2=11;
+
+                                if(!tempClassForPlayer2.itemGameAreaController.receive(k)) {
+                                    //게임 종료시
+                                    timerForPlyer1.stop();
+                                    timerForPlyer2.stop();
+                                    dispose();
+                                    pageController = new PageController();
+                                    //player2가 졌다
+                                    pageController.setWinner(1);
+                                    pageController.createVersusGameEndPage();
+                                }
+                                else {
+                                    receive2 = false;
+                                    toSend2 = null;
+                                    received2 = 11;
+                                }
                             }
                             else {
-                                tempClassForPlayer2.itemGameAreaController.receive(toSend2);
-                                receive2 = false;
-                                received2+= toSend2.length;
-                                toSend2=null;
+                                if(!tempClassForPlayer2.itemGameAreaController.receive(toSend2)){
+                                    //게임 종료시
+                                    timerForPlyer1.stop();
+                                    timerForPlyer2.stop();
+                                    dispose();
+                                    pageController = new PageController();
+                                    //player2가 졌다
+                                    pageController.setWinner(1);
+                                    pageController.createVersusGameEndPage();
+                                }
+                                else {
+                                    receive2 = false;
+                                    received2 += toSend2.length;
+                                    toSend2 = null;
+                                }
                             }
                         }
                         timerForPlyer2.setDelay((int) tempClassForPlayer2.getDelay());
