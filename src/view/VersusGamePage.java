@@ -251,13 +251,12 @@ public class VersusGamePage extends JFrame{
                                 int a = 10-received1;
                                 int[][] k= new int[a][10];
                                 for(int i=0; i<a;i++){
-                                    k[i]=toSend1[i];
+                                    k[i]=toSend1[a-i];
                                 }
                                 if(!tempClassForPlayer1.itemGameAreaController.receive(k))
                                 {
                                     timerForPlyer1.stop();
                                     timerForPlyer2.stop();
-
                                     dispose();
                                     pageController = new PageController();
                                     // player 1이 졌다.
@@ -302,7 +301,9 @@ public class VersusGamePage extends JFrame{
 
                 //다음 블럭 그리기
                 drawNextBlock(tempClassForPlayer1.getNextBlock(),1);
+
                 drawPassedBlock(toSend1,1);
+
             }
 
         });
@@ -356,7 +357,7 @@ public class VersusGamePage extends JFrame{
                                 int a = 10-received2;
                                 int[][] k= new int[a][10];
                                 for(int i=0; i<a;i++){
-                                    k[i]=toSend2[i];
+                                    k[i]=toSend2[a-i];
                                 }
                                 if(!tempClassForPlayer2.itemGameAreaController.receive(k)){
                                     timerForPlyer1.stop();
@@ -431,7 +432,7 @@ public class VersusGamePage extends JFrame{
                                 int a = 10 - received1;
                                 int[][] k = new int[a][10];
                                 for (int i = 0; i < a; i++) {
-                                    k[i] = toSend1[i];
+                                    k[i] = toSend1[a-i];
                                 }
                                 if (!tempClassForPlayer1.itemGameAreaController.receive(k)) {
                                     timerForPlyer1.stop();
@@ -513,7 +514,7 @@ public class VersusGamePage extends JFrame{
                                     int a = 10-received1;
                                     int[][] k= new int[a][10];
                                     for(int i=0; i<a;i++){
-                                        k[i]=toSend1[i];
+                                        k[i]=toSend1[a-i];
                                     }
                                     if(!tempClassForPlayer1.itemGameAreaController.receive(k)){
                                         timerForPlyer1.stop();
@@ -585,7 +586,7 @@ public class VersusGamePage extends JFrame{
                                 int a = 10 - received2;
                                 int[][] k = new int[a][10];
                                 for (int i = 0; i < a; i++) {
-                                    k[i] = toSend2[i];
+                                    k[i] = toSend2[a-i];
                                 }
                                 if (!tempClassForPlayer2.itemGameAreaController.receive(k)) {
                                     timerForPlyer1.stop();
@@ -666,7 +667,7 @@ public class VersusGamePage extends JFrame{
                                     int a = 10-received2;
                                     int[][] k= new int[a][10];
                                     for(int i=0; i<a;i++){
-                                        k[i]=toSend2[i];
+                                        k[i]=toSend2[a-i];
                                     }
                                     if(!tempClassForPlayer2.itemGameAreaController.receive(k)){
                                         timerForPlyer1.stop();
@@ -789,7 +790,7 @@ public class VersusGamePage extends JFrame{
                                 int a = 10-received1;
                                 int[][] k= new int[a][10];
                                 for(int i=0; i<a;i++){
-                                    k[i]=toSend1[i];
+                                    k[i]=toSend1[a-i];
                                 }
                                 if(!tempClassForPlayer1.itemGameAreaController.receive(k))
                                 {
@@ -890,7 +891,7 @@ public class VersusGamePage extends JFrame{
                                 int a = 10-received2;
                                 int[][] k= new int[a][10];
                                 for(int i=0; i<a;i++){
-                                    k[i]=toSend2[i];
+                                    k[i]=toSend2[a-i];
                                 }
 
                                 if(!tempClassForPlayer2.itemGameAreaController.receive(k)) {

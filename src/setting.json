@@ -12,21 +12,21 @@
     },
     "player2": {
       "resume": 82,
-      "drop": 104,
+      "drop": 32,
       "exit": 27,
-      "rotate": 101,
-      "left": 97,
-      "right": 99,
-      "down": 98,
+      "rotate": 84,
+      "left": 70,
+      "right": 72,
+      "down": 71,
       "pause": 80
     }
   },
-  "difficulty": "hard",
+  "difficulty": "normal",
   "display": {
-    "width": 1000,
-    "height": 1000
+    "width": 500,
+    "height": 800
   },
-  "gameMode": "item",
+  "gameMode": "normal",
   "defaultKey": {
     "player1": {
       "resume": 82,
@@ -49,5 +49,5 @@
       "pause": 80
     }
   },
-  "displayMode": "blind"
+  "displayMode": "normal"
 }
