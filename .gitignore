@@ -122,3 +122,6 @@ fabric.properties
 .iml
 lib
 out
+/launch4j.log
+/SE-project.zip
+/SE_Tetris_Final.exe

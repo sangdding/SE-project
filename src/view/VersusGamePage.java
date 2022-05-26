@@ -1088,7 +1088,10 @@ public class VersusGamePage extends JFrame{
 
         for(int i=0;i<passedBlock.length;i++){
             for(int j=0;j<passedBlock[i].length;j++){
-                drawTextWithColor(passedBlockPaneArray[playerIndex-1],String.valueOf("X"),Color.GRAY);
+                if(passedBlock[i][j]>0)
+                    drawTextWithColor(passedBlockPaneArray[playerIndex-1],String.valueOf("X"),Color.GRAY);
+                else
+                    drawTextWithColor(passedBlockPaneArray[playerIndex-1],String.valueOf("X"),Color.WHITE);
             }
             drawTextWithColor(passedBlockPaneArray[playerIndex-1], "\n", Color.BLACK);
         }
